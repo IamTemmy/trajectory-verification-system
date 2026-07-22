@@ -9,7 +9,7 @@ description = "Requirements-driven trajectory verification and failure attributi
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Temiloluwa Adesola" }]
-dependencies = []
+dependencies = ["protobuf>=4.25,<7"]
 
 [project.scripts]
 verify-trajectories = "trajectory_verification.cli:main"

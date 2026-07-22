@@ -82,6 +82,31 @@ def write_tfrecord(path, payloads):
 
 
 class WOMDAdapterTests(unittest.TestCase):
+    def test_bundled_proto_decodes_consumed_womd_fields(self):
+        from trajectory_verification.adapters.womd_proto import Scenario
+
+        message = Scenario(
+            scenario_id="real-schema-shape",
+            timestamps_seconds=[0.0, 0.1],
+            current_time_index=1,
+            sdc_track_index=0,
+            objects_of_interest=[42],
+        )
+        track = message.tracks.add(id=42, object_type=1)
+        track.states.add(center_x=1.0, center_y=2.0, velocity_x=3.0, valid=True)
+        track.states.add(center_x=1.3, center_y=2.0, velocity_x=3.0, valid=True)
+        message.tracks_to_predict.add(track_index=0, difficulty=1)
+        message.map_features.add()
+
+        decoded = Scenario.FromString(message.SerializeToString())
+        normalized = scenario_from_proto(decoded)
+
+        self.assertEqual("real-schema-shape", normalized.scenario_id)
+        self.assertEqual("42", normalized.sdc_agent_id)
+        self.assertEqual(("42",), normalized.objects_of_interest)
+        self.assertEqual(("42",), normalized.tracks_to_predict)
+        self.assertEqual(1, normalized.map_feature_count)
+
     def test_normalizes_valid_states_and_metadata(self):
         scenario = scenario_from_proto(make_scenario())
         self.assertEqual("womd-fixture-001", scenario.scenario_id)

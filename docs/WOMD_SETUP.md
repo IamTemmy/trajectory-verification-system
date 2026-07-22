@@ -14,19 +14,24 @@ The official scenario schema aligns every track state by index with `timestamps_
 
 ## Why TensorFlow is not required
 
-TFRecord is a simple binary framing format. The project reads that framing with Python's standard library and passes each payload to the official generated `Scenario` protobuf class. This keeps the ingestion path lightweight and testable on macOS.
+TFRecord is a simple binary framing format. The project reads that framing with
+Python's standard library and passes each payload to a wire-compatible subset of
+the official `Scenario` schema. Protobuf safely skips fields not consumed by the
+normalizer. This keeps ingestion lightweight on Apple Silicon without TensorFlow.
 
 CRC fields are consumed but not yet validated. Dataset shards should be validated by checksum at download time; optional CRC32C validation is planned.
 
-## Optional runtime dependency
+## Runtime dependency
 
-Real shards require a package that provides:
+Real shards require only Google's cross-platform protobuf runtime, installed with
+the project:
 
 ```python
-from waymo_open_dataset.protos import scenario_pb2
+python3 -m pip install -e .
 ```
 
-Waymo's official motion tutorial currently installs `waymo-open-dataset-tf-2-12-0==1.6.7`, which is a substantial TensorFlow-oriented distribution. Do not install it into the project environment until platform compatibility has been confirmed.
+The official Waymo wheel is unnecessary here. Its published artifact targets
+Linux x86-64 and is unsuitable for Apple Silicon macOS.
 
 ## Inspect a shard
 

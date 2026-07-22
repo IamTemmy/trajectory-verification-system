@@ -2,7 +2,7 @@
 
 The adapter deliberately depends on protobuf-shaped attributes rather than concrete
 generated classes. Unit tests can therefore exercise normalization without installing
-TensorFlow or the Waymo SDK. Real decoding imports ``scenario_pb2`` only when needed.
+TensorFlow or the Waymo SDK. Real decoding uses a wire-compatible schema subset.
 """
 
 from __future__ import annotations
@@ -167,10 +167,10 @@ def iter_womd_scenarios(
 
 def _official_scenario_factory() -> Callable[[], Any]:
     try:
-        from waymo_open_dataset.protos import scenario_pb2
+        from .womd_proto import Scenario as ScenarioProto
     except ImportError as exc:
         raise WOMDDependencyError(
-            "WOMD protobuf classes are unavailable. Install a compatible official "
-            "Waymo Open Dataset package, or pass scenario_factory for testing."
+            "WOMD protobuf decoding requires the 'protobuf' package. Install "
+            "project dependencies, or pass scenario_factory for testing."
         ) from exc
-    return scenario_pb2.Scenario
+    return ScenarioProto
