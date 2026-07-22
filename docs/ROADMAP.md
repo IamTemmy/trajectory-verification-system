@@ -16,7 +16,7 @@
 - [x] Normalize agent histories and scenario identifiers
 - [x] Add fixture-based adapter tests
 - [ ] Validate against an authenticated real WOMD scenario shard
-- [ ] Visualize a decoded scenario
+- [x] Visualize a normalized decoded scenario as standalone SVG
 
 ## Milestone 2 — Engineering evidence
 
