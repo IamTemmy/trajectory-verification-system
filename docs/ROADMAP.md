@@ -15,7 +15,7 @@
 - [x] Read uncompressed TFRecord framing without TensorFlow
 - [x] Normalize agent histories and scenario identifiers
 - [x] Add fixture-based adapter tests
-- [ ] Validate against an authenticated real WOMD scenario shard
+- [x] Validate against an authenticated real WOMD scenario shard
 - [x] Visualize a normalized decoded scenario as standalone SVG
 
 ## Milestone 2 — Engineering evidence
