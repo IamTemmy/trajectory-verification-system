@@ -33,8 +33,13 @@ Waymo's official motion tutorial currently installs `waymo-open-dataset-tf-2-12-
 ```bash
 PYTHONPATH=src python3 -m trajectory_verification.womd_cli \
   /path/to/uncompressed_scenario_validation.tfrecord-00000-of-00150 \
-  --limit 3
+  --limit 3 \
+  --svg-output reports/generated/first_scenario.svg
 ```
+
+The SVG renderer uses only the Python standard library. It plots normalized agent
+trajectories, highlights the SDC track, and labels each final position by track ID
+and object type.
 
 ## Dataset access
 

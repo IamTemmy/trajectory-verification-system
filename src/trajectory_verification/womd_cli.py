@@ -6,18 +6,25 @@ import argparse
 import json
 
 from .adapters.womd import iter_womd_scenarios
+from .visualization import write_scenario_svg
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Inspect WOMD scenario-proto TFRecords")
     parser.add_argument("shard", nargs="+", help="uncompressed scenario TFRecord shard(s)")
     parser.add_argument("--limit", type=int, default=1, help="maximum scenarios to inspect")
+    parser.add_argument(
+        "--svg-output",
+        help="optional SVG path for the first decoded scenario",
+    )
     args = parser.parse_args()
     if args.limit < 1:
         parser.error("--limit must be at least one")
 
     summaries = []
     for index, scenario in enumerate(iter_womd_scenarios(args.shard)):
+        if index == 0 and args.svg_output:
+            write_scenario_svg(scenario, args.svg_output)
         summaries.append(
             {
                 "scenario_id": scenario.scenario_id,

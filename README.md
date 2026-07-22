@@ -29,6 +29,7 @@ The first milestone provides:
 - structured evidence suitable for reports and regression gates;
 - deterministic unit tests and continuous integration.
 - lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency.
+- standalone SVG trajectory visualization without plotting dependencies.
 
 ## Quick start
 
