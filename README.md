@@ -27,8 +27,8 @@ The first milestone provides:
 - declarative threshold requirements;
 - contiguous failure-interval localization;
 - structured evidence suitable for reports and regression gates;
-- deterministic unit tests and continuous integration.
-- lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency.
+- deterministic unit tests and continuous integration;
+- lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency;
 - standalone SVG trajectory visualization without plotting dependencies.
 
 ## Quick start
@@ -38,7 +38,9 @@ python3 -m unittest discover -s tests -v
 PYTHONPATH=src python3 -m trajectory_verification.cli examples/following_scenario.json examples/requirements.json
 ```
 
-The core package intentionally uses only the Python standard library. Dataset-specific integrations will be isolated behind adapters so the verification engine remains testable without downloading WOMD.
+The verification core uses only the Python standard library. WOMD decoding adds
+Google's cross-platform protobuf runtime behind an isolated adapter, so the core
+remains testable without downloading WOMD or installing TensorFlow.
 
 ## Architecture
 
@@ -57,7 +59,9 @@ scenario source -> dataset adapter -> normalized trajectories
 
 ## Repository status
 
-This is an active engineering project. The normalized core and first threshold evaluator form Milestone 0; WOMD protobuf ingestion and map-aware requirements follow after environment compatibility is validated.
+This is an active engineering project. Milestone 0 (verification kernel) and
+Milestone 1 (WOMD ingestion) are complete. Engineering-evidence generation is
+next; map-aware requirements remain planned.
 
 ## Responsible interpretation
 
