@@ -69,7 +69,7 @@ class RequirementResult:
 def evaluate_requirement(scenario: Scenario, requirement: Requirement) -> RequirementResult:
     if requirement.operator not in COMPARATORS:
         raise ValueError(f"unsupported operator: {requirement.operator}")
-    samples = _metric_samples(scenario, requirement)
+    samples = metric_samples(scenario, requirement)
     compare = COMPARATORS[requirement.operator]
     failures = tuple(sample for sample in samples if not compare(sample.value, requirement.threshold))
     intervals = _localize_failures(failures, requirement.operator)
@@ -86,7 +86,8 @@ def evaluate_requirement(scenario: Scenario, requirement: Requirement) -> Requir
     )
 
 
-def _metric_samples(scenario: Scenario, requirement: Requirement) -> tuple[Sample, ...]:
+def metric_samples(scenario: Scenario, requirement: Requirement) -> tuple[Sample, ...]:
+    """Return the derived samples evaluated by a requirement."""
     subject = scenario.track(requirement.subject_agent_id)
     if requirement.metric == "speed":
         return speed(subject)
