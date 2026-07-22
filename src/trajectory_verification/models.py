@@ -13,6 +13,12 @@ class State:
     x_m: float
     y_m: float
     heading_rad: float | None = None
+    z_m: float | None = None
+    velocity_x_mps: float | None = None
+    velocity_y_mps: float | None = None
+    length_m: float | None = None
+    width_m: float | None = None
+    height_m: float | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -39,6 +45,11 @@ class Scenario:
 
     scenario_id: str
     tracks: tuple[AgentTrack, ...]
+    current_time_index: int | None = None
+    sdc_agent_id: str | None = None
+    objects_of_interest: tuple[str, ...] = ()
+    tracks_to_predict: tuple[str, ...] = ()
+    map_feature_count: int = 0
 
     def __post_init__(self) -> None:
         if not self.scenario_id:
@@ -46,6 +57,8 @@ class Scenario:
         ids = [track.agent_id for track in self.tracks]
         if len(ids) != len(set(ids)):
             raise ValueError("agent IDs must be unique within a scenario")
+        if self.current_time_index is not None and self.current_time_index < 0:
+            raise ValueError("current_time_index must be non-negative")
 
     def track(self, agent_id: str) -> AgentTrack:
         for track in self.tracks:

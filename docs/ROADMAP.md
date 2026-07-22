@@ -11,10 +11,11 @@
 
 ## Milestone 1 — WOMD ingestion
 
-- [ ] Confirm supported Python and package versions on macOS
-- [ ] Decode a small WOMD scenario shard
-- [ ] Normalize agent histories and map identifiers
-- [ ] Add fixture-based adapter tests
+- [x] Document official schema and isolate platform-dependent package loading
+- [x] Read uncompressed TFRecord framing without TensorFlow
+- [x] Normalize agent histories and scenario identifiers
+- [x] Add fixture-based adapter tests
+- [ ] Validate against an authenticated real WOMD scenario shard
 - [ ] Visualize a decoded scenario
 
 ## Milestone 2 — Engineering evidence

@@ -37,3 +37,8 @@ The WOMD adapter will:
 - fail explicitly on missing or inconsistent data.
 
 The adapter will not leak TensorFlow or Waymo SDK types into the core engine.
+
+The first adapter implementation now reads uncompressed TFRecord framing without
+TensorFlow and accepts protobuf-shaped messages through dependency injection. Real
+shard decoding remains optional and imports the official generated `Scenario` class
+only at runtime. See [WOMD_SETUP.md](WOMD_SETUP.md).
