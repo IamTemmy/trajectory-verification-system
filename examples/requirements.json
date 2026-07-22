@@ -1,0 +1,23 @@
+{
+  "requirements": [
+    {
+      "id": "SAFE_FOLLOWING_001",
+      "description": "Maintain time-to-collision above the demonstration threshold",
+      "metric": "time_to_collision",
+      "operator": "greater_than_or_equal",
+      "threshold": 12.0,
+      "units": "s",
+      "subject_agent_id": "ego",
+      "other_agent_id": "lead"
+    },
+    {
+      "id": "COMFORT_SPEED_001",
+      "description": "Keep speed at or below the demonstration threshold",
+      "metric": "speed",
+      "operator": "less_than_or_equal",
+      "threshold": 12.0,
+      "units": "m/s",
+      "subject_agent_id": "ego"
+    }
+  ]
+}

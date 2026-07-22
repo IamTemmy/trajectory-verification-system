@@ -1,0 +1,27 @@
+{
+  "scenario_id": "synthetic-following-001",
+  "tracks": [
+    {
+      "agent_id": "ego",
+      "object_type": "vehicle",
+      "states": [
+        {"time_s": 0.0, "x_m": 0.0, "y_m": 0.0},
+        {"time_s": 1.0, "x_m": 10.0, "y_m": 0.0},
+        {"time_s": 2.0, "x_m": 20.0, "y_m": 0.0},
+        {"time_s": 3.0, "x_m": 30.0, "y_m": 0.0},
+        {"time_s": 4.0, "x_m": 40.0, "y_m": 0.0}
+      ]
+    },
+    {
+      "agent_id": "lead",
+      "object_type": "vehicle",
+      "states": [
+        {"time_s": 0.0, "x_m": 30.0, "y_m": 0.0},
+        {"time_s": 1.0, "x_m": 38.0, "y_m": 0.0},
+        {"time_s": 2.0, "x_m": 46.0, "y_m": 0.0},
+        {"time_s": 3.0, "x_m": 54.0, "y_m": 0.0},
+        {"time_s": 4.0, "x_m": 62.0, "y_m": 0.0}
+      ]
+    }
+  ]
+}
