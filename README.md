@@ -38,6 +38,26 @@ python3 -m unittest discover -s tests -v
 PYTHONPATH=src python3 -m trajectory_verification.cli examples/following_scenario.json examples/requirements.json
 ```
 
+Generate machine-readable evidence plus Markdown and standalone HTML reports:
+
+```bash
+verify-trajectories examples/following_scenario.json examples/requirements.json \
+  --markdown-report reports/generated/example.md \
+  --html-report reports/generated/example.html
+```
+
+Run reusable role-based requirements directly on a WOMD scenario shard:
+
+```bash
+verify-womd data/raw/SHARD examples/womd_requirements.json \
+  --markdown-report reports/generated/womd.md \
+  --html-report reports/generated/womd.html \
+  --svg-output reports/generated/womd.svg
+```
+
+WOMD templates may select `@sdc`, `@prediction:N`, or
+`@object_of_interest:N`; reports always record the resolved track IDs.
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.

@@ -26,19 +26,33 @@ All current quantities use SI units:
 
 Milestone 0 supports scalar threshold requirements over derived signals. A requirement names a metric, comparison operator, threshold, subject agent, and optional counterpart agent. Evaluation yields every sample, failed samples, localized intervals, and extrema.
 
-## Planned WOMD adapter
+## WOMD adapter
 
-The WOMD adapter will:
+The WOMD adapter:
 
 - decode scenario protocol buffers;
 - preserve scenario and track identifiers;
 - translate valid state histories into the normalized model;
-- expose map features separately for later map-aware requirements;
+- records map-feature availability for later map-aware requirements;
 - fail explicitly on missing or inconsistent data.
 
 The adapter will not leak TensorFlow or Waymo SDK types into the core engine.
 
-The first adapter implementation now reads uncompressed TFRecord framing without
-TensorFlow and accepts protobuf-shaped messages through dependency injection. Real
-shard decoding remains optional and imports the official generated `Scenario` class
-only at runtime. See [WOMD_SETUP.md](WOMD_SETUP.md).
+The adapter reads uncompressed TFRecord framing without TensorFlow and decodes a
+wire-compatible subset of the official Scenario schema using Google's protobuf
+runtime. See [WOMD_SETUP.md](WOMD_SETUP.md).
+
+## Engineering evidence
+
+The evidence layer wraps requirement results without changing their pass/fail
+semantics. It adds:
+
+- quantitative threshold deviation and interval narratives;
+- deterministic threshold-sensitivity sweeps;
+- scenario and requirement-level data-quality annotations;
+- evidence-completeness confidence with an explicit rationale;
+- structured JSON, Markdown, and standalone HTML representations.
+
+Confidence describes completeness of the available evidence, not confidence in
+real-world safety. Role selectors are resolved at the adapter boundary so reusable
+WOMD requirement templates do not leak scenario-specific track IDs into policy.
