@@ -28,6 +28,7 @@ The first milestone provides:
 - contiguous failure-interval localization;
 - structured evidence suitable for reports and regression gates;
 - deterministic unit tests and continuous integration.
+- lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency.
 
 ## Quick start
 
@@ -66,7 +67,8 @@ This is an active engineering project. The normalized core and first threshold e
 
 ## Roadmap
 
-See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+See [docs/ROADMAP.md](docs/ROADMAP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
+and [docs/WOMD_SETUP.md](docs/WOMD_SETUP.md).
 
 ## License
 

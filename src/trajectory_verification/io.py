@@ -21,13 +21,33 @@ def load_scenario(path: str | Path) -> Scenario:
                     x_m=float(state["x_m"]),
                     y_m=float(state["y_m"]),
                     heading_rad=(float(state["heading_rad"]) if "heading_rad" in state else None),
+                    z_m=(float(state["z_m"]) if "z_m" in state else None),
+                    velocity_x_mps=(
+                        float(state["velocity_x_mps"]) if "velocity_x_mps" in state else None
+                    ),
+                    velocity_y_mps=(
+                        float(state["velocity_y_mps"]) if "velocity_y_mps" in state else None
+                    ),
+                    length_m=(float(state["length_m"]) if "length_m" in state else None),
+                    width_m=(float(state["width_m"]) if "width_m" in state else None),
+                    height_m=(float(state["height_m"]) if "height_m" in state else None),
                 )
                 for state in track["states"]
             ),
         )
         for track in data["tracks"]
     )
-    return Scenario(scenario_id=str(data["scenario_id"]), tracks=tracks)
+    return Scenario(
+        scenario_id=str(data["scenario_id"]),
+        tracks=tracks,
+        current_time_index=(
+            int(data["current_time_index"]) if data.get("current_time_index") is not None else None
+        ),
+        sdc_agent_id=(str(data["sdc_agent_id"]) if data.get("sdc_agent_id") else None),
+        objects_of_interest=tuple(str(item) for item in data.get("objects_of_interest", [])),
+        tracks_to_predict=tuple(str(item) for item in data.get("tracks_to_predict", [])),
+        map_feature_count=int(data.get("map_feature_count", 0)),
+    )
 
 
 def load_requirements(path: str | Path) -> tuple[Requirement, ...]:
