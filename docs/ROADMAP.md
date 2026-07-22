@@ -20,10 +20,10 @@
 
 ## Milestone 2 — Engineering evidence
 
-- [ ] Explain failure intervals using contributing signals
-- [ ] Add threshold sensitivity sweeps
-- [ ] Add confidence and data-quality annotations
-- [ ] Generate Markdown and HTML validation reports
+- [x] Explain failure intervals using contributing signals
+- [x] Add threshold sensitivity sweeps
+- [x] Add confidence and data-quality annotations
+- [x] Generate Markdown and HTML validation reports
 
 ## Milestone 3 — Map-aware requirements
 

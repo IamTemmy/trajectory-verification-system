@@ -27,6 +27,8 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(1.5, explanation.threshold_deviation)
         self.assertIn("2 s to 3 s", explanation.narrative)
         self.assertIn("worst value was 12 s", explanation.narrative)
+        self.assertEqual("medium", evidence.evidence_confidence)
+        self.assertIn("sample count", evidence.confidence_rationale)
 
     def test_sensitivity_sweep(self):
         thresholds = default_sensitivity_thresholds(self.requirement)

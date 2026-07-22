@@ -56,6 +56,8 @@ class RequirementEvidence:
     explanations: tuple[FailureExplanation, ...]
     sensitivity: tuple[SensitivityPoint, ...]
     quality_annotations: tuple[DataQualityAnnotation, ...]
+    evidence_confidence: str
+    confidence_rationale: str
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -64,6 +66,8 @@ class RequirementEvidence:
             "explanations": [item.to_dict() for item in self.explanations],
             "sensitivity": [item.to_dict() for item in self.sensitivity],
             "quality_annotations": [item.to_dict() for item in self.quality_annotations],
+            "evidence_confidence": self.evidence_confidence,
+            "confidence_rationale": self.confidence_rationale,
         }
 
 
@@ -138,7 +142,10 @@ def explain_requirement(
         item for item in assess_scenario_quality(scenario)
         if not item.agent_ids or relevant_ids.intersection(item.agent_ids)
     )
-    return RequirementEvidence(requirement, result, explanations, sensitivity, quality)
+    confidence, rationale = _evidence_confidence(result, quality)
+    return RequirementEvidence(
+        requirement, result, explanations, sensitivity, quality, confidence, rationale
+    )
 
 
 def default_sensitivity_thresholds(requirement: Requirement) -> tuple[float, ...]:
@@ -177,3 +184,17 @@ def _sensitivity_point(
     result = evaluate_requirement(scenario, replace(requirement, threshold=threshold))
     fraction = result.failed_samples / result.evaluated_samples if result.evaluated_samples else 0.0
     return SensitivityPoint(threshold, result.passed, result.failed_samples, fraction)
+
+
+def _evidence_confidence(
+    result: RequirementResult,
+    annotations: tuple[DataQualityAnnotation, ...],
+) -> tuple[str, str]:
+    """Grade evidence completeness, not real-world safety confidence."""
+
+    severities = {item.severity for item in annotations}
+    if result.evaluated_samples < 2 or "error" in severities:
+        return "low", "Too few evaluated samples or a blocking data-quality error."
+    if result.evaluated_samples < 5 or "warning" in severities:
+        return "medium", "Evidence is usable but limited by sample count or a quality warning."
+    return "high", "At least five samples were evaluated with no blocking quality warning."

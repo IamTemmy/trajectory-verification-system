@@ -1,0 +1,32 @@
+{
+  "requirements": [
+    {
+      "id": "WOMD_SDC_SPEED_SANITY_001",
+      "description": "Flag implausibly high position-derived SDC speed for data review",
+      "metric": "speed",
+      "operator": "less_than_or_equal",
+      "threshold": 55.0,
+      "units": "m/s",
+      "subject_agent_id": "@sdc"
+    },
+    {
+      "id": "WOMD_SDC_ACCEL_SANITY_001",
+      "description": "Flag extreme position-derived SDC acceleration for data review",
+      "metric": "acceleration",
+      "operator": "less_than_or_equal",
+      "threshold": 15.0,
+      "units": "m/s^2",
+      "subject_agent_id": "@sdc"
+    },
+    {
+      "id": "WOMD_SELECTED_PAIR_SEPARATION_001",
+      "description": "Flag near-zero center-to-center separation from the first prediction target",
+      "metric": "separation",
+      "operator": "greater_than_or_equal",
+      "threshold": 0.5,
+      "units": "m",
+      "subject_agent_id": "@sdc",
+      "other_agent_id": "@prediction:0"
+    }
+  ]
+}
