@@ -81,8 +81,9 @@ scenario source -> dataset adapter -> normalized trajectories
 
 This is an active engineering project. Milestone 0 (verification kernel) and
 Milestone 1 (WOMD ingestion), and Milestone 2 (engineering evidence) are
-complete and validated on a real WOMD v1.3.1 scenario. Map-aware requirements
-are next.
+complete. Milestone 3 adds map-aware requirements with explicit `PASS`, `FAIL`,
+and `NOT APPLICABLE` outcomes; all three milestones are validated on a real
+WOMD v1.3.1 scenario. Regression gates are next.
 
 ## Responsible interpretation
 
