@@ -12,7 +12,17 @@ from pathlib import Path
 import struct
 from typing import Any
 
-from ..models import AgentTrack, Scenario, State
+from ..models import (
+    AgentTrack,
+    CrosswalkFeature,
+    LaneFeature,
+    MapContext,
+    MapPoint,
+    Scenario,
+    State,
+    StopSignFeature,
+    TrafficSignalState,
+)
 
 
 OBJECT_TYPES = {
@@ -21,6 +31,13 @@ OBJECT_TYPES = {
     2: "pedestrian",
     3: "cyclist",
     4: "other",
+}
+
+LANE_TYPES = {0: "undefined", 1: "freeway", 2: "surface_street", 3: "bike_lane"}
+SIGNAL_STATES = {
+    0: "unknown", 1: "arrow_stop", 2: "arrow_caution", 3: "arrow_go",
+    4: "stop", 5: "caution", 6: "go", 7: "flashing_stop",
+    8: "flashing_caution",
 }
 
 
@@ -88,6 +105,7 @@ def scenario_from_proto(message: Any, *, min_valid_states: int = 1) -> Scenario:
     interest_ids = tuple(
         str(agent_id) for agent_id in message.objects_of_interest if str(agent_id) in retained_ids
     )
+    map_context = _map_context_from_proto(message, timestamps)
 
     return Scenario(
         scenario_id=str(message.scenario_id),
@@ -97,7 +115,62 @@ def scenario_from_proto(message: Any, *, min_valid_states: int = 1) -> Scenario:
         objects_of_interest=interest_ids,
         tracks_to_predict=prediction_ids,
         map_feature_count=len(message.map_features),
+        map_context=map_context,
     )
+
+
+def _map_context_from_proto(message: Any, timestamps: tuple[float, ...]) -> MapContext:
+    lanes: list[LaneFeature] = []
+    stop_signs: list[StopSignFeature] = []
+    crosswalks: list[CrosswalkFeature] = []
+    for feature in message.map_features:
+        if not hasattr(feature, "id"):
+            continue
+        feature_id = str(feature.id)
+        if _has_field(feature, "lane") and feature.lane.polyline:
+            lanes.append(LaneFeature(
+                feature_id,
+                tuple(_map_point(point) for point in feature.lane.polyline),
+                float(feature.lane.speed_limit_mph),
+                LANE_TYPES.get(int(feature.lane.type), f"unknown_{feature.lane.type}"),
+            ))
+        elif _has_field(feature, "stop_sign") and _has_field(feature.stop_sign, "position"):
+            stop_signs.append(StopSignFeature(
+                feature_id,
+                tuple(str(lane_id) for lane_id in feature.stop_sign.lane),
+                _map_point(feature.stop_sign.position),
+            ))
+        elif _has_field(feature, "crosswalk") and feature.crosswalk.polygon:
+            crosswalks.append(CrosswalkFeature(
+                feature_id,
+                tuple(_map_point(point) for point in feature.crosswalk.polygon),
+            ))
+
+    signals: list[TrafficSignalState] = []
+    for time_s, dynamic_state in zip(timestamps, getattr(message, "dynamic_map_states", ())):
+        for lane_state in dynamic_state.lane_states:
+            if _has_field(lane_state, "stop_point"):
+                signals.append(TrafficSignalState(
+                    time_s,
+                    str(lane_state.lane),
+                    SIGNAL_STATES.get(int(lane_state.state), f"unknown_{lane_state.state}"),
+                    _map_point(lane_state.stop_point),
+                ))
+    return MapContext(tuple(lanes), tuple(stop_signs), tuple(crosswalks), tuple(signals))
+
+
+def _map_point(point: Any) -> MapPoint:
+    return MapPoint(float(point.x), float(point.y), float(point.z))
+
+
+def _has_field(message: Any, field_name: str) -> bool:
+    has_field = getattr(message, "HasField", None)
+    if has_field is not None:
+        try:
+            return bool(has_field(field_name))
+        except (ValueError, TypeError):
+            pass
+    return getattr(message, field_name, None) is not None
 
 
 def _state_from_proto(timestamp: float, state: Any) -> State:

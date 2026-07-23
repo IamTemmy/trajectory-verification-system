@@ -107,6 +107,41 @@ class WOMDAdapterTests(unittest.TestCase):
         self.assertEqual(("42",), normalized.tracks_to_predict)
         self.assertEqual(1, normalized.map_feature_count)
 
+    def test_normalizes_map_geometry_and_signals(self):
+        from trajectory_verification.adapters.womd_proto import Scenario
+
+        message = Scenario(
+            scenario_id="map-shape",
+            timestamps_seconds=[0.0, 0.1],
+            current_time_index=1,
+            sdc_track_index=0,
+        )
+        track = message.tracks.add(id=1, object_type=1)
+        track.states.add(center_x=0.0, center_y=0.0, valid=True)
+        track.states.add(center_x=1.0, center_y=0.0, valid=True)
+        lane = message.map_features.add(id=10).lane
+        lane.type = 2
+        lane.speed_limit_mph = 35.0
+        lane.polyline.add(x=0.0, y=0.0)
+        lane.polyline.add(x=10.0, y=0.0)
+        stop = message.map_features.add(id=11).stop_sign
+        stop.lane.append(10)
+        stop.position.x = 8.0
+        crosswalk = message.map_features.add(id=12).crosswalk
+        for x, y in ((4, -1), (6, -1), (6, 1), (4, 1)):
+            crosswalk.polygon.add(x=x, y=y)
+        signal = message.dynamic_map_states.add().lane_states.add(lane=10, state=4)
+        signal.stop_point.x = 7.0
+
+        normalized = scenario_from_proto(message)
+        context = normalized.map_context
+        self.assertEqual(1, len(context.lanes))
+        self.assertEqual("surface_street", context.lanes[0].lane_type)
+        self.assertEqual(35.0, context.lanes[0].speed_limit_mph)
+        self.assertEqual(("10",), context.stop_signs[0].lane_ids)
+        self.assertEqual(4, len(context.crosswalks[0].polygon))
+        self.assertEqual("stop", context.traffic_signals[0].state)
+
     def test_normalizes_valid_states_and_metadata(self):
         scenario = scenario_from_proto(make_scenario())
         self.assertEqual("womd-fixture-001", scenario.scenario_id)
