@@ -63,6 +63,28 @@ The raw shard and generated report remain local and are excluded from version
 control. This validates schema compatibility and the end-to-end ingestion path;
 it is not a claim about production Waymo Driver behavior.
 
+## Verified engineering-evidence run
+
+Milestone 2 was validated on July 22, 2026 using scenario
+`4992809c590076fe` from the same authenticated v1.3.1 shard. Reusable selectors
+resolved `@sdc` to track `873` and `@prediction:0` to track `842`.
+
+The report evaluated 270 derived samples across three demonstration data-review
+requirements:
+
+- SDC speed: 90 samples, observed 6.23–11.13 m/s, passed;
+- SDC acceleration: 89 samples, observed -0.10–1.20 m/s², passed;
+- selected-pair separation: 91 samples, observed 27.45–47.06 m, passed.
+
+Each result included a three-point threshold-sensitivity sweep and high
+requirement-level evidence confidence. Scenario-level quality analysis separately
+flagged irregular sampling on tracks `865`, `867`, and `872`; those tracks were
+not inputs to the evaluated requirements. Markdown, standalone HTML, structured
+JSON, and SVG outputs were generated successfully and remain gitignored.
+
+These thresholds are demonstrative data-review checks, not validated safety
+limits, and the results make no claim about production Waymo Driver behavior.
+
 ## Dataset access
 
 Waymo requires users to apply for Open Dataset access and authenticate with the account used for that application. Dataset files are not committed to this repository.

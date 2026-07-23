@@ -80,8 +80,9 @@ scenario source -> dataset adapter -> normalized trajectories
 ## Repository status
 
 This is an active engineering project. Milestone 0 (verification kernel) and
-Milestone 1 (WOMD ingestion) are complete. Engineering-evidence generation is
-next; map-aware requirements remain planned.
+Milestone 1 (WOMD ingestion), and Milestone 2 (engineering evidence) are
+complete and validated on a real WOMD v1.3.1 scenario. Map-aware requirements
+are next.
 
 ## Responsible interpretation
 
