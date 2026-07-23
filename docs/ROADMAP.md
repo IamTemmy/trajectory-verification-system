@@ -27,10 +27,10 @@
 
 ## Milestone 3 — Map-aware requirements
 
-- [ ] Lane association and lateral offset
-- [ ] Stop-line and traffic-signal compliance
-- [ ] Crosswalk and vulnerable-road-user proximity
-- [ ] Explicit applicability conditions
+- [x] Lane association and lateral offset
+- [x] Stop-line and traffic-signal compliance
+- [x] Crosswalk and vulnerable-road-user proximity
+- [x] Explicit applicability conditions
 
 ## Milestone 4 — Regression gates
 

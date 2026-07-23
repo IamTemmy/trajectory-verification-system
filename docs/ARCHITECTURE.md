@@ -56,3 +56,20 @@ semantics. It adds:
 Confidence describes completeness of the available evidence, not confidence in
 real-world safety. Role selectors are resolved at the adapter boundary so reusable
 WOMD requirement templates do not leak scenario-specific track IDs into policy.
+
+## Map-aware requirements
+
+The normalized map context contains lane-center polylines, stop-sign positions,
+crosswalk polygons, and timestamped traffic-signal states. The geometric layer
+provides:
+
+- nearest-lane association and absolute lateral offset;
+- stop-sign crossing speed;
+- stop-state signal crossing indicators;
+- agent-to-crosswalk distance;
+- vehicle-to-pedestrian/cyclist separation conditioned on mapped crosswalk occupancy.
+
+Map requirements have three outcomes. `PASS` and `FAIL` require sufficient
+context and evaluated samples. `NOT APPLICABLE` retains a concrete reason—such
+as no stop-state signal, no stop-sign crossing, or no crosswalk-context vulnerable
+road user—and is never counted as a passed requirement.

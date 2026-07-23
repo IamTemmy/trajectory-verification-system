@@ -46,9 +46,20 @@ def main() -> int:
         write_scenario_svg(scenario, args.svg_output)
     print(json.dumps({
         "scenario_id": report.scenario_id,
+        "overall_status": report.overall_status,
         "passed": report.passed,
         "requirements_passed": report.passed_count,
+        "requirements_applicable": report.applicable_count,
+        "requirements_not_applicable": (
+            len(report.requirement_evidence) - report.applicable_count
+        ),
         "requirements_total": len(report.requirement_evidence),
+        "map_context": {
+            "lanes": len(scenario.map_context.lanes),
+            "stop_signs": len(scenario.map_context.stop_signs),
+            "crosswalks": len(scenario.map_context.crosswalks),
+            "traffic_signal_states": len(scenario.map_context.traffic_signals),
+        },
         "quality_annotations": [item.to_dict() for item in report.quality_annotations],
         "results": [item.to_dict() for item in report.requirement_evidence],
     }, indent=2))

@@ -53,6 +53,9 @@ class WOMDVerifyCLITests(unittest.TestCase):
 
             self.assertEqual(0, exit_code)
             self.assertIn('"passed": true', output.getvalue())
+            self.assertIn('"overall_status": "PASS"', output.getvalue())
+            self.assertIn('"requirements_applicable": 1', output.getvalue())
+            self.assertIn('"lanes": 0', output.getvalue())
             self.assertTrue(markdown.exists())
             self.assertTrue(html.exists())
             self.assertTrue(svg.exists())

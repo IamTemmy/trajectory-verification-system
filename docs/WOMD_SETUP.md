@@ -85,6 +85,25 @@ JSON, and SVG outputs were generated successfully and remain gitignored.
 These thresholds are demonstrative data-review checks, not validated safety
 limits, and the results make no claim about production Waymo Driver behavior.
 
+## Verified map-aware run
+
+Milestone 3 was validated on July 23, 2026 using scenario
+`4992809c590076fe`. The SDC role resolved to track `873`. Lane association was
+applicable for all 91 SDC states and passed the 3.5 m demonstration threshold,
+with observed center offset from 0.044 m to 0.446 m.
+
+The remaining requirements were correctly reported as `NOT APPLICABLE`:
+
+- no stop-state traffic signal was present for the signal-crossing check;
+- the SDC did not cross a mapped stop-sign position;
+- no pedestrian or cyclist occupied a mapped crosswalk context.
+
+Thus the scenario result is one of one applicable requirement passed, with three
+requirements excluded for recorded, machine-readable reasons. The scenario-level
+irregular-sampling warning remained limited to tracks `865`, `867`, and `872`,
+which were not inputs to the lane-offset evaluation. Map-overlay SVG, Markdown,
+HTML, and JSON artifacts were generated locally and remain gitignored.
+
 ## Dataset access
 
 Waymo requires users to apply for Open Dataset access and authenticate with the account used for that application. Dataset files are not committed to this repository.
