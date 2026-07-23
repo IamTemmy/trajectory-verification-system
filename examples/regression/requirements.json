@@ -1,0 +1,11 @@
+{
+  "requirements": [{
+    "id": "REGRESSION_SPEED_001",
+    "description": "Keep speed within the regression demonstration threshold",
+    "metric": "speed",
+    "operator": "less_than_or_equal",
+    "threshold": 12.0,
+    "units": "m/s",
+    "subject_agent_id": "ego"
+  }]
+}

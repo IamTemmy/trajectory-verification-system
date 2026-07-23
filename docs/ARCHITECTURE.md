@@ -73,3 +73,16 @@ Map requirements have three outcomes. `PASS` and `FAIL` require sufficient
 context and evaluated samples. `NOT APPLICABLE` retains a concrete reason—such
 as no stop-state signal, no stop-sign crossing, or no crosswalk-context vulnerable
 road user—and is never counted as a passed requirement.
+
+## Regression gates
+
+Scenario-set manifests provide stable baseline and candidate inputs. The
+regression layer evaluates the same declarative requirements on matching
+scenario IDs and classifies each transition as unchanged, newly failed,
+resolved, newly applicable and passing, or lost applicability. Missing and
+added scenarios remain explicit rather than disappearing from aggregate counts.
+
+A policy sets the allowed new-failure budget and whether missing candidate
+scenarios or lost applicability block the gate. JSON is the machine interface;
+Markdown and standalone HTML provide review evidence. The CLI returns exit code
+`0` for a passing policy and `1` for a blocking regression.

@@ -15,6 +15,7 @@ dependencies = ["protobuf>=4.25,<7"]
 verify-trajectories = "trajectory_verification.cli:main"
 inspect-womd = "trajectory_verification.womd_cli:main"
 verify-womd = "trajectory_verification.womd_verify_cli:main"
+compare-trajectories = "trajectory_verification.regression_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
