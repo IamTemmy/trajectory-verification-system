@@ -23,3 +23,18 @@ jobs:
         run: python -m pip install -e .
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
+      - name: Exercise regression gate
+        run: |
+          compare-trajectories \
+            examples/regression/baseline_manifest.json \
+            examples/regression/baseline_manifest.json \
+            examples/regression/requirements.json \
+            --policy examples/regression/policy.json \
+            --json-report reports/generated/regression.json \
+            --markdown-report reports/generated/regression.md \
+            --html-report reports/generated/regression.html
+      - name: Retain regression evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-evidence-py${{ matrix.python-version }}
+          path: reports/generated/regression.*
