@@ -43,6 +43,16 @@ class RequirementTests(unittest.TestCase):
         self.assertTrue(result.passed)
         self.assertEqual(0, result.failed_samples)
 
+    def test_map_requirement_is_explicitly_not_applicable_without_map(self):
+        requirement = Requirement(
+            "LANE_001", "Stay near lane center", "lane_lateral_offset",
+            "less_than_or_equal", 2.0, "m", "ego",
+        )
+        result = evaluate_requirement(self.scenario, requirement)
+        self.assertFalse(result.applicable)
+        self.assertIsNone(result.passed)
+        self.assertIn("no lane-center geometry", result.not_applicable_reason)
+
 
 if __name__ == "__main__":
     unittest.main()

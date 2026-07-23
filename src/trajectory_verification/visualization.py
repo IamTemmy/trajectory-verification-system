@@ -35,6 +35,19 @@ def scenario_to_svg(
         for state in track.states
         if isfinite(state.x_m) and isfinite(state.y_m)
     ]
+    map_points = [
+        (point.x_m, point.y_m)
+        for lane in scenario.map_context.lanes
+        for point in lane.polyline
+    ] + [
+        (point.x_m, point.y_m)
+        for crosswalk in scenario.map_context.crosswalks
+        for point in crosswalk.polygon
+    ] + [
+        (sign.position.x_m, sign.position.y_m)
+        for sign in scenario.map_context.stop_signs
+    ]
+    points.extend(map_points)
     if not points:
         raise ValueError("scenario contains no finite trajectory points")
     xs, ys = zip(*points)
@@ -61,6 +74,26 @@ def scenario_to_svg(
             f'{escape(scenario.scenario_id)}</text>'
         ),
     ]
+    for lane in scenario.map_context.lanes:
+        projected = [project(point.x_m, point.y_m) for point in lane.polyline]
+        point_text = " ".join(f"{x:.2f},{y:.2f}" for x, y in projected)
+        elements.append(
+            f'<polyline points="{point_text}" fill="none" stroke="#cbd5e1" '
+            'stroke-width="2" stroke-dasharray="7 5" opacity="0.9"/>'
+        )
+    for crosswalk in scenario.map_context.crosswalks:
+        projected = [project(point.x_m, point.y_m) for point in crosswalk.polygon]
+        point_text = " ".join(f"{x:.2f},{y:.2f}" for x, y in projected)
+        elements.append(
+            f'<polygon points="{point_text}" fill="#fef3c7" stroke="#f59e0b" '
+            'stroke-width="1.5" opacity="0.65"/>'
+        )
+    for sign in scenario.map_context.stop_signs:
+        x, y = project(sign.position.x_m, sign.position.y_m)
+        elements.append(
+            f'<rect x="{x - 4:.2f}" y="{y - 4:.2f}" width="8" height="8" '
+            'fill="#dc2626" transform="rotate(45 ' + f'{x:.2f} {y:.2f}' + ')"/>'
+        )
     for track in scenario.tracks:
         projected = [project(state.x_m, state.y_m) for state in track.states]
         if not projected:
