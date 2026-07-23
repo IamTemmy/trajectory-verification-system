@@ -49,6 +49,18 @@ class ReportingTests(unittest.TestCase):
             self.assertEqual(2, len(outputs))
             self.assertTrue(all(path.exists() for path in outputs))
 
+    def test_not_applicable_is_not_reported_as_pass(self):
+        ego = AgentTrack("ego", (State(0, 0, 0), State(1, 1, 0)))
+        scenario = Scenario("no-map", (ego,))
+        requirement = Requirement(
+            "LANE", "Lane offset", "lane_lateral_offset",
+            "less_than_or_equal", 2.0, "m", "ego",
+        )
+        report = build_validation_report(scenario, (requirement,))
+        self.assertEqual("NOT APPLICABLE", report.overall_status)
+        self.assertFalse(report.passed)
+        self.assertIn("NOT APPLICABLE", report_to_markdown(report))
+
 
 if __name__ == "__main__":
     unittest.main()

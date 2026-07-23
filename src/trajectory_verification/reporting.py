@@ -27,11 +27,23 @@ class ValidationReport:
 
     @property
     def passed(self) -> bool:
-        return all(item.result.passed for item in self.requirement_evidence)
+        return self.overall_status == "PASS"
+
+    @property
+    def overall_status(self) -> str:
+        if any(item.result.passed is False for item in self.requirement_evidence):
+            return "FAIL"
+        if not any(item.result.applicable for item in self.requirement_evidence):
+            return "NOT APPLICABLE"
+        return "PASS"
 
     @property
     def passed_count(self) -> int:
-        return sum(item.result.passed for item in self.requirement_evidence)
+        return sum(item.result.passed is True for item in self.requirement_evidence)
+
+    @property
+    def applicable_count(self) -> int:
+        return sum(item.result.applicable for item in self.requirement_evidence)
 
 
 def build_validation_report(
@@ -60,7 +72,7 @@ def build_validation_report(
 
 
 def report_to_markdown(report: ValidationReport) -> str:
-    status = "PASS" if report.passed else "FAIL"
+    status = report.overall_status
     total = len(report.requirement_evidence)
     lines = [
         f"# Trajectory Validation Report — `{report.scenario_id}`",
@@ -68,7 +80,7 @@ def report_to_markdown(report: ValidationReport) -> str:
         f"**Overall result:** {status}",
         "",
         f"- Tracks: {report.track_count}",
-        f"- Requirements passed: {report.passed_count}/{total}",
+        f"- Requirements passed: {report.passed_count}/{report.applicable_count} applicable ({total} total)",
         "",
         "## Requirement summary",
         "",
@@ -80,7 +92,7 @@ def report_to_markdown(report: ValidationReport) -> str:
         observed = _range_text(result.observed_min, result.observed_max, result.units)
         lines.append(
             f"| `{item.requirement.requirement_id}` | "
-            f"{'PASS' if result.passed else 'FAIL'} | {item.evidence_confidence.upper()} | "
+            f"{_result_status(result)} | {item.evidence_confidence.upper()} | "
             f"{result.evaluated_samples} | "
             f"{result.failed_samples} | {observed} |"
         )
@@ -99,7 +111,7 @@ def report_to_markdown(report: ValidationReport) -> str:
         requirement, result = item.requirement, item.result
         lines.extend([
             "",
-            f"## `{requirement.requirement_id}` — {'PASS' if result.passed else 'FAIL'}",
+            f"## `{requirement.requirement_id}` — {_result_status(result)}",
             "",
             requirement.description,
             "",
@@ -112,7 +124,9 @@ def report_to_markdown(report: ValidationReport) -> str:
             f"Evidence confidence: **{item.evidence_confidence.upper()}** — "
             f"{item.confidence_rationale}",
         ])
-        if item.explanations:
+        if not result.applicable:
+            lines.extend(["", f"Not applicable: {result.not_applicable_reason}"])
+        elif item.explanations:
             lines.extend(["", "### Failure evidence", ""])
             lines.extend(f"- {explanation.narrative}" for explanation in item.explanations)
         else:
@@ -128,7 +142,7 @@ def report_to_markdown(report: ValidationReport) -> str:
             for point in item.sensitivity:
                 lines.append(
                     f"| {point.threshold:g} {requirement.units} | "
-                    f"{'PASS' if point.passed else 'FAIL'} | {point.failed_samples} | "
+                    f"{('PASS' if point.passed else 'FAIL')} | {point.failed_samples} | "
                     f"{point.failed_fraction:.1%} |"
                 )
 
@@ -145,13 +159,13 @@ def report_to_markdown(report: ValidationReport) -> str:
 
 
 def report_to_html(report: ValidationReport) -> str:
-    status = "PASS" if report.passed else "FAIL"
-    status_class = "pass" if report.passed else "fail"
+    status = report.overall_status
+    status_class = "pass" if status == "PASS" else ("fail" if status == "FAIL" else "na")
     summary_rows = "".join(
         "<tr>"
         f"<td><code>{escape(item.requirement.requirement_id)}</code></td>"
-        f"<td><span class='pill {'pass' if item.result.passed else 'fail'}'>"
-        f"{'PASS' if item.result.passed else 'FAIL'}</span></td>"
+        f"<td><span class='pill {_result_class(item.result)}'>"
+        f"{_result_status(item.result)}</span></td>"
         f"<td>{escape(item.evidence_confidence.upper())}</td>"
         f"<td>{item.result.evaluated_samples}</td><td>{item.result.failed_samples}</td>"
         f"<td>{escape(_range_text(item.result.observed_min, item.result.observed_max, item.result.units))}</td>"
@@ -172,11 +186,11 @@ def report_to_html(report: ValidationReport) -> str:
 main{{max-width:1050px;margin:0 auto;padding:48px 24px 80px}}h1{{font-size:32px;margin:0 0 8px}}h2{{margin-top:34px}}h3{{margin-top:24px}}
 .muted{{color:var(--muted)}}.card{{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:18px 0;box-shadow:0 1px 3px #10182810}}
 .hero{{display:flex;justify-content:space-between;gap:24px;align-items:center}}.score{{font-size:14px;color:var(--muted)}}.score b{{font-size:28px;color:var(--ink)}}
-.pill{{display:inline-block;border-radius:999px;padding:5px 10px;font-weight:700;font-size:12px}}.pill.pass{{color:var(--pass);background:var(--pass-bg)}}.pill.fail{{color:var(--fail);background:var(--fail-bg)}}
+.pill{{display:inline-block;border-radius:999px;padding:5px 10px;font-weight:700;font-size:12px}}.pill.pass{{color:var(--pass);background:var(--pass-bg)}}.pill.fail{{color:var(--fail);background:var(--fail-bg)}}.pill.na{{color:#475467;background:#f2f4f7}}
 table{{width:100%;border-collapse:collapse}}th,td{{text-align:left;padding:11px;border-bottom:1px solid var(--line)}}th{{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}}
 code{{font-family:ui-monospace,SFMono-Regular,monospace}}.boundary{{border-left:4px solid #f79009}}ul{{padding-left:22px}}
 </style></head><body><main>
-<section class="card hero"><div><div class="muted">Trajectory validation report</div><h1>{escape(report.scenario_id)}</h1><span class="pill {status_class}">{status}</span></div><div class="score"><b>{report.passed_count}/{len(report.requirement_evidence)}</b><br>requirements passed<br>{report.track_count} tracks</div></section>
+<section class="card hero"><div><div class="muted">Trajectory validation report</div><h1>{escape(report.scenario_id)}</h1><span class="pill {status_class}">{status}</span></div><div class="score"><b>{report.passed_count}/{report.applicable_count}</b><br>applicable requirements passed<br>{report.track_count} tracks</div></section>
 <section class="card"><h2>Requirement summary</h2><table><thead><tr><th>Requirement</th><th>Result</th><th>Confidence</th><th>Evaluated</th><th>Failed</th><th>Observed range</th></tr></thead><tbody>{summary_rows}</tbody></table></section>
 <section class="card"><h2>Data quality and applicability</h2><ul>{quality}</ul></section>
 {details}
@@ -213,7 +227,7 @@ def _evidence_html(item: RequirementEvidence) -> str:
     requirement, result = item.requirement, item.result
     failures = "".join(
         f"<li>{escape(explanation.narrative)}</li>" for explanation in item.explanations
-    ) or "<li>No failed samples were observed.</li>"
+    ) or (f"<li>Not applicable: {escape(result.not_applicable_reason or '')}</li>" if not result.applicable else "<li>No failed samples were observed.</li>")
     sensitivity = "".join(
         "<tr>"
         f"<td>{point.threshold:g} {escape(requirement.units)}</td>"
@@ -221,8 +235,20 @@ def _evidence_html(item: RequirementEvidence) -> str:
         f"<td>{point.failed_samples}</td><td>{point.failed_fraction:.1%}</td>"
         "</tr>" for point in item.sensitivity
     )
-    return f"""<section class="card"><h2><code>{escape(requirement.requirement_id)}</code> — {'PASS' if result.passed else 'FAIL'}</h2>
+    return f"""<section class="card"><h2><code>{escape(requirement.requirement_id)}</code> — {_result_status(result)}</h2>
 <p>{escape(requirement.description)}</p><p class="muted">{escape(requirement.metric)} {escape(requirement.operator)} {requirement.threshold:g} {escape(requirement.units)} · subject {escape(requirement.subject_agent_id)}{(' · counterpart ' + escape(requirement.other_agent_id)) if requirement.other_agent_id else ''}</p>
 <p><strong>Evidence confidence: {escape(item.evidence_confidence.upper())}</strong> — {escape(item.confidence_rationale)}</p>
 <h3>Failure evidence</h3><ul>{failures}</ul>
 <h3>Threshold sensitivity</h3><table><thead><tr><th>Threshold</th><th>Result</th><th>Failed samples</th><th>Failed fraction</th></tr></thead><tbody>{sensitivity}</tbody></table></section>"""
+
+
+def _result_status(result) -> str:
+    if not result.applicable:
+        return "NOT APPLICABLE"
+    return "PASS" if result.passed else "FAIL"
+
+
+def _result_class(result) -> str:
+    if not result.applicable:
+        return "na"
+    return "pass" if result.passed else "fail"

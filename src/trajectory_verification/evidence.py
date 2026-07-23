@@ -41,7 +41,7 @@ class FailureExplanation:
 @dataclass(frozen=True, slots=True)
 class SensitivityPoint:
     threshold: float
-    passed: bool
+    passed: bool | None
     failed_samples: int
     failed_fraction: float
 
@@ -133,10 +133,10 @@ def explain_requirement(
         _explain_interval(interval, requirement, relation)
         for interval in result.failure_intervals
     )
-    sensitivity = tuple(
+    sensitivity = (() if not result.applicable else tuple(
         _sensitivity_point(scenario, requirement, float(threshold))
         for threshold in sensitivity_thresholds
-    )
+    ))
     relevant_ids = {requirement.subject_agent_id, requirement.other_agent_id}
     quality = tuple(
         item for item in assess_scenario_quality(scenario)
@@ -193,6 +193,8 @@ def _evidence_confidence(
     """Grade evidence completeness, not real-world safety confidence."""
 
     severities = {item.severity for item in annotations}
+    if not result.applicable:
+        return "not_applicable", result.not_applicable_reason or "Requirement is not applicable."
     if result.evaluated_samples < 2 or "error" in severities:
         return "low", "Too few evaluated samples or a blocking data-quality error."
     if result.evaluated_samples < 5 or "warning" in severities:

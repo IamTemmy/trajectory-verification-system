@@ -7,6 +7,14 @@ from operator import ge, gt, le, lt
 from typing import Callable
 
 from .metrics import Sample, acceleration, jerk, separation, speed, time_to_collision
+from .map_metrics import (
+    NotApplicableError,
+    crosswalk_proximity,
+    lane_lateral_offset,
+    red_stop_line_violation,
+    stop_sign_crossing_speed,
+    vru_crosswalk_proximity,
+)
 from .models import Scenario
 
 
@@ -54,13 +62,15 @@ class FailureInterval:
 @dataclass(frozen=True, slots=True)
 class RequirementResult:
     requirement_id: str
-    passed: bool
+    passed: bool | None
     evaluated_samples: int
     failed_samples: int
     failure_intervals: tuple[FailureInterval, ...]
     observed_min: float | None
     observed_max: float | None
     units: str
+    applicable: bool = True
+    not_applicable_reason: str | None = None
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
@@ -69,7 +79,21 @@ class RequirementResult:
 def evaluate_requirement(scenario: Scenario, requirement: Requirement) -> RequirementResult:
     if requirement.operator not in COMPARATORS:
         raise ValueError(f"unsupported operator: {requirement.operator}")
-    samples = metric_samples(scenario, requirement)
+    try:
+        samples = metric_samples(scenario, requirement)
+    except NotApplicableError as exc:
+        return RequirementResult(
+            requirement_id=requirement.requirement_id,
+            passed=None,
+            evaluated_samples=0,
+            failed_samples=0,
+            failure_intervals=(),
+            observed_min=None,
+            observed_max=None,
+            units=requirement.units,
+            applicable=False,
+            not_applicable_reason=str(exc),
+        )
     compare = COMPARATORS[requirement.operator]
     failures = tuple(sample for sample in samples if not compare(sample.value, requirement.threshold))
     intervals = _localize_failures(failures, requirement.operator)
@@ -95,6 +119,16 @@ def metric_samples(scenario: Scenario, requirement: Requirement) -> tuple[Sample
         return acceleration(subject)
     if requirement.metric == "jerk":
         return jerk(subject)
+    if requirement.metric == "lane_lateral_offset":
+        return lane_lateral_offset(scenario, subject)
+    if requirement.metric == "crosswalk_proximity":
+        return crosswalk_proximity(scenario, subject)
+    if requirement.metric == "vru_crosswalk_proximity":
+        return vru_crosswalk_proximity(scenario, subject)
+    if requirement.metric == "red_stop_line_violation":
+        return red_stop_line_violation(scenario, subject)
+    if requirement.metric == "stop_sign_crossing_speed":
+        return stop_sign_crossing_speed(scenario, subject)
     if requirement.other_agent_id is None:
         raise ValueError(f"metric {requirement.metric} requires other_agent_id")
     other = scenario.track(requirement.other_agent_id)

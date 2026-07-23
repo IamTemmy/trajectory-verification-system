@@ -1,0 +1,40 @@
+{
+  "requirements": [
+    {
+      "id": "MAP_LANE_OFFSET_REVIEW_001",
+      "description": "Flag large SDC center offset from the nearest mapped lane center",
+      "metric": "lane_lateral_offset",
+      "operator": "less_than_or_equal",
+      "threshold": 3.5,
+      "units": "m",
+      "subject_agent_id": "@sdc"
+    },
+    {
+      "id": "MAP_RED_STOP_LINE_REVIEW_001",
+      "description": "Flag an SDC stop-line crossing while its associated signal is in a stop state",
+      "metric": "red_stop_line_violation",
+      "operator": "less_than_or_equal",
+      "threshold": 0.0,
+      "units": "indicator",
+      "subject_agent_id": "@sdc"
+    },
+    {
+      "id": "MAP_STOP_SIGN_SPEED_REVIEW_001",
+      "description": "Flag high SDC crossing speed at a mapped stop-sign position",
+      "metric": "stop_sign_crossing_speed",
+      "operator": "less_than_or_equal",
+      "threshold": 0.5,
+      "units": "m/s",
+      "subject_agent_id": "@sdc"
+    },
+    {
+      "id": "MAP_CROSSWALK_VRU_PROXIMITY_REVIEW_001",
+      "description": "Flag low SDC separation from a pedestrian or cyclist occupying a mapped crosswalk context",
+      "metric": "vru_crosswalk_proximity",
+      "operator": "greater_than_or_equal",
+      "threshold": 2.0,
+      "units": "m",
+      "subject_agent_id": "@sdc"
+    }
+  ]
+}
