@@ -1,0 +1,5 @@
+{
+  "max_new_failures": 0,
+  "fail_on_missing_candidate_scenarios": true,
+  "fail_on_lost_applicability": true
+}

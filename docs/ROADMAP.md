@@ -34,7 +34,7 @@
 
 ## Milestone 4 — Regression gates
 
-- [ ] Compare baseline and candidate trajectory sets
-- [ ] Detect newly introduced failures
-- [ ] Define CI-friendly pass/fail policies
-- [ ] Produce scenario-level regression summaries
+- [x] Compare baseline and candidate trajectory sets
+- [x] Detect newly introduced failures
+- [x] Define CI-friendly pass/fail policies
+- [x] Produce scenario-level regression summaries

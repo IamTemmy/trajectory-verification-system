@@ -30,6 +30,7 @@ The first milestone provides:
 - deterministic unit tests and continuous integration;
 - lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency;
 - standalone SVG trajectory visualization without plotting dependencies.
+- deterministic baseline/candidate regression gates for CI.
 
 ## Quick start
 
@@ -58,6 +59,24 @@ verify-womd data/raw/SHARD examples/womd_requirements.json \
 WOMD templates may select `@sdc`, `@prediction:N`, or
 `@object_of_interest:N`; reports always record the resolved track IDs.
 
+Run the included regression example (it intentionally exits `1` because the
+candidate introduces a speed failure):
+
+```bash
+compare-trajectories \
+  examples/regression/baseline_manifest.json \
+  examples/regression/candidate_manifest.json \
+  examples/regression/requirements.json \
+  --policy examples/regression/policy.json \
+  --json-report reports/generated/regression.json \
+  --markdown-report reports/generated/regression.md \
+  --html-report reports/generated/regression.html
+```
+
+Manifest scenario paths are relative to the manifest. The default policy allows
+no new failures and blocks missing candidate scenarios or lost applicability.
+The command exits `0` when the policy passes and `1` when it fails.
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.
@@ -82,8 +101,8 @@ scenario source -> dataset adapter -> normalized trajectories
 This is an active engineering project. Milestone 0 (verification kernel) and
 Milestone 1 (WOMD ingestion), and Milestone 2 (engineering evidence) are
 complete. Milestone 3 adds map-aware requirements with explicit `PASS`, `FAIL`,
-and `NOT APPLICABLE` outcomes; all three milestones are validated on a real
-WOMD v1.3.1 scenario. Regression gates are next.
+and `NOT APPLICABLE` outcomes; the WOMD milestones are validated on a real
+WOMD v1.3.1 scenario. Milestone 4 adds deterministic regression gates.
 
 ## Responsible interpretation
 

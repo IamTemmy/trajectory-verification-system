@@ -53,3 +53,18 @@ def load_scenario(path: str | Path) -> Scenario:
 def load_requirements(path: str | Path) -> tuple[Requirement, ...]:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     return tuple(Requirement.from_dict(item) for item in data["requirements"])
+
+
+def load_scenario_manifest(path: str | Path) -> tuple[Scenario, ...]:
+    """Load scenarios listed by paths relative to a manifest."""
+    manifest_path = Path(path)
+    data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    entries = data.get("scenarios")
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("scenario manifest must contain a non-empty 'scenarios' list")
+    scenarios = tuple(load_scenario(manifest_path.parent / str(item)) for item in entries)
+    identifiers = [scenario.scenario_id for scenario in scenarios]
+    duplicates = sorted({item for item in identifiers if identifiers.count(item) > 1})
+    if duplicates:
+        raise ValueError(f"duplicate scenario IDs in manifest: {', '.join(duplicates)}")
+    return scenarios

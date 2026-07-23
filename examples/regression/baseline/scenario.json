@@ -1,0 +1,12 @@
+{
+  "scenario_id": "regression-demo-001",
+  "tracks": [{
+    "agent_id": "ego",
+    "object_type": "vehicle",
+    "states": [
+      {"time_s": 0.0, "x_m": 0.0, "y_m": 0.0},
+      {"time_s": 1.0, "x_m": 10.0, "y_m": 0.0},
+      {"time_s": 2.0, "x_m": 20.0, "y_m": 0.0}
+    ]
+  }]
+}
