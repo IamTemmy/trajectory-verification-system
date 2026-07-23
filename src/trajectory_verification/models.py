@@ -40,6 +40,50 @@ class AgentTrack:
 
 
 @dataclass(frozen=True, slots=True)
+class MapPoint:
+    x_m: float
+    y_m: float
+    z_m: float = 0.0
+
+
+@dataclass(frozen=True, slots=True)
+class LaneFeature:
+    feature_id: str
+    polyline: tuple[MapPoint, ...]
+    speed_limit_mph: float | None = None
+    lane_type: str = "unknown"
+
+
+@dataclass(frozen=True, slots=True)
+class StopSignFeature:
+    feature_id: str
+    lane_ids: tuple[str, ...]
+    position: MapPoint
+
+
+@dataclass(frozen=True, slots=True)
+class CrosswalkFeature:
+    feature_id: str
+    polygon: tuple[MapPoint, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class TrafficSignalState:
+    time_s: float
+    lane_id: str
+    state: str
+    stop_point: MapPoint
+
+
+@dataclass(frozen=True, slots=True)
+class MapContext:
+    lanes: tuple[LaneFeature, ...] = ()
+    stop_signs: tuple[StopSignFeature, ...] = ()
+    crosswalks: tuple[CrosswalkFeature, ...] = ()
+    traffic_signals: tuple[TrafficSignalState, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
 class Scenario:
     """A normalized collection of agent trajectories."""
 
@@ -50,6 +94,7 @@ class Scenario:
     objects_of_interest: tuple[str, ...] = ()
     tracks_to_predict: tuple[str, ...] = ()
     map_feature_count: int = 0
+    map_context: MapContext = MapContext()
 
     def __post_init__(self) -> None:
         if not self.scenario_id:
