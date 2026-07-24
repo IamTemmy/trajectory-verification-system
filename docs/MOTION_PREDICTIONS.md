@@ -164,3 +164,40 @@ track contains all 91 valid WOMD states.
 
 Use `--summary-only` for full-shard runs to keep terminal output compact. Full
 scenario and agent evidence remains available in the requested report files.
+
+## Verified full-shard benchmark
+
+Milestone 7 was validated on July 24, 2026 over every record in validation shard
+`uncompressed_scenario_validation_validation.tfrecord-00007-of-00150`: 276
+scenarios and 1,203 prediction-target agents. The strict comparison gate passed
+without changing the evaluated population or 93.132% valid-label coverage.
+
+| Metric | Constant velocity | Kinematic ensemble | Change |
+|---|---:|---:|---:|
+| Mean minADE | 9.633 m | 7.728 m | -1.905 m (-19.8%) |
+| Mean minFDE | 24.385 m | 19.938 m | -4.447 m (-18.2%) |
+| 2 m diagnostic miss rate | 93.43% | 91.52% | -1.91 percentage points |
+| Valid ground-truth coverage | 93.132% | 93.132% | unchanged |
+
+The ensemble improved mean displacement metrics for every object type:
+
+| Object type | Agents | Baseline minADE | Ensemble minADE | Baseline minFDE | Ensemble minFDE |
+|---|---:|---:|---:|---:|---:|
+| Vehicle | 1,055 | 10.687 m | 8.548 m | 27.131 m | 22.142 m |
+| Pedestrian | 126 | 1.609 m | 1.403 m | 3.561 m | 3.061 m |
+| Cyclist | 22 | 5.079 m | 4.673 m | 11.968 m | 10.887 m |
+
+Best-minADE mode selection used constant velocity for 501 agents (41.6%),
+capped constant acceleration for 205 (17.0%), and capped constant turn rate for
+497 (41.3%). The broad contribution pattern supports retaining all three
+transparent modes.
+
+Deterministic 95% agent-bootstrap intervals were:
+
+- ensemble mean minADE: 7.393–8.055 m;
+- ensemble mean minFDE: 19.072–20.761 m;
+- ensemble miss rate: 89.94%–93.10%.
+
+These intervals describe sampling uncertainty within this shard. A paired
+bootstrap of per-agent candidate-minus-baseline deltas is the appropriate next
+step for directly quantifying improvement uncertainty.

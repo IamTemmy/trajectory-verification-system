@@ -63,5 +63,5 @@
 - [x] Add deterministic bootstrap confidence intervals
 - [x] Add vehicle, pedestrian, and cyclist performance breakdowns
 - [x] Add mode-contribution and worst-agent rankings
-- [ ] Evaluate constant velocity and kinematic ensemble across a complete shard
-- [ ] Gate the full-shard candidate comparison
+- [x] Evaluate constant velocity and kinematic ensemble across a complete shard
+- [x] Gate the full-shard candidate comparison
