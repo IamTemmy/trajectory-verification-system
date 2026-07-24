@@ -161,3 +161,6 @@ Reports also include:
 The normalized scenario stores the source timeline separately from track
 histories. Prediction horizons therefore remain correct even when no individual
 track contains all 91 valid WOMD states.
+
+Use `--summary-only` for full-shard runs to keep terminal output compact. Full
+scenario and agent evidence remains available in the requested report files.
