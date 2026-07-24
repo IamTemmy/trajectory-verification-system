@@ -116,6 +116,7 @@ def scenario_from_proto(message: Any, *, min_valid_states: int = 1) -> Scenario:
         tracks_to_predict=prediction_ids,
         map_feature_count=len(message.map_features),
         map_context=map_context,
+        timestamps_s=timestamps,
     )
 
 

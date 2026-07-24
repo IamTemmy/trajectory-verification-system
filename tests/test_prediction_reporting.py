@@ -25,6 +25,20 @@ class PredictionReportingTests(unittest.TestCase):
         self.assertIn("not official Waymo", evaluation_to_markdown(evaluation))
         self.assertIn("not official Waymo", evaluation_to_html(evaluation))
 
+    def test_bootstrap_and_breakdowns_are_deterministic(self):
+        evaluation = PredictionEvaluation((
+            ScenarioPredictionScore("a", (
+                AgentPredictionScore("one", 3, 16, 16, 1.0, 2.0, False, 1, "vehicle"),
+                AgentPredictionScore("two", 3, 16, 16, 3.0, 6.0, True, 2, "pedestrian"),
+            )),
+        ), 2.0, bootstrap_samples=100, bootstrap_seed=7)
+        first = evaluation.to_dict()
+        second = evaluation.to_dict()
+        self.assertEqual(first["confidence_intervals"], second["confidence_intervals"])
+        self.assertEqual(first["best_mode_counts"], {"1": 1, "2": 1})
+        self.assertEqual(first["by_object_type"]["vehicle"]["agents"], 1)
+        self.assertEqual(first["worst_agents_by_min_ade"][0]["agent_id"], "two")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -17,6 +17,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("submission", help="serialized MotionChallengeSubmission protobuf")
     parser.add_argument("shards", nargs="+", help="matching uncompressed WOMD scenario shards")
     parser.add_argument("--miss-threshold-m", type=float, default=2.0)
+    parser.add_argument("--bootstrap-samples", type=int, default=1000)
+    parser.add_argument("--bootstrap-seed", type=int, default=0)
     parser.add_argument("--json-report")
     parser.add_argument("--markdown-report")
     parser.add_argument("--html-report")
@@ -41,7 +43,14 @@ def main() -> int:
     )
     if not scores:
         raise SystemExit("submission contains no scenario predictions")
-    evaluation = PredictionEvaluation(scores, args.miss_threshold_m)
+    if args.bootstrap_samples < 0:
+        raise SystemExit("--bootstrap-samples must be non-negative")
+    evaluation = PredictionEvaluation(
+        scores,
+        args.miss_threshold_m,
+        args.bootstrap_samples,
+        args.bootstrap_seed,
+    )
     payload = evaluation.to_dict()
     if args.json_report:
         output = Path(args.json_report)

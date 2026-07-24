@@ -103,11 +103,13 @@ def write_motion_submission(
 
 
 def _source_timestamps(ground_truth: Scenario) -> dict[int, float]:
-    reference = max(ground_truth.tracks, key=lambda track: len(track.states))
-    if len(reference.states) <= OFFICIAL_PREDICTION_STEPS[-1]:
+    timeline = ground_truth.timestamps_s or tuple(
+        state.time_s
+        for state in max(ground_truth.tracks, key=lambda track: len(track.states)).states
+    )
+    if len(timeline) <= OFFICIAL_PREDICTION_STEPS[-1]:
         raise ValueError("ground-truth scenario does not contain official prediction horizon")
-    reference_times = tuple(state.time_s for state in reference.states)
-    return {step: reference_times[step] for step in OFFICIAL_PREDICTION_STEPS}
+    return {step: timeline[step] for step in OFFICIAL_PREDICTION_STEPS}
 
 
 def _trajectory_from_proto(

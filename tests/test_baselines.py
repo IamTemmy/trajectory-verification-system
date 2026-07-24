@@ -61,6 +61,18 @@ class BaselineTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported baseline"):
             baseline_predictions(linear_scenario(), "unknown")
 
+    def test_scenario_timeline_does_not_require_a_complete_track(self):
+        states = linear_scenario().tracks[0].states[:20]
+        scenario = Scenario(
+            "sparse",
+            (AgentTrack("42", states, "vehicle"),),
+            current_time_index=10,
+            tracks_to_predict=("42",),
+            timestamps_s=tuple(index * 0.1 for index in range(91)),
+        )
+        prediction = baseline_predictions(scenario)
+        self.assertEqual(len(prediction.agents[0].trajectories[0].points), 16)
+
 
 if __name__ == "__main__":
     unittest.main()
