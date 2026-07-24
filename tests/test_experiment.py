@@ -94,6 +94,10 @@ class ExperimentTests(unittest.TestCase):
             self.assertEqual(completed.returncode, 0, completed.stderr)
             terminal = json.loads(completed.stdout)
             self.assertTrue(terminal["result"]["gate_passed"])
+            self.assertEqual(
+                terminal["result"]["risk_context"]["candidate"]["summary"]["agents"],
+                1,
+            )
             index_path = root / "artifacts" / "experiment-index.json"
             index = json.loads(index_path.read_text())
             self.assertEqual(index["source_revision"]["commit"], "verified-test-sha")
