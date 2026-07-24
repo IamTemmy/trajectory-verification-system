@@ -98,12 +98,17 @@ class ExperimentTests(unittest.TestCase):
             index = json.loads(index_path.read_text())
             self.assertEqual(index["source_revision"]["commit"], "verified-test-sha")
             self.assertEqual(index["dataset"]["scenario_count"], 1)
-            self.assertEqual(len(index["artifacts"]), 11)
+            self.assertEqual(len(index["artifacts"]), 17)
             self.assertTrue(all(len(item["sha256"]) == 64 for item in index["artifacts"]))
             self.assertTrue((root / "artifacts" / "comparison.html").exists())
             self.assertTrue(
                 (root / "artifacts" / "candidate-evaluation.json").exists()
             )
+            risk = json.loads(
+                (root / "artifacts" / "candidate-risk.json").read_text()
+            )
+            self.assertEqual(risk["summary"]["agents"], 1)
+            self.assertIn("motion_class", risk["summary"])
 
 
 if __name__ == "__main__":

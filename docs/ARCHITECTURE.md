@@ -129,3 +129,16 @@ reports, paired comparison evidence, and `experiment-index.json`. The index
 records the Git source revision, dirty-worktree state, manifest and shard
 SHA-256 checksums, artifact sizes and checksums, configuration, and gate result.
 Large dataset records and generated evidence remain outside version control.
+
+## Prediction risk context
+
+The risk-context layer joins each scored prediction back to its normalized
+scenario. It derives motion class, 30 m scene density, minimum future actor
+separation, SDC-relative separation error, and proximity to crosswalk and
+traffic-control map features. These signals stratify aggregate displacement
+errors and rank cases for human review.
+
+Priority is categorical and threshold-driven. A high-priority case requires a
+diagnostic miss plus at least one consequential context tag. This is an
+engineering-review heuristic, not a calibrated probability of collision,
+severity, unsafe behavior, or production-system risk.

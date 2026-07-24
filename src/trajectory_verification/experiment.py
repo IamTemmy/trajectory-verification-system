@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from hashlib import sha256
 import json
 import os
@@ -21,6 +21,8 @@ from .prediction_comparison import (
 )
 from .prediction_metrics import score_scenario_predictions
 from .prediction_reporting import PredictionEvaluation, write_prediction_reports
+from .risk_analysis import RiskThresholds, analyze_prediction_risk
+from .risk_reporting import write_risk_reports
 
 
 SUPPORTED_MODELS = {
@@ -155,7 +157,9 @@ def run_experiment(config: ExperimentConfig) -> dict[str, object]:
             baseline_predictions(scenario, candidate.model) for scenario in scenarios
         )
         write_motion_submission(predictions, submission_path)
-        evaluation = _evaluate_submission(config, scenarios, submission_path)
+        evaluation, loaded_predictions = _evaluate_submission(
+            config, scenarios, submission_path
+        )
         payload = evaluation.to_dict()
         evaluations[candidate.name] = payload
         json_path = output / f"{candidate.name}-evaluation.json"
@@ -163,7 +167,22 @@ def run_experiment(config: ExperimentConfig) -> dict[str, object]:
         html_path = output / f"{candidate.name}-evaluation.html"
         json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         write_prediction_reports(evaluation, markdown_path, html_path)
-        artifact_paths.extend((submission_path, json_path, markdown_path, html_path))
+        risk = analyze_prediction_risk(
+            scenarios, loaded_predictions, evaluation.scenarios, RiskThresholds()
+        )
+        risk_json = output / f"{candidate.name}-risk.json"
+        risk_markdown = output / f"{candidate.name}-risk.md"
+        risk_html = output / f"{candidate.name}-risk.html"
+        write_risk_reports(risk, risk_json, risk_markdown, risk_html)
+        artifact_paths.extend((
+            submission_path,
+            json_path,
+            markdown_path,
+            html_path,
+            risk_json,
+            risk_markdown,
+            risk_html,
+        ))
 
     comparison = compare_prediction_evaluations(
         evaluations[config.baseline_name],
@@ -217,6 +236,7 @@ def run_experiment(config: ExperimentConfig) -> dict[str, object]:
                 "baseline": config.baseline_name,
                 "candidate": config.candidate_name,
             },
+            "risk_context_thresholds": asdict(RiskThresholds()),
         },
         "result": {
             "gate_passed": comparison.gate_passed,
@@ -234,7 +254,7 @@ def run_experiment(config: ExperimentConfig) -> dict[str, object]:
 
 def _evaluate_submission(
     config: ExperimentConfig, scenarios, submission_path: Path
-) -> PredictionEvaluation:
+) -> tuple[PredictionEvaluation, tuple]:
     truth_by_id = {item.scenario_id: item for item in scenarios}
     predictions = load_motion_submission(submission_path, scenarios)
     scores = tuple(
@@ -250,7 +270,7 @@ def _evaluate_submission(
         config.miss_threshold_m,
         config.evaluation_bootstrap_samples,
         config.evaluation_bootstrap_seed,
-    )
+    ), predictions
 
 
 def _artifact_record(path: Path, relative_to: Path) -> dict[str, object]:
