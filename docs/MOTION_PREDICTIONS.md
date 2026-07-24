@@ -212,3 +212,33 @@ Deterministic 95% agent-bootstrap intervals were:
 These intervals describe sampling uncertainty within this shard. A paired
 bootstrap of per-agent candidate-minus-baseline deltas is the appropriate next
 step for directly quantifying improvement uncertainty.
+
+## Verified paired full-shard evidence
+
+Milestone 8 was validated on July 24, 2026 using the same 276 scenarios and
+1,203 paired prediction-target agents. The significance-aware gate passed with
+no policy violations.
+
+| Paired candidate-minus-baseline delta | Estimate | 95% paired interval |
+|---|---:|---:|
+| Mean minADE | -1.905 m | [-2.120, -1.692] m |
+| Mean minFDE | -4.447 m | [-4.966, -3.918] m |
+| Diagnostic miss rate | -1.91 percentage points | [-2.66, -1.16] points |
+
+Every paired interval remained below zero, supporting improvement rather than
+an unpaired difference caused by population composition. Ground-truth coverage
+was unchanged.
+
+The agent-level audit found:
+
+- minADE improved for 702 agents, was unchanged for 501, and regressed for 0;
+- minFDE improved for 676 agents, was unchanged for 527, and regressed for 0;
+- miss status improved for 23 agents, was unchanged for 1,180, and regressed
+  for 0.
+
+The large unchanged population is expected because the ensemble includes the
+constant-velocity baseline as one of its modes. Under independently minimized
+minADE and minFDE, adding modes cannot worsen those diagnostics for an
+identically aligned agent. This is evidence that the comparison and mode
+selection are internally consistent; it is not a claim that the kinematic
+ensemble is a competitive learned forecasting model.
