@@ -125,6 +125,11 @@ The full-shard manifest has been reproduced from a clean revision over all 276
 scenarios, producing 11 indexed artifacts and exactly matching the independently
 executed benchmark and paired-comparison results.
 
+Contextual review reports connect forecast errors to motion class, scene
+density, observed actor separation, SDC-relative separation error, crosswalks,
+and traffic controls. Their priority labels are screening heuristics for
+engineering review—not collision probabilities or safety determinations.
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.
@@ -179,6 +184,8 @@ See [docs/ROADMAP.md](docs/ROADMAP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE
 [docs/WOMD_SETUP.md](docs/WOMD_SETUP.md), and
 [docs/MOTION_PREDICTIONS.md](docs/MOTION_PREDICTIONS.md). Reproducible runs are
 documented in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md).
+Prediction-error context and its interpretation boundary are documented in
+[docs/RISK_CONTEXT.md](docs/RISK_CONTEXT.md).
 
 ## License
 

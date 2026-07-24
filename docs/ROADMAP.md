@@ -85,10 +85,11 @@
 
 ## Milestone 10 — Prediction-risk verification
 
-- [ ] Connect forecast errors to map and interaction context
-- [ ] Detect high-consequence misses and near-conflict cases
-- [ ] Stratify failures by motion and scene difficulty
-- [ ] Generate review-ready scenario evidence
+- [x] Connect forecast errors to map and interaction context
+- [x] Detect high-priority misses and close-interaction cases
+- [x] Stratify failures by motion and scene difficulty
+- [x] Generate review-ready scenario evidence
+- [ ] Validate risk-context evidence across the complete real-data shard
 
 ## Milestone 11 — External model integration
 

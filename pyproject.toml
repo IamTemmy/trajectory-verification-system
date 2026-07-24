@@ -20,6 +20,7 @@ evaluate-motion-predictions = "trajectory_verification.motion_evaluate_cli:main"
 generate-womd-baseline = "trajectory_verification.baseline_cli:main"
 compare-prediction-evaluations = "trajectory_verification.prediction_compare_cli:main"
 run-prediction-experiment = "trajectory_verification.experiment_cli:main"
+analyze-prediction-risk = "trajectory_verification.prediction_risk_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

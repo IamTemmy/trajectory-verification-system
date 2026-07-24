@@ -16,6 +16,7 @@ Outputs are written to `reports/generated/full-shard-experiment/`:
 
 - official-format submission protobufs for every candidate;
 - JSON, Markdown, and HTML evaluation reports;
+- JSON, Markdown, and HTML risk-context review reports;
 - JSON, Markdown, and HTML paired comparison reports;
 - `experiment-index.json`.
 
