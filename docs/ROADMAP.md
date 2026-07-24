@@ -65,3 +65,12 @@
 - [x] Add mode-contribution and worst-agent rankings
 - [x] Evaluate constant velocity and kinematic ensemble across a complete shard
 - [x] Gate the full-shard candidate comparison
+
+## Milestone 8 — Paired evidence and case studies
+
+- [x] Add deterministic paired agent-level bootstrap intervals
+- [x] Gate statistically supported minADE and minFDE improvements
+- [x] Count improved, unchanged, and regressed agents by metric
+- [x] Rank the most improved and regressed scenarios and agents
+- [x] Generate standalone Markdown and HTML comparison reports
+- [ ] Validate paired evidence across the complete real-data shard

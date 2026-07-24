@@ -102,8 +102,13 @@ generate-womd-baseline reports/generated/ensemble.binproto data/raw/SHARD \
   --model kinematic_ensemble
 
 compare-prediction-evaluations baseline.json candidate.json \
-  --policy examples/prediction_comparison_policy.json
+  --policy examples/prediction_comparison_policy.json \
+  --html-report reports/generated/prediction-comparison.html
 ```
+
+The comparison uses paired agent-level bootstrap intervals, can require
+statistically supported improvement, and ranks the strongest gains and
+regressions for case-study review.
 
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
@@ -140,6 +145,8 @@ breakdowns, mode contributions, and worst-case rankings. Across a verified
 276-scenario validation shard, the ensemble improved mean minADE by 19.8% and
 mean minFDE by 18.2% over constant velocity while preserving the evaluated
 population and label coverage.
+Milestone 8 adds paired improvement uncertainty and standalone case-study
+reports; full-shard real-data validation is the remaining checkpoint.
 
 ## Responsible interpretation
 
