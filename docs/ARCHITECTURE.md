@@ -86,3 +86,16 @@ A policy sets the allowed new-failure budget and whether missing candidate
 scenarios or lost applicability block the gate. JSON is the machine interface;
 Markdown and standalone HTML provide review evidence. The CLI returns exit code
 `0` for a passing policy and `1` for a blocking regression.
+
+## Motion-prediction evaluation
+
+The motion-submission adapter decodes the official single-object prediction
+wire format into dataset-independent multimodal trajectories. It validates
+scenario and object identity, the six-mode limit, and the documented 16-point
+WOMD horizon before attaching timestamps from normalized ground truth.
+
+The prediction metric layer aligns by timestamp and computes per-agent minADE,
+minFDE, and a configurable final-displacement miss diagnostic. Batch reporting
+aggregates scenarios without importing Waymo SDK types into the verification
+core. Reports state that these local diagnostics are not substitutes for
+Waymo's official challenge evaluation.
