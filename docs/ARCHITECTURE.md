@@ -142,3 +142,16 @@ Priority is categorical and threshold-driven. A high-priority case requires a
 diagnostic miss plus at least one consequential context tag. This is an
 engineering-review heuristic, not a calibrated probability of collision,
 severity, unsafe behavior, or production-system risk.
+
+## External model boundary
+
+Learned-model runtimes remain outside the verification process. A versioned
+JSON interchange contract carries model and checkpoint provenance, coordinate
+frame, future-data declaration, scenario/agent identities, mode confidences,
+and trajectory coordinates. The adapter validates this contract against the
+same normalized WOMD population before writing the official-compatible
+submission wire format.
+
+This makes GPU framework and preprocessing choices replaceable while keeping
+identity, alignment, scoring, contextual review, and regression policy inside
+the tested verification boundary.
