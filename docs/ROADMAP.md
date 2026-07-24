@@ -38,3 +38,12 @@
 - [x] Detect newly introduced failures
 - [x] Define CI-friendly pass/fail policies
 - [x] Produce scenario-level regression summaries
+
+## Milestone 5 — Motion-prediction evaluation
+
+- [x] Decode official single-object motion-submission protobufs
+- [x] Align scenario IDs, object IDs, timestamps, and prediction horizons
+- [x] Compute multimodal minADE, minFDE, and explicit diagnostic miss rate
+- [x] Evaluate multiple scenarios and ground-truth shards
+- [x] Generate JSON, Markdown, and HTML batch reports
+- [ ] Validate against a real model-generated prediction submission

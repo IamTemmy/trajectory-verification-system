@@ -77,6 +77,21 @@ Manifest scenario paths are relative to the manifest. The default policy allows
 no new failures and blocks missing candidate scenarios or lost applicability.
 The command exits `0` when the policy passes and `1` when it fails.
 
+Evaluate an official WOMD motion-prediction submission against matching local
+scenario shards:
+
+```bash
+evaluate-motion-predictions predictions.binproto data/raw/SHARD \
+  --json-report reports/generated/predictions.json \
+  --markdown-report reports/generated/predictions.md \
+  --html-report reports/generated/predictions.html
+```
+
+The evaluator preserves Waymo's documented scenario IDs, object IDs, six-mode
+limit, and 16-point prediction horizon. Its minADE, minFDE, and configurable
+miss-rate outputs are clearly labeled as project diagnostics rather than
+official challenge scores.
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.
@@ -102,7 +117,8 @@ This is an active engineering project. Milestone 0 (verification kernel) and
 Milestone 1 (WOMD ingestion), and Milestone 2 (engineering evidence) are
 complete. Milestone 3 adds map-aware requirements with explicit `PASS`, `FAIL`,
 and `NOT APPLICABLE` outcomes; the WOMD milestones are validated on a real
-WOMD v1.3.1 scenario. Milestone 4 adds deterministic regression gates.
+WOMD v1.3.1 scenario. Milestone 4 adds deterministic regression gates, and
+Milestone 5 adds official-format motion-prediction ingestion and batch metrics.
 
 ## Responsible interpretation
 
@@ -114,7 +130,8 @@ WOMD v1.3.1 scenario. Milestone 4 adds deterministic regression gates.
 ## Roadmap
 
 See [docs/ROADMAP.md](docs/ROADMAP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
-and [docs/WOMD_SETUP.md](docs/WOMD_SETUP.md).
+[docs/WOMD_SETUP.md](docs/WOMD_SETUP.md), and
+[docs/MOTION_PREDICTIONS.md](docs/MOTION_PREDICTIONS.md).
 
 ## License
 
