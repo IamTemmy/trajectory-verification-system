@@ -120,3 +120,26 @@ The poor displacement results are expected for a single-mode constant-velocity
 forecast over an eight-second horizon and establish a deliberately weak,
 transparent baseline for future model comparisons. They do not indicate a
 pipeline failure and are not official Waymo challenge scores.
+
+## Verified kinematic-ensemble comparison
+
+Milestone 6 was validated on July 24, 2026 using the same three scenarios and
+12 target agents as the constant-velocity run. The strict zero-regression policy
+passed:
+
+| Metric | Constant velocity | Kinematic ensemble | Change |
+|---|---:|---:|---:|
+| Mean minADE | 13.859 m | 7.129 m | -6.730 m (-48.6%) |
+| Mean minFDE | 36.942 m | 19.764 m | -17.178 m (-46.5%) |
+| 2 m diagnostic miss rate | 100% | 91.67% | -8.33 percentage points |
+| Valid ground-truth coverage | 90.625% | 90.625% | unchanged |
+
+Best-minADE mode selection used constant velocity for 2 agents, capped constant
+acceleration for 6 agents, and capped constant turn rate for 4 agents. This
+shows that each transparent motion hypothesis contributed to the evaluated
+population. Agent `339` moved below the project-defined miss threshold, with
+1.024 m minADE and 1.875 m minFDE.
+
+The comparison preserved identical scenario and agent identities and reported
+no policy violations. Results remain local diagnostics rather than official
+Waymo challenge scores.

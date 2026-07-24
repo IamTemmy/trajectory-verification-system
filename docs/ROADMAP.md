@@ -55,4 +55,4 @@
 - [x] Add capped constant-turn-rate prediction
 - [x] Build a three-mode kinematic ensemble
 - [x] Gate aggregate ADE, FDE, miss-rate, and coverage regressions
-- [ ] Compare the ensemble with the verified real-data baseline
+- [x] Compare the ensemble with the verified real-data baseline
