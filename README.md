@@ -133,6 +133,9 @@ and `NOT APPLICABLE` outcomes; the WOMD milestones are validated on a real
 WOMD v1.3.1 scenario. Milestone 4 adds deterministic regression gates, and
 Milestone 5 adds official-format motion-prediction ingestion and batch metrics,
 validated with generated baseline predictions on three real WOMD scenarios.
+Milestone 6 adds a transparent kinematic ensemble that reduced mean minADE by
+48.6% and mean minFDE by 46.5% against that baseline under a strict regression
+policy.
 
 ## Responsible interpretation
 
