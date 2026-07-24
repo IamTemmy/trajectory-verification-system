@@ -22,6 +22,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--json-report")
     parser.add_argument("--markdown-report")
     parser.add_argument("--html-report")
+    parser.add_argument(
+        "--summary-only",
+        action="store_true",
+        help="print aggregate sections while retaining complete report files",
+    )
     return parser
 
 
@@ -57,7 +62,19 @@ def main() -> int:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     write_prediction_reports(evaluation, args.markdown_report, args.html_report)
-    print(json.dumps(payload, indent=2))
+    terminal_payload = payload
+    if args.summary_only:
+        terminal_payload = {
+            name: payload[name]
+            for name in (
+                "assumptions",
+                "summary",
+                "confidence_intervals",
+                "by_object_type",
+                "best_mode_counts",
+            )
+        }
+    print(json.dumps(terminal_payload, indent=2))
     return 0
 
 
