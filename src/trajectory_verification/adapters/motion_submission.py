@@ -33,7 +33,7 @@ def scenario_predictions_from_proto(
     for item in predictions:
         agent_id = str(item.object_id)
         truth = ground_truth.track(agent_id)
-        timestamp_by_index = _source_timestamps(ground_truth, truth)
+        timestamp_by_index = _source_timestamps(ground_truth)
         modes = tuple(
             _trajectory_from_proto(mode, timestamp_by_index)
             for mode in tuple(item.trajectories)[:MAX_MODES]
@@ -102,19 +102,12 @@ def write_motion_submission(
     return output
 
 
-def _source_timestamps(ground_truth: Scenario, truth_track) -> dict[int, float]:
+def _source_timestamps(ground_truth: Scenario) -> dict[int, float]:
     reference = max(ground_truth.tracks, key=lambda track: len(track.states))
     if len(reference.states) <= OFFICIAL_PREDICTION_STEPS[-1]:
         raise ValueError("ground-truth scenario does not contain official prediction horizon")
     reference_times = tuple(state.time_s for state in reference.states)
-    truth_times = {state.time_s for state in truth_track.states}
-    selected = {step: reference_times[step] for step in OFFICIAL_PREDICTION_STEPS}
-    missing = [step for step, time_s in selected.items() if time_s not in truth_times]
-    if missing:
-        raise ValueError(
-            f"ground-truth agent {truth_track.agent_id} is invalid at prediction steps {missing}"
-        )
-    return selected
+    return {step: reference_times[step] for step in OFFICIAL_PREDICTION_STEPS}
 
 
 def _trajectory_from_proto(

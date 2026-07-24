@@ -47,10 +47,24 @@ class PredictionMetricTests(unittest.TestCase):
                 PredictedTrajectory(1.0, (PredictionPoint(4.0, 4.0, 0.0),)),
             )),
         ))
-        with self.assertRaisesRegex(ValueError, "no valid ground truth"):
+        with self.assertRaisesRegex(ValueError, "no valid aligned future"):
             score_scenario_predictions(scenario(), predictions)
+
+    def test_missing_future_truth_is_excluded_and_coverage_reported(self):
+        predictions = ScenarioPredictions("a", (
+            AgentPrediction("ego", (
+                PredictedTrajectory(1.0, (
+                    PredictionPoint(1.0, 1.0, 0.0),
+                    PredictionPoint(2.0, 2.0, 0.0),
+                    PredictionPoint(4.0, 4.0, 0.0),
+                )),
+            )),
+        ))
+        score = score_scenario_predictions(scenario(), predictions).agents[0]
+        self.assertEqual(score.evaluated_points, 2)
+        self.assertEqual(score.expected_points, 3)
+        self.assertAlmostEqual(score.ground_truth_coverage, 2 / 3)
 
 
 if __name__ == "__main__":
     unittest.main()
-

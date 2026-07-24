@@ -15,13 +15,20 @@ class AgentPredictionScore:
     agent_id: str
     modes: int
     evaluated_points: int
+    expected_points: int
     min_ade_m: float
     min_fde_m: float
     miss: bool
     best_mode_index: int
 
+    @property
+    def ground_truth_coverage(self) -> float:
+        return self.evaluated_points / self.expected_points
+
     def to_dict(self) -> dict[str, object]:
-        return asdict(self)
+        payload = asdict(self)
+        payload["ground_truth_coverage"] = self.ground_truth_coverage
+        return payload
 
 
 @dataclass(frozen=True, slots=True)
@@ -93,6 +100,7 @@ def _score_agent(
         prediction.agent_id,
         len(prediction.trajectories),
         points,
+        len(prediction.trajectories[0].points),
         ade,
         fde,
         fde > miss_threshold_m,
@@ -106,7 +114,8 @@ def _mode_errors(
     errors: list[float] = []
     for point in mode.points:
         truth = truth_by_time.get(round(point.time_s, 6))
-        if truth is None:
-            raise ValueError(f"no valid ground truth at prediction time {point.time_s:g}s")
-        errors.append(hypot(point.x_m - truth.x_m, point.y_m - truth.y_m))
+        if truth is not None:
+            errors.append(hypot(point.x_m - truth.x_m, point.y_m - truth.y_m))
+    if not errors:
+        raise ValueError("prediction has no valid aligned future ground truth")
     return tuple(errors)
