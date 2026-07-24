@@ -150,6 +150,7 @@ def run_experiment(config: ExperimentConfig) -> dict[str, object]:
     output = config.output_directory
     output.mkdir(parents=True, exist_ok=True)
     evaluations: dict[str, dict[str, object]] = {}
+    risk_summaries: dict[str, dict[str, object]] = {}
     artifact_paths: list[Path] = []
     for candidate in config.candidates:
         submission_path = output / f"{candidate.name}.binproto"
@@ -170,6 +171,11 @@ def run_experiment(config: ExperimentConfig) -> dict[str, object]:
         risk = analyze_prediction_risk(
             scenarios, loaded_predictions, evaluation.scenarios, RiskThresholds()
         )
+        risk_payload = risk.to_dict()
+        risk_summaries[candidate.name] = {
+            "summary": risk_payload["summary"],
+            "by_motion_class": risk_payload["by_motion_class"],
+        }
         risk_json = output / f"{candidate.name}-risk.json"
         risk_markdown = output / f"{candidate.name}-risk.md"
         risk_html = output / f"{candidate.name}-risk.html"
@@ -242,6 +248,7 @@ def run_experiment(config: ExperimentConfig) -> dict[str, object]:
             "gate_passed": comparison.gate_passed,
             "deltas": comparison.deltas,
             "violations": list(comparison.violations),
+            "risk_context": risk_summaries,
         },
         "artifacts": [
             _artifact_record(path, output) for path in sorted(artifact_paths)
