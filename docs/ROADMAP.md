@@ -73,4 +73,25 @@
 - [x] Count improved, unchanged, and regressed agents by metric
 - [x] Rank the most improved and regressed scenarios and agents
 - [x] Generate standalone Markdown and HTML comparison reports
-- [ ] Validate paired evidence across the complete real-data shard
+- [x] Validate paired evidence across the complete real-data shard
+
+## Milestone 9 — Reproducible experiment manifests
+
+- [ ] Capture dataset, model, metric, threshold, and seed configuration
+- [ ] Record source revisions and artifact checksums
+- [ ] Run generation, evaluation, and comparison from one command
+- [ ] Produce a self-contained experiment index
+
+## Milestone 10 — Prediction-risk verification
+
+- [ ] Connect forecast errors to map and interaction context
+- [ ] Detect high-consequence misses and near-conflict cases
+- [ ] Stratify failures by motion and scene difficulty
+- [ ] Generate review-ready scenario evidence
+
+## Milestone 11 — External model integration
+
+- [ ] Define a stable adapter contract for third-party predictions
+- [ ] Validate at least one learned-model output
+- [ ] Compare learned, kinematic, and ensemble candidates fairly
+- [ ] Add release-quality reproducibility and interpretation guidance

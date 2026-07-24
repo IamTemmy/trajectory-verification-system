@@ -146,7 +146,10 @@ breakdowns, mode contributions, and worst-case rankings. Across a verified
 mean minFDE by 18.2% over constant velocity while preserving the evaluated
 population and label coverage.
 Milestone 8 adds paired improvement uncertainty and standalone case-study
-reports; full-shard real-data validation is the remaining checkpoint.
+reports. On the verified 1,203-agent full-shard comparison, paired 95%
+intervals excluded zero for minADE, minFDE, and miss-rate improvements; no
+agent regressed because the candidate preserves constant velocity as an
+available mode.
 
 ## Responsible interpretation
 
