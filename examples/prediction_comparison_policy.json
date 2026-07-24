@@ -2,5 +2,7 @@
   "max_ade_increase_m": 0.0,
   "max_fde_increase_m": 0.0,
   "max_miss_rate_increase": 0.0,
-  "max_coverage_decrease": 0.0
+  "max_coverage_decrease": 0.0,
+  "require_significant_ade_improvement": true,
+  "require_significant_fde_improvement": true
 }

@@ -89,13 +89,24 @@ compare-prediction-evaluations \
   reports/generated/prediction-evaluation.json \
   reports/generated/ensemble-evaluation.json \
   --policy examples/prediction_comparison_policy.json \
+  --bootstrap-samples 5000 \
+  --bootstrap-seed 0 \
   --json-report reports/generated/prediction-comparison.json \
-  --markdown-report reports/generated/prediction-comparison.md
+  --markdown-report reports/generated/prediction-comparison.md \
+  --html-report reports/generated/prediction-comparison.html
 ```
 
 The strict example policy permits no increase in mean minADE, mean minFDE, or
-miss rate and no decrease in ground-truth coverage. Tolerances can be configured
-explicitly for noisy or larger evaluation sets.
+miss rate and no decrease in ground-truth coverage. It also requires the upper
+bounds of the paired 95% agent-bootstrap intervals for minADE and minFDE deltas
+to remain below zero. Tolerances and significance requirements can be configured
+explicitly.
+
+Comparison reports preserve the aggregate gate and add paired uncertainty,
+improved/unchanged/regressed agent counts, and the ten most improved and
+regressed scenarios and agents. Ranking is based on candidate-minus-baseline
+minADE, so negative values indicate improvement. Use `--summary-only` to keep
+terminal output compact while retaining complete evidence in report files.
 
 ## Verified real-data baseline
 
