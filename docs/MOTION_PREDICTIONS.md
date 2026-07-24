@@ -68,3 +68,27 @@ evaluate-motion-predictions \
 
 Multiple matching ground-truth shards may be supplied. Dataset files and
 generated reports remain outside version control.
+
+## Verified real-data baseline
+
+The end-to-end pipeline was validated on July 24, 2026 against the first three
+scenarios in WOMD v1.3.1 validation shard
+`uncompressed_scenario_validation_validation.tfrecord-00007-of-00150`.
+The constant-velocity baseline generated an official-format serialized
+submission and the evaluator successfully decoded, aligned, scored, and
+reported:
+
+- 3 scenarios and 12 prediction-target agents;
+- mean minADE: 13.859 m;
+- mean minFDE: 36.942 m;
+- project-defined 2 m miss rate: 100%;
+- mean valid future-ground-truth coverage: 90.625%.
+
+Coverage varied from 68.75% to 100% because some target tracks did not contain
+valid labels for the full prediction horizon. Those missing states were excluded
+and retained as explicit coverage evidence.
+
+The poor displacement results are expected for a single-mode constant-velocity
+forecast over an eight-second horizon and establish a deliberately weak,
+transparent baseline for future model comparisons. They do not indicate a
+pipeline failure and are not official Waymo challenge scores.

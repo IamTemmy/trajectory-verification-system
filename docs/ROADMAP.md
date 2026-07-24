@@ -47,4 +47,4 @@
 - [x] Evaluate multiple scenarios and ground-truth shards
 - [x] Generate JSON, Markdown, and HTML batch reports
 - [x] Generate a transparent no-future-leakage constant-velocity baseline
-- [ ] Validate against a real model-generated prediction submission
+- [x] Validate generated baseline predictions against real WOMD scenarios

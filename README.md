@@ -120,7 +120,8 @@ Milestone 1 (WOMD ingestion), and Milestone 2 (engineering evidence) are
 complete. Milestone 3 adds map-aware requirements with explicit `PASS`, `FAIL`,
 and `NOT APPLICABLE` outcomes; the WOMD milestones are validated on a real
 WOMD v1.3.1 scenario. Milestone 4 adds deterministic regression gates, and
-Milestone 5 adds official-format motion-prediction ingestion and batch metrics.
+Milestone 5 adds official-format motion-prediction ingestion and batch metrics,
+validated with generated baseline predictions on three real WOMD scenarios.
 
 ## Responsible interpretation
 
