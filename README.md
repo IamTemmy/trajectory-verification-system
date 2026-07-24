@@ -130,6 +130,12 @@ density, observed actor separation, SDC-relative separation error, crosswalks,
 and traffic controls. Their priority labels are screening heuristics for
 engineering review—not collision probabilities or safety determinations.
 
+On the verified full shard, turning targets were the hardest motion group and
+showed the largest ensemble gain: mean minADE fell from 11.174 m to 8.093 m and
+mean minFDE from 29.227 m to 21.769 m. The broad default screen reduced
+high-priority cases from 1,076 to 1,048, but its high flag rate is explicitly
+treated as an uncalibrated review filter rather than a severity estimate.
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.
