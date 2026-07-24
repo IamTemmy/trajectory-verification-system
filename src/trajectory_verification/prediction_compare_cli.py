@@ -49,17 +49,17 @@ def main() -> int:
     if args.markdown_report:
         output = Path(args.markdown_report)
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(_to_markdown(comparison), encoding="utf-8")
+        output.write_text(comparison_to_markdown(comparison), encoding="utf-8")
     if args.html_report:
         output = Path(args.html_report)
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(_to_html(comparison), encoding="utf-8")
+        output.write_text(comparison_to_html(comparison), encoding="utf-8")
     terminal_payload = _summary_payload(comparison) if args.summary_only else payload
     print(json.dumps(terminal_payload, indent=2))
     return 0 if comparison.gate_passed else 1
 
 
-def _to_markdown(comparison) -> str:
+def comparison_to_markdown(comparison) -> str:
     lines = [
         "# Prediction Regression Report",
         "",
@@ -142,7 +142,7 @@ def _agent_markdown(title, rows) -> list[str]:
     return lines
 
 
-def _to_html(comparison) -> str:
+def comparison_to_html(comparison) -> str:
     status = "PASS" if comparison.gate_passed else "FAIL"
     status_class = "pass" if comparison.gate_passed else "fail"
     metric_rows = "".join(

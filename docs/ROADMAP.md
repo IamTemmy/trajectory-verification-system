@@ -77,10 +77,11 @@
 
 ## Milestone 9 — Reproducible experiment manifests
 
-- [ ] Capture dataset, model, metric, threshold, and seed configuration
-- [ ] Record source revisions and artifact checksums
-- [ ] Run generation, evaluation, and comparison from one command
-- [ ] Produce a self-contained experiment index
+- [x] Capture dataset, model, metric, threshold, and seed configuration
+- [x] Record source revisions and artifact checksums
+- [x] Run generation, evaluation, and comparison from one command
+- [x] Produce a self-contained experiment index
+- [ ] Validate the one-command manifest against the complete real-data shard
 
 ## Milestone 10 — Prediction-risk verification
 
