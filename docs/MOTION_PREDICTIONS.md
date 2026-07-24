@@ -38,6 +38,21 @@ reports metrics such as mAP and overlap rate.
 
 ## Command
 
+Generate a transparent constant-velocity baseline using only each target's
+state and velocity at or before `current_time_index`:
+
+```bash
+generate-womd-baseline \
+  reports/generated/constant_velocity.binproto \
+  data/raw/validation-00007-of-00150
+```
+
+Use `--limit N` for a quick pipeline check. The generator does not inspect
+future target states when forecasting; future timestamps are taken from the
+scenario timeline solely to preserve alignment.
+
+Then evaluate the generated or model-produced predictions:
+
 ```bash
 evaluate-motion-predictions \
   predictions.binproto \
@@ -50,4 +65,3 @@ evaluate-motion-predictions \
 
 Multiple matching ground-truth shards may be supplied. Dataset files and
 generated reports remain outside version control.
-

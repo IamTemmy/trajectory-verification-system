@@ -6,6 +6,7 @@ from trajectory_verification.adapters.motion_submission import (
     OFFICIAL_PREDICTION_STEPS,
     load_motion_submission,
     scenario_predictions_from_proto,
+    write_motion_submission,
 )
 from trajectory_verification.adapters.motion_submission_proto import (
     ChallengeScenarioPredictions,
@@ -55,7 +56,14 @@ class MotionSubmissionTests(unittest.TestCase):
             result = load_motion_submission(path, [ground_truth()])
         self.assertEqual(result[0].scenario_id, "scenario-a")
 
+    def test_normalized_predictions_serialize_to_official_wire_format(self):
+        normalized = scenario_predictions_from_proto(prediction_message(), ground_truth())
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "written.binproto"
+            write_motion_submission([normalized], path)
+            decoded = load_motion_submission(path, [ground_truth()])
+        self.assertEqual(decoded, (normalized,))
+
 
 if __name__ == "__main__":
     unittest.main()
-
