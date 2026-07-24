@@ -121,6 +121,10 @@ The resulting experiment index records the source revision, dataset and
 manifest SHA-256 checksums, effective configuration, artifact checksums, and
 gate outcome.
 
+The full-shard manifest has been reproduced from a clean revision over all 276
+scenarios, producing 11 indexed artifacts and exactly matching the independently
+executed benchmark and paired-comparison results.
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.

@@ -51,3 +51,23 @@ The dataset remains local and is never committed by the runner.
 The index intentionally does not contain a timestamp. Given identical source,
 manifest, dataset bytes, protobuf runtime, and Python implementation, this keeps
 the evidence focused on reproducible inputs rather than wall-clock metadata.
+
+## Verified full-shard run
+
+Milestone 9 was validated on July 24, 2026 from clean Git revision
+`61d2549f7222a1cf97cad4b98a1ff647eb37755f`.
+
+The one-command run:
+
+- identified WOMD version 1.3.1 and decoded 276 scenarios;
+- recorded the 246,887,249-byte source shard with SHA-256
+  `c017ab0a5f0f8d0396bcd238c1f54321198ede495060c488a897e12f30d50f78`;
+- generated and indexed 11 prediction, evaluation, comparison, and reporting
+  artifacts;
+- reproduced the previously verified minADE, minFDE, miss-rate, and coverage
+  deltas exactly;
+- passed the significance-aware comparison policy with no violations.
+
+This closes the reproducibility milestone for the current shard and candidates.
+The shard checksum allows later runs to distinguish genuine model or source
+changes from experiments performed on different dataset bytes.
