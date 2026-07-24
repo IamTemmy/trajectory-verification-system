@@ -6,7 +6,10 @@ from trajectory_verification.adapters.motion_submission import (
     load_motion_submission,
     write_motion_submission,
 )
-from trajectory_verification.baselines import constant_velocity_predictions
+from trajectory_verification.baselines import (
+    baseline_predictions,
+    constant_velocity_predictions,
+)
 from trajectory_verification.models import AgentTrack, Scenario, State
 from trajectory_verification.prediction_metrics import score_scenario_predictions
 
@@ -46,6 +49,17 @@ class BaselineTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(ValueError, "tracks_to_predict"):
             constant_velocity_predictions(without_targets)
+
+    def test_kinematic_ensemble_contains_three_distinct_models(self):
+        prediction = baseline_predictions(linear_scenario(), "kinematic_ensemble")
+        self.assertEqual(len(prediction.agents[0].trajectories), 3)
+        self.assertAlmostEqual(
+            sum(item.confidence for item in prediction.agents[0].trajectories), 1.0
+        )
+
+    def test_rejects_unknown_model(self):
+        with self.assertRaisesRegex(ValueError, "unsupported baseline"):
+            baseline_predictions(linear_scenario(), "unknown")
 
 
 if __name__ == "__main__":

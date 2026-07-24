@@ -54,6 +54,16 @@ Use `--limit N` for a quick pipeline check. The generator does not inspect
 future target states when forecasting; future timestamps are taken from the
 scenario timeline solely to preserve alignment.
 
+Available transparent models are:
+
+- `constant_velocity`;
+- `constant_acceleration`, with acceleration magnitude capped at 4 m/s²;
+- `constant_turn_rate`, with yaw rate capped at 0.5 rad/s;
+- `kinematic_ensemble`, which emits all three as equally weighted modes.
+
+Select one with `--model`. All models use only states at or before
+`current_time_index`.
+
 Then evaluate the generated or model-produced predictions:
 
 ```bash
@@ -68,6 +78,24 @@ evaluate-motion-predictions \
 
 Multiple matching ground-truth shards may be supplied. Dataset files and
 generated reports remain outside version control.
+
+## Candidate regression gate
+
+Compare two evaluation JSON reports produced over exactly the same scenario and
+agent population:
+
+```bash
+compare-prediction-evaluations \
+  reports/generated/prediction-evaluation.json \
+  reports/generated/ensemble-evaluation.json \
+  --policy examples/prediction_comparison_policy.json \
+  --json-report reports/generated/prediction-comparison.json \
+  --markdown-report reports/generated/prediction-comparison.md
+```
+
+The strict example policy permits no increase in mean minADE, mean minFDE, or
+miss rate and no decrease in ground-truth coverage. Tolerances can be configured
+explicitly for noisy or larger evaluation sets.
 
 ## Verified real-data baseline
 

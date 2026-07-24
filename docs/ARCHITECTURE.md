@@ -99,3 +99,13 @@ minFDE, and a configurable final-displacement miss diagnostic. Batch reporting
 aggregates scenarios without importing Waymo SDK types into the verification
 core. Reports state that these local diagnostics are not substitutes for
 Waymo's official challenge evaluation.
+
+Transparent kinematic candidates share the same history boundary and official
+serialization path. The multimodal ensemble combines constant velocity,
+constant acceleration, and constant turn rate without selecting a future-aware
+mode during generation. Evaluation may select the best mode according to the
+declared displacement metric, matching the purpose of multimodal forecasting.
+
+Prediction comparison consumes two evaluation artifacts, first requiring
+identical scenario and agent populations. A separate policy then gates increases
+in mean minADE, mean minFDE, or miss rate and decreases in valid-label coverage.
