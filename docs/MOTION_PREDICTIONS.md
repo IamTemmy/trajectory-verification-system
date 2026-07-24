@@ -16,8 +16,10 @@ For each prediction:
 - every mode must contain 16 x/y points;
 - points align to WOMD scenario steps 15, 20, 25, …, 90.
 
-Ground truth must be valid at every evaluated timestamp. Missing ground truth,
-duplicate scenarios, mismatched agents, and malformed horizons fail explicitly.
+Invalid future ground-truth states are excluded from displacement metrics and
+their coverage is reported explicitly. An agent with no valid aligned future
+state fails evaluation. Duplicate scenarios, mismatched agents, and malformed
+horizons also fail explicitly.
 
 ## Diagnostic metrics
 
@@ -26,6 +28,7 @@ The local evaluator reports:
 - minimum average displacement error (minADE) across modes;
 - minimum final displacement error (minFDE) across modes;
 - a project-defined miss indicator based on minimum final displacement error;
+- valid future-ground-truth coverage;
 - per-agent, per-scenario, and batch aggregates.
 
 minADE and minFDE are minimized independently. The default miss threshold is
