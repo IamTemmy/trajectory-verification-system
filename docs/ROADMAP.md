@@ -48,3 +48,11 @@
 - [x] Generate JSON, Markdown, and HTML batch reports
 - [x] Generate a transparent no-future-leakage constant-velocity baseline
 - [x] Validate generated baseline predictions against real WOMD scenarios
+
+## Milestone 6 — Kinematic candidates and quality gates
+
+- [x] Add capped constant-acceleration prediction
+- [x] Add capped constant-turn-rate prediction
+- [x] Build a three-mode kinematic ensemble
+- [x] Gate aggregate ADE, FDE, miss-rate, and coverage regressions
+- [ ] Compare the ensemble with the verified real-data baseline

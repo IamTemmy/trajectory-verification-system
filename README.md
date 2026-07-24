@@ -94,6 +94,17 @@ limit, and 16-point prediction horizon. Its minADE, minFDE, and configurable
 miss-rate outputs are clearly labeled as project diagnostics rather than
 official challenge scores.
 
+Generate a stronger three-mode transparent candidate and compare it with a
+baseline evaluation:
+
+```bash
+generate-womd-baseline reports/generated/ensemble.binproto data/raw/SHARD \
+  --model kinematic_ensemble
+
+compare-prediction-evaluations baseline.json candidate.json \
+  --policy examples/prediction_comparison_policy.json
+```
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.
