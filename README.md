@@ -136,7 +136,10 @@ validated with generated baseline predictions on three real WOMD scenarios.
 Milestone 6 adds a transparent kinematic ensemble that reduced mean minADE by
 48.6% and mean minFDE by 46.5% against that baseline under a strict regression
 policy. Full-shard reports add deterministic confidence intervals, object-type
-breakdowns, mode contributions, and worst-case rankings.
+breakdowns, mode contributions, and worst-case rankings. Across a verified
+276-scenario validation shard, the ensemble improved mean minADE by 19.8% and
+mean minFDE by 18.2% over constant velocity while preserving the evaluated
+population and label coverage.
 
 ## Responsible interpretation
 
