@@ -93,7 +93,10 @@
 
 ## Milestone 11 — External model integration
 
-- [ ] Define a stable adapter contract for third-party predictions
+- [x] Define a stable adapter contract for third-party predictions
+- [x] Enforce checkpoint provenance and no-future-label declarations
+- [x] Convert external predictions to the official-compatible wire format
+- [x] Select and document a credible learned-model execution target
 - [ ] Validate at least one learned-model output
 - [ ] Compare learned, kinematic, and ensemble candidates fairly
 - [ ] Add release-quality reproducibility and interpretation guidance

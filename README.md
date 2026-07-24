@@ -136,6 +136,12 @@ mean minFDE from 29.227 m to 21.769 m. The broad default screen reduced
 high-priority cases from 1,076 to 1,048, but its high flag rate is explicitly
 treated as an uncalibrated review filter rather than a severity estimate.
 
+Third-party learned models enter through a versioned JSON contract that
+requires exact source and checkpoint provenance, scenario-global coordinates,
+the complete prediction-target population, and an explicit no-future-label
+declaration. The importer converts validated artifacts to the same
+official-compatible wire format used by local candidates.
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.
@@ -192,6 +198,8 @@ See [docs/ROADMAP.md](docs/ROADMAP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE
 documented in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md).
 Prediction-error context and its interpretation boundary are documented in
 [docs/RISK_CONTEXT.md](docs/RISK_CONTEXT.md).
+The learned-model boundary is documented in
+[docs/EXTERNAL_MODELS.md](docs/EXTERNAL_MODELS.md).
 
 ## License
 
