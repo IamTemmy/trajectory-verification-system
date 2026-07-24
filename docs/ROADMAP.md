@@ -89,7 +89,7 @@
 - [x] Detect high-priority misses and close-interaction cases
 - [x] Stratify failures by motion and scene difficulty
 - [x] Generate review-ready scenario evidence
-- [ ] Validate risk-context evidence across the complete real-data shard
+- [x] Validate risk-context evidence across the complete real-data shard
 
 ## Milestone 11 — External model integration
 
