@@ -115,3 +115,17 @@ not as an accidental property of the longest retained agent track. Uncertainty
 is estimated by deterministic nonparametric bootstrap resampling over evaluated
 agents. Object-type groups, best-mode counts, and worst-case rankings retain
 the identities required for targeted follow-up.
+
+## Reproducible experiments
+
+An experiment manifest binds dataset identity and shard paths to candidate
+models, metric thresholds, bootstrap seeds, comparison policy, and output
+location. The runner decodes the scenario population once and uses that same
+in-memory population for every candidate, preventing accidental population
+drift between baseline and candidate runs.
+
+Each run writes official-format prediction submissions, complete evaluation
+reports, paired comparison evidence, and `experiment-index.json`. The index
+records the Git source revision, dirty-worktree state, manifest and shard
+SHA-256 checksums, artifact sizes and checksums, configuration, and gate result.
+Large dataset records and generated evidence remain outside version control.

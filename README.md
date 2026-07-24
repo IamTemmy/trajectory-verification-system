@@ -110,6 +110,17 @@ The comparison uses paired agent-level bootstrap intervals, can require
 statistically supported improvement, and ranks the strongest gains and
 regressions for case-study review.
 
+Reproduce generation, evaluation, comparison, and artifact indexing from one
+manifest:
+
+```bash
+run-prediction-experiment examples/full_shard_experiment.json
+```
+
+The resulting experiment index records the source revision, dataset and
+manifest SHA-256 checksums, effective configuration, artifact checksums, and
+gate outcome.
+
 The verification core uses only the Python standard library. WOMD decoding adds
 Google's cross-platform protobuf runtime behind an isolated adapter, so the core
 remains testable without downloading WOMD or installing TensorFlow.
@@ -162,7 +173,8 @@ available mode.
 
 See [docs/ROADMAP.md](docs/ROADMAP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [docs/WOMD_SETUP.md](docs/WOMD_SETUP.md), and
-[docs/MOTION_PREDICTIONS.md](docs/MOTION_PREDICTIONS.md).
+[docs/MOTION_PREDICTIONS.md](docs/MOTION_PREDICTIONS.md). Reproducible runs are
+documented in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md).
 
 ## License
 
