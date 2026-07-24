@@ -73,6 +73,35 @@ def load_motion_submission(
     return tuple(output)
 
 
+def write_motion_submission(
+    predictions: Iterable[ScenarioPredictions], path: str | Path
+) -> Path:
+    """Serialize normalized single-object predictions in the official wire format."""
+    from .motion_submission_proto import MotionChallengeSubmission
+
+    submission = MotionChallengeSubmission()
+    submission.submission_type = 1
+    seen: set[str] = set()
+    for scenario in predictions:
+        if scenario.scenario_id in seen:
+            raise ValueError(f"duplicate prediction scenario: {scenario.scenario_id}")
+        seen.add(scenario.scenario_id)
+        item = submission.scenario_predictions.add()
+        item.scenario_id = scenario.scenario_id
+        for agent_prediction in scenario.agents:
+            agent = item.single_predictions.predictions.add()
+            agent.object_id = int(agent_prediction.agent_id)
+            for trajectory in agent_prediction.trajectories[:MAX_MODES]:
+                mode = agent.trajectories.add()
+                mode.confidence = trajectory.confidence
+                mode.trajectory.center_x.extend(point.x_m for point in trajectory.points)
+                mode.trajectory.center_y.extend(point.y_m for point in trajectory.points)
+    output = Path(path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_bytes(submission.SerializeToString())
+    return output
+
+
 def _source_timestamps(ground_truth: Scenario, truth_track) -> dict[int, float]:
     reference = max(ground_truth.tracks, key=lambda track: len(track.states))
     if len(reference.states) <= OFFICIAL_PREDICTION_STEPS[-1]:
@@ -102,4 +131,3 @@ def _trajectory_from_proto(
         for step, x_m, y_m in zip(OFFICIAL_PREDICTION_STEPS, xs, ys)
     )
     return PredictedTrajectory(float(mode.confidence), points)
-

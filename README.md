@@ -81,6 +81,8 @@ Evaluate an official WOMD motion-prediction submission against matching local
 scenario shards:
 
 ```bash
+generate-womd-baseline reports/generated/constant_velocity.binproto data/raw/SHARD
+
 evaluate-motion-predictions predictions.binproto data/raw/SHARD \
   --json-report reports/generated/predictions.json \
   --markdown-report reports/generated/predictions.md \
