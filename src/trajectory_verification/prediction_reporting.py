@@ -2,18 +2,32 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from html import escape
+from math import ceil, floor
 from pathlib import Path
+from random import Random
 from statistics import fmean
 
 from .prediction_metrics import ScenarioPredictionScore
 
 
 @dataclass(frozen=True, slots=True)
+class ConfidenceInterval:
+    lower: float
+    upper: float
+    confidence: float = 0.95
+
+    def to_dict(self) -> dict[str, float]:
+        return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
 class PredictionEvaluation:
     scenarios: tuple[ScenarioPredictionScore, ...]
     miss_threshold_m: float
+    bootstrap_samples: int = 1000
+    bootstrap_seed: int = 0
 
     @property
     def agent_count(self) -> int:
@@ -37,6 +51,44 @@ class PredictionEvaluation:
             agent.ground_truth_coverage for item in self.scenarios for agent in item.agents
         )
 
+    @property
+    def agents(self):
+        return tuple(agent for scenario in self.scenarios for agent in scenario.agents)
+
+    def confidence_intervals(self) -> dict[str, ConfidenceInterval]:
+        if self.bootstrap_samples < 1:
+            return {}
+        extractors = {
+            "mean_min_ade_m": lambda item: item.min_ade_m,
+            "mean_min_fde_m": lambda item: item.min_fde_m,
+            "miss_rate": lambda item: float(item.miss),
+        }
+        return {
+            name: _bootstrap_mean_interval(
+                self.agents, extractor, self.bootstrap_samples, self.bootstrap_seed + index
+            )
+            for index, (name, extractor) in enumerate(extractors.items())
+        }
+
+    def by_object_type(self) -> dict[str, dict[str, float | int]]:
+        output: dict[str, dict[str, float | int]] = {}
+        for object_type in sorted({item.object_type for item in self.agents}):
+            agents = tuple(item for item in self.agents if item.object_type == object_type)
+            output[object_type] = {
+                "agents": len(agents),
+                "mean_min_ade_m": fmean(item.min_ade_m for item in agents),
+                "mean_min_fde_m": fmean(item.min_fde_m for item in agents),
+                "miss_rate": fmean(float(item.miss) for item in agents),
+            }
+        return output
+
+    def best_mode_counts(self) -> dict[str, int]:
+        indices = sorted({item.best_mode_index for item in self.agents})
+        return {
+            str(index): sum(item.best_mode_index == index for item in self.agents)
+            for index in indices
+        }
+
     def to_dict(self) -> dict[str, object]:
         return {
             "assumptions": {
@@ -52,6 +104,27 @@ class PredictionEvaluation:
                 "miss_rate": self.miss_rate,
                 "mean_ground_truth_coverage": self.mean_ground_truth_coverage,
             },
+            "confidence_intervals": {
+                name: interval.to_dict()
+                for name, interval in self.confidence_intervals().items()
+            },
+            "by_object_type": self.by_object_type(),
+            "best_mode_counts": self.best_mode_counts(),
+            "worst_agents_by_min_ade": [
+                {
+                    "scenario_id": scenario.scenario_id,
+                    **agent.to_dict(),
+                }
+                for scenario, agent in sorted(
+                    (
+                        (scenario, agent)
+                        for scenario in self.scenarios
+                        for agent in scenario.agents
+                    ),
+                    key=lambda pair: pair[1].min_ade_m,
+                    reverse=True,
+                )[:10]
+            ],
             "scenarios": [item.to_dict() for item in self.scenarios],
         }
 
@@ -69,9 +142,43 @@ def evaluation_to_markdown(evaluation: PredictionEvaluation) -> str:
         f"- Miss rate at {evaluation.miss_threshold_m:g} m: {evaluation.miss_rate:.1%}",
         f"- Mean valid ground-truth coverage: {evaluation.mean_ground_truth_coverage:.1%}",
         "",
+        "## Bootstrap uncertainty",
+        "",
+    ]
+    intervals = evaluation.confidence_intervals()
+    if intervals:
+        lines.extend([
+            "| Metric | Estimate | 95% interval |",
+            "|---|---:|---:|",
+            f"| Mean minADE | {evaluation.mean_min_ade_m:.3f} m | "
+            f"{intervals['mean_min_ade_m'].lower:.3f}–{intervals['mean_min_ade_m'].upper:.3f} m |",
+            f"| Mean minFDE | {evaluation.mean_min_fde_m:.3f} m | "
+            f"{intervals['mean_min_fde_m'].lower:.3f}–{intervals['mean_min_fde_m'].upper:.3f} m |",
+            f"| Miss rate | {evaluation.miss_rate:.1%} | "
+            f"{intervals['miss_rate'].lower:.1%}–{intervals['miss_rate'].upper:.1%} |",
+            "",
+        ])
+    lines.extend([
+        "## Object-type breakdown",
+        "",
+        "| Object type | Agents | Mean minADE | Mean minFDE | Miss rate |",
+        "|---|---:|---:|---:|---:|",
+    ])
+    for object_type, values in evaluation.by_object_type().items():
+        lines.append(
+            f"| {object_type} | {values['agents']} | "
+            f"{values['mean_min_ade_m']:.3f} m | {values['mean_min_fde_m']:.3f} m | "
+            f"{values['miss_rate']:.1%} |"
+        )
+    lines.extend([
+        "",
+        f"Best-mode index counts: `{evaluation.best_mode_counts()}`.",
+        "",
+        "## Scenario ranking",
+        "",
         "| Scenario | Agents | Mean minADE | Mean minFDE | Miss rate | Coverage |",
         "|---|---:|---:|---:|---:|---:|",
-    ]
+    ])
     for item in sorted(evaluation.scenarios, key=lambda score: score.mean_min_ade_m, reverse=True):
         lines.append(
             f"| `{item.scenario_id}` | {len(item.agents)} | "
@@ -81,6 +188,24 @@ def evaluation_to_markdown(evaluation: PredictionEvaluation) -> str:
         )
     lines.append("")
     return "\n".join(lines)
+
+
+def _bootstrap_mean_interval(
+    items: tuple,
+    extractor,
+    samples: int,
+    seed: int,
+) -> ConfidenceInterval:
+    if not items:
+        raise ValueError("cannot bootstrap an empty evaluation")
+    random = Random(seed)
+    means = sorted(
+        fmean(extractor(items[random.randrange(len(items))]) for _ in items)
+        for _ in range(samples)
+    )
+    lower_index = floor(0.025 * (samples - 1))
+    upper_index = ceil(0.975 * (samples - 1))
+    return ConfidenceInterval(means[lower_index], means[upper_index])
 
 
 def evaluation_to_html(evaluation: PredictionEvaluation) -> str:

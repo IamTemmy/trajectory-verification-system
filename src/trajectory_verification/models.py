@@ -95,6 +95,7 @@ class Scenario:
     tracks_to_predict: tuple[str, ...] = ()
     map_feature_count: int = 0
     map_context: MapContext = MapContext()
+    timestamps_s: tuple[float, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.scenario_id:
@@ -104,6 +105,8 @@ class Scenario:
             raise ValueError("agent IDs must be unique within a scenario")
         if self.current_time_index is not None and self.current_time_index < 0:
             raise ValueError("current_time_index must be non-negative")
+        if any(b <= a for a, b in zip(self.timestamps_s, self.timestamps_s[1:])):
+            raise ValueError("scenario timestamps must be strictly increasing")
 
     def track(self, agent_id: str) -> AgentTrack:
         for track in self.tracks:

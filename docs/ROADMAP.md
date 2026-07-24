@@ -56,3 +56,12 @@
 - [x] Build a three-mode kinematic ensemble
 - [x] Gate aggregate ADE, FDE, miss-rate, and coverage regressions
 - [x] Compare the ensemble with the verified real-data baseline
+
+## Milestone 7 — Full-shard benchmark
+
+- [x] Preserve authoritative scenario timelines independently of track validity
+- [x] Add deterministic bootstrap confidence intervals
+- [x] Add vehicle, pedestrian, and cyclist performance breakdowns
+- [x] Add mode-contribution and worst-agent rankings
+- [ ] Evaluate constant velocity and kinematic ensemble across a complete shard
+- [ ] Gate the full-shard candidate comparison

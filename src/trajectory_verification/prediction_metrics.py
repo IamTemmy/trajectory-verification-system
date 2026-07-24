@@ -20,6 +20,7 @@ class AgentPredictionScore:
     min_fde_m: float
     miss: bool
     best_mode_index: int
+    object_type: str = "unknown"
 
     @property
     def ground_truth_coverage(self) -> float:
@@ -105,6 +106,7 @@ def _score_agent(
         fde,
         fde > miss_threshold_m,
         best_index,
+        truth.object_type,
     )
 
 

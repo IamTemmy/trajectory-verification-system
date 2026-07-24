@@ -47,6 +47,7 @@ def load_scenario(path: str | Path) -> Scenario:
         objects_of_interest=tuple(str(item) for item in data.get("objects_of_interest", [])),
         tracks_to_predict=tuple(str(item) for item in data.get("tracks_to_predict", [])),
         map_feature_count=int(data.get("map_feature_count", 0)),
+        timestamps_s=tuple(float(value) for value in data.get("timestamps_s", [])),
     )
 
 

@@ -33,11 +33,11 @@ def baseline_predictions(
         raise ValueError(f"unsupported baseline model: {model}")
     if scenario.current_time_index is None:
         raise ValueError("scenario current_time_index is required")
-    reference = max(scenario.tracks, key=lambda track: len(track.states))
-    if len(reference.states) <= OFFICIAL_PREDICTION_STEPS[-1]:
+    timeline = _scenario_timeline(scenario)
+    if len(timeline) <= OFFICIAL_PREDICTION_STEPS[-1]:
         raise ValueError("scenario does not contain the official prediction horizon")
-    current_time = reference.states[scenario.current_time_index].time_s
-    future_times = tuple(reference.states[index].time_s for index in OFFICIAL_PREDICTION_STEPS)
+    current_time = timeline[scenario.current_time_index]
+    future_times = tuple(timeline[index] for index in OFFICIAL_PREDICTION_STEPS)
     agents = tuple(
         AgentPrediction(
             agent_id,
@@ -50,6 +50,13 @@ def baseline_predictions(
     if not agents:
         raise ValueError("scenario contains no tracks_to_predict")
     return ScenarioPredictions(scenario.scenario_id, agents)
+
+
+def _scenario_timeline(scenario: Scenario) -> tuple[float, ...]:
+    if scenario.timestamps_s:
+        return scenario.timestamps_s
+    reference = max(scenario.tracks, key=lambda track: len(track.states))
+    return tuple(state.time_s for state in reference.states)
 
 
 def _forecast_modes(

@@ -109,3 +109,9 @@ declared displacement metric, matching the purpose of multimodal forecasting.
 Prediction comparison consumes two evaluation artifacts, first requiring
 identical scenario and agent populations. A separate policy then gates increases
 in mean minADE, mean minFDE, or miss rate and decreases in valid-label coverage.
+
+Full-shard reporting treats the scenario timestamp sequence as source metadata,
+not as an accidental property of the longest retained agent track. Uncertainty
+is estimated by deterministic nonparametric bootstrap resampling over evaluated
+agents. Object-type groups, best-mode counts, and worst-case rankings retain
+the identities required for targeted follow-up.

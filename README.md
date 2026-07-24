@@ -135,7 +135,8 @@ Milestone 5 adds official-format motion-prediction ingestion and batch metrics,
 validated with generated baseline predictions on three real WOMD scenarios.
 Milestone 6 adds a transparent kinematic ensemble that reduced mean minADE by
 48.6% and mean minFDE by 46.5% against that baseline under a strict regression
-policy.
+policy. Full-shard reports add deterministic confidence intervals, object-type
+breakdowns, mode contributions, and worst-case rankings.
 
 ## Responsible interpretation
 

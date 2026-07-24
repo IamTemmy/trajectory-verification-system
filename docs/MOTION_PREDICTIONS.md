@@ -143,3 +143,21 @@ population. Agent `339` moved below the project-defined miss threshold, with
 The comparison preserved identical scenario and agent identities and reported
 no policy violations. Results remain local diagnostics rather than official
 Waymo challenge scores.
+
+## Full-shard analysis
+
+Batch reports include deterministic agent-level bootstrap estimates using 1,000
+resamples and seed 0 by default. Configure these with `--bootstrap-samples` and
+`--bootstrap-seed`; use zero samples to disable intervals.
+
+Reports also include:
+
+- metrics grouped by normalized object type;
+- best-mode index contribution counts;
+- the ten worst agents ranked by minADE;
+- scenarios ranked from highest to lowest mean minADE;
+- explicit valid-label coverage.
+
+The normalized scenario stores the source timeline separately from track
+histories. Prediction horizons therefore remain correct even when no individual
+track contains all 91 valid WOMD states.
