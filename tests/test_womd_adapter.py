@@ -1,3 +1,4 @@
+import gzip
 import struct
 import tempfile
 import unittest
@@ -165,6 +166,17 @@ class WOMDAdapterTests(unittest.TestCase):
             path = Path(directory) / "fixture.tfrecord"
             write_tfrecord(path, [b"one", b"two"])
             self.assertEqual([b"one", b"two"], list(iter_tfrecord_records(path)))
+
+    def test_reads_gzip_compressed_tfrecord(self):
+        with tempfile.TemporaryDirectory() as directory:
+            plain = Path(directory) / "plain.tfrecord"
+            write_tfrecord(plain, [b"one", b"two"])
+            compressed = Path(directory) / "compressed.tfrecord"
+            compressed.write_bytes(gzip.compress(plain.read_bytes()))
+            self.assertEqual(
+                list(iter_tfrecord_records(plain)),
+                list(iter_tfrecord_records(compressed)),
+            )
 
     def test_detects_truncated_tfrecord(self):
         with tempfile.TemporaryDirectory() as directory:

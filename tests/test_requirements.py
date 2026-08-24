@@ -35,6 +35,32 @@ class RequirementTests(unittest.TestCase):
         self.assertEqual(3.0, result.failure_intervals[0].end_time_s)
         self.assertEqual(12.0, result.failure_intervals[0].worst_value)
 
+    def test_one_short_gap_does_not_split_a_contiguous_failure(self):
+        """Irregular sampling must not fragment a single failure interval.
+
+        Speed samples land at t = 1.0, 1.2, 2.2 and 3.2, so the gaps are
+        0.2, 1.0 and 1.0 seconds. Inferring the nominal step from the minimum
+        gap would treat the two one-second gaps as discontinuities and report
+        three intervals; the median keeps the failure whole.
+        """
+        track = AgentTrack(
+            "jittery",
+            tuple(
+                State(time_s, x_m, 0.0)
+                for time_s, x_m in [(0.0, 0.0), (1.0, 100.0), (1.2, 120.0), (2.2, 220.0), (3.2, 320.0)]
+            ),
+        )
+        requirement = Requirement(
+            "SPEED_002", "Limit speed", "speed", "less_than_or_equal", 10.0, "m/s", "jittery"
+        )
+        result = evaluate_requirement(Scenario("jitter", (track,)), requirement)
+        self.assertFalse(result.passed)
+        self.assertEqual(4, result.failed_samples)
+        self.assertEqual(1, len(result.failure_intervals))
+        self.assertEqual(1.0, result.failure_intervals[0].start_time_s)
+        self.assertEqual(3.2, result.failure_intervals[0].end_time_s)
+        self.assertEqual(4, result.failure_intervals[0].sample_count)
+
     def test_passing_speed_requirement(self):
         requirement = Requirement(
             "SPEED_001", "Limit speed", "speed", "less_than_or_equal", 10.0, "m/s", "ego"

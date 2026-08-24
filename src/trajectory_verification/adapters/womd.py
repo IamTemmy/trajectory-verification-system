@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Iterator, Sequence
 from pathlib import Path
+import gzip
 import struct
 from typing import Any
 
@@ -189,15 +190,40 @@ def _state_from_proto(timestamp: float, state: Any) -> State:
     )
 
 
-def iter_tfrecord_records(path: str | Path) -> Iterator[bytes]:
-    """Yield payloads from an uncompressed TFRecord without TensorFlow.
+GZIP_MAGIC = b"\x1f\x8b"
 
-    TFRecord CRC fields are consumed but not validated because Python's standard
-    library does not provide CRC32C. Protobuf parsing still validates payload shape.
+
+def _open_tfrecord_stream(record_path: Path):
+    """Open a TFRecord shard, transparently decompressing gzip shards.
+
+    Waymo publishes both uncompressed and gzip-compressed shards. Detection uses
+    the gzip magic number rather than the file name, because shard names do not
+    consistently carry a ``.gz`` suffix.
+    """
+
+    handle = record_path.open("rb")
+    try:
+        is_gzip = handle.read(2) == GZIP_MAGIC
+        handle.seek(0)
+    except OSError:
+        handle.close()
+        raise
+    if not is_gzip:
+        return handle
+    handle.close()
+    return gzip.open(record_path, "rb")
+
+
+def iter_tfrecord_records(path: str | Path) -> Iterator[bytes]:
+    """Yield payloads from a TFRecord shard without TensorFlow.
+
+    Uncompressed and gzip-compressed shards are both supported. TFRecord CRC
+    fields are consumed but not validated because Python's standard library does
+    not provide CRC32C. Protobuf parsing still validates payload shape.
     """
 
     record_path = Path(path)
-    with record_path.open("rb") as stream:
+    with _open_tfrecord_stream(record_path) as stream:
         record_index = 0
         while True:
             length_bytes = stream.read(8)

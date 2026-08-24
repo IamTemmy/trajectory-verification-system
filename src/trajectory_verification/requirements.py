@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from operator import ge, gt, le, lt
+from statistics import median
 from typing import Callable
 
 from .metrics import Sample, acceleration, jerk, separation, speed, time_to_collision
@@ -152,7 +153,10 @@ def _localize_failures(
             for a, b in zip(failures, failures[1:])
             if b.time_s > a.time_s
         ]
-        nominal_step = min(positive_steps) if positive_steps else None
+        # The median resists a single unusually short gap. Using the minimum let
+        # one close pair shrink the step so that genuinely contiguous failures
+        # were split across several intervals.
+        nominal_step = median(positive_steps) if positive_steps else None
     for sample in failures[1:]:
         previous = groups[-1][-1]
         contiguous = nominal_step is None or sample.time_s - previous.time_s <= nominal_step * 1.5
