@@ -8,6 +8,7 @@ import json
 from .io import load_requirements, load_scenario
 from .evidence import default_sensitivity_thresholds, explain_requirement
 from .reporting import build_validation_report, write_validation_reports
+from .visualization import write_scenario_svg
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -16,6 +17,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("requirements", help="requirement definitions JSON")
     parser.add_argument("--markdown-report", help="write a Markdown evidence report")
     parser.add_argument("--html-report", help="write a standalone HTML evidence report")
+    parser.add_argument("--svg-output", help="write a standalone SVG trajectory drawing")
     return parser
 
 
@@ -31,6 +33,8 @@ def main() -> int:
         ).to_dict()
         for requirement in requirements
     ]
+    if args.svg_output:
+        write_scenario_svg(scenario, args.svg_output)
     report = build_validation_report(scenario, requirements)
     write_validation_reports(
         report,

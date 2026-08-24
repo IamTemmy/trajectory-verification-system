@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trajectory validation — synthetic-intersection-001</title>
+<style>
+:root{--ink:#172033;--muted:#667085;--line:#e4e7ec;--bg:#f5f7fb;--card:#fff;--pass:#067647;--pass-bg:#ecfdf3;--fail:#b42318;--fail-bg:#fef3f2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,sans-serif}
+main{max-width:1050px;margin:0 auto;padding:48px 24px 80px}h1{font-size:32px;margin:0 0 8px}h2{margin-top:34px}h3{margin-top:24px}
+.muted{color:var(--muted)}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:18px 0;box-shadow:0 1px 3px #10182810}
+.hero{display:flex;justify-content:space-between;gap:24px;align-items:center}.score{font-size:14px;color:var(--muted)}.score b{font-size:28px;color:var(--ink)}
+.pill{display:inline-block;border-radius:999px;padding:5px 10px;font-weight:700;font-size:12px}.pill.pass{color:var(--pass);background:var(--pass-bg)}.pill.fail{color:var(--fail);background:var(--fail-bg)}.pill.na{color:#475467;background:#f2f4f7}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+code{font-family:ui-monospace,SFMono-Regular,monospace}.boundary{border-left:4px solid #f79009}ul{padding-left:22px}
+</style></head><body><main>
+<section class="card hero"><div><div class="muted">Trajectory validation report</div><h1>synthetic-intersection-001</h1><span class="pill fail">FAIL</span></div><div class="score"><b>2/3</b><br>applicable requirements passed<br>4 tracks</div></section>
+<section class="card"><h2>Requirement summary</h2><table><thead><tr><th>Requirement</th><th>Result</th><th>Confidence</th><th>Evaluated</th><th>Failed</th><th>Observed range</th></tr></thead><tbody><tr><td><code>INTERSECTION_SEPARATION_001</code></td><td><span class='pill fail'>FAIL</span></td><td>HIGH</td><td>91</td><td>3</td><td>3.82678–91.9829 m</td></tr><tr><td><code>INTERSECTION_VRU_SEPARATION_002</code></td><td><span class='pill pass'>PASS</span></td><td>HIGH</td><td>91</td><td>0</td><td>4.32468–68.1006 m</td></tr><tr><td><code>INTERSECTION_SPEED_003</code></td><td><span class='pill pass'>PASS</span></td><td>HIGH</td><td>90</td><td>0</td><td>11–11 m/s</td></tr></tbody></table></section>
+<section class="card"><h2>Data quality and applicability</h2><ul><li><strong>INFO — <code>PARTIAL_REPORTED_VELOCITY</code></strong>: Reported velocity is incomplete; position-derived kinematics remain available.</li><li><strong>INFO — <code>NO_MAP_FEATURES</code></strong>: No map features are attached; map-aware requirements are not applicable.</li></ul></section>
+<section class="card"><h2><code>INTERSECTION_SEPARATION_001</code> — FAIL</h2>
+<p>Maintain at least 5 m between the through vehicle and the turning vehicle</p><p class="muted">separation greater_than_or_equal 5 m · subject through_vehicle · counterpart turning_vehicle</p>
+<p><strong>Evidence confidence: HIGH</strong> — At least five samples were evaluated with no blocking quality warning.</p>
+<h3>Failure evidence</h3><ul><li>separation was below the 5 m threshold from 4.5 s to 4.7 s; the worst value was 3.82678 m (1.17322 m beyond the limit).</li></ul>
+<h3>Threshold sensitivity</h3><table><thead><tr><th>Threshold</th><th>Result</th><th>Failed samples</th><th>Failed fraction</th></tr></thead><tbody><tr><td>4.5 m</td><td>FAIL</td><td>3</td><td>3.3%</td></tr><tr><td>5 m</td><td>FAIL</td><td>3</td><td>3.3%</td></tr><tr><td>5.5 m</td><td>FAIL</td><td>5</td><td>5.5%</td></tr></tbody></table></section><section class="card"><h2><code>INTERSECTION_VRU_SEPARATION_002</code> — PASS</h2>
+<p>Maintain at least 3 m between the through vehicle and the pedestrian</p><p class="muted">separation greater_than_or_equal 3 m · subject through_vehicle · counterpart pedestrian</p>
+<p><strong>Evidence confidence: HIGH</strong> — At least five samples were evaluated with no blocking quality warning.</p>
+<h3>Failure evidence</h3><ul><li>No failed samples were observed.</li></ul>
+<h3>Threshold sensitivity</h3><table><thead><tr><th>Threshold</th><th>Result</th><th>Failed samples</th><th>Failed fraction</th></tr></thead><tbody><tr><td>2.7 m</td><td>PASS</td><td>0</td><td>0.0%</td></tr><tr><td>3 m</td><td>PASS</td><td>0</td><td>0.0%</td></tr><tr><td>3.3 m</td><td>PASS</td><td>0</td><td>0.0%</td></tr></tbody></table></section><section class="card"><h2><code>INTERSECTION_SPEED_003</code> — PASS</h2>
+<p>Keep the through vehicle at or below the 15 m/s urban limit</p><p class="muted">speed less_than_or_equal 15 m/s · subject through_vehicle</p>
+<p><strong>Evidence confidence: HIGH</strong> — At least five samples were evaluated with no blocking quality warning.</p>
+<h3>Failure evidence</h3><ul><li>No failed samples were observed.</li></ul>
+<h3>Threshold sensitivity</h3><table><thead><tr><th>Threshold</th><th>Result</th><th>Failed samples</th><th>Failed fraction</th></tr></thead><tbody><tr><td>13.5 m/s</td><td>PASS</td><td>0</td><td>0.0%</td></tr><tr><td>15 m/s</td><td>PASS</td><td>0</td><td>0.0%</td></tr><tr><td>16.5 m/s</td><td>PASS</td><td>0</td><td>0.0%</td></tr></tbody></table></section>
+<section class="card boundary"><h2>Interpretation boundary</h2><p>A project-defined threshold failure is evidence about this requirement and trajectory record. It is not, by itself, proof of unsafe real-world operation or a claim about the production Waymo Driver.</p></section>
+</main></body></html>

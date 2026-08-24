@@ -1,0 +1,33 @@
+{
+  "requirements": [
+    {
+      "id": "INTERSECTION_SEPARATION_001",
+      "description": "Maintain at least 5 m between the through vehicle and the turning vehicle",
+      "metric": "separation",
+      "operator": "greater_than_or_equal",
+      "threshold": 5.0,
+      "units": "m",
+      "subject_agent_id": "through_vehicle",
+      "other_agent_id": "turning_vehicle"
+    },
+    {
+      "id": "INTERSECTION_VRU_SEPARATION_002",
+      "description": "Maintain at least 3 m between the through vehicle and the pedestrian",
+      "metric": "separation",
+      "operator": "greater_than_or_equal",
+      "threshold": 3.0,
+      "units": "m",
+      "subject_agent_id": "through_vehicle",
+      "other_agent_id": "pedestrian"
+    },
+    {
+      "id": "INTERSECTION_SPEED_003",
+      "description": "Keep the through vehicle at or below the 15 m/s urban limit",
+      "metric": "speed",
+      "operator": "less_than_or_equal",
+      "threshold": 15.0,
+      "units": "m/s",
+      "subject_agent_id": "through_vehicle"
+    }
+  ]
+}
