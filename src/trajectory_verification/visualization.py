@@ -17,6 +17,59 @@ COLORS = {
     "unset": "#64748b",
 }
 
+AGENT_PALETTE = (
+    "#2563eb", "#ea580c", "#16a34a", "#7c3aed",
+    "#db2777", "#0891b2", "#ca8a04", "#dc2626",
+)
+
+DEFAULT_COLOR = "#64748b"
+
+
+def _assign_colors(scenario: Scenario) -> dict[str, str]:
+    """Choose a stroke colour for every track.
+
+    Scenes small enough to read agent by agent get one palette entry each, so
+    that two agents sharing an object type stay distinguishable — the common
+    case for a hand-authored conflict between two vehicles. Crowded scenes fall
+    back to colouring by object type, because a real WOMD scenario carries
+    dozens of tracks and per-agent hues would read as noise.
+    """
+
+    tracks = scenario.tracks
+    if len(tracks) <= len(AGENT_PALETTE):
+        return {
+            track.agent_id: AGENT_PALETTE[index]
+            for index, track in enumerate(tracks)
+        }
+    return {
+        track.agent_id: COLORS.get(track.object_type, DEFAULT_COLOR)
+        for track in tracks
+    }
+
+
+CHAR_WIDTH_PX = 6.6
+TITLE_BASELINE_PX = 30
+
+
+def _place_label(
+    label: str, end_x: float, end_y: float, *, width_px: int, height_px: int
+) -> tuple[float, float, str]:
+    """Position an endpoint label so it stays inside the canvas.
+
+    Labels sit to the right of the end marker by default. A track finishing near
+    the right edge would otherwise render its label off-canvas, so those flip to
+    the left of the marker instead. The vertical position is clamped clear of the
+    title and the bottom edge.
+    """
+
+    estimated_width = CHAR_WIDTH_PX * len(label)
+    if end_x + 10 + estimated_width > width_px - 6:
+        label_x, anchor = end_x - 10, "end"
+    else:
+        label_x, anchor = end_x + 10, "start"
+    label_y = min(max(end_y - 10, TITLE_BASELINE_PX + 18), height_px - 8)
+    return label_x, label_y, anchor
+
 
 def scenario_to_svg(
     scenario: Scenario,
@@ -94,11 +147,12 @@ def scenario_to_svg(
             f'<rect x="{x - 4:.2f}" y="{y - 4:.2f}" width="8" height="8" '
             'fill="#dc2626" transform="rotate(45 ' + f'{x:.2f} {y:.2f}' + ')"/>'
         )
+    colors = _assign_colors(scenario)
     for track in scenario.tracks:
         projected = [project(state.x_m, state.y_m) for state in track.states]
         if not projected:
             continue
-        color = COLORS.get(track.object_type, "#64748b")
+        color = colors.get(track.agent_id, DEFAULT_COLOR)
         stroke_width = 4 if track.agent_id == scenario.sdc_agent_id else 2
         point_text = " ".join(f"{x:.2f},{y:.2f}" for x, y in projected)
         elements.append(
@@ -106,11 +160,24 @@ def scenario_to_svg(
             f'stroke-width="{stroke_width}" stroke-linecap="round" '
             'stroke-linejoin="round" opacity="0.85"/>'
         )
+        # Hollow marker where the track starts, filled where it ends, so the
+        # direction of travel is readable from a still image.
+        start_x, start_y = projected[0]
+        elements.append(
+            f'<circle cx="{start_x:.2f}" cy="{start_y:.2f}" r="4" fill="#f8fafc" '
+            f'stroke="{color}" stroke-width="2"/>'
+        )
         end_x, end_y = projected[-1]
         elements.append(f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="5" fill="{color}"/>')
-        label = escape(f"{track.agent_id} · {track.object_type}")
+        if track.agent_id == track.object_type:
+            label = escape(track.agent_id)
+        else:
+            label = escape(f"{track.agent_id} · {track.object_type}")
+        label_x, label_y, anchor = _place_label(
+            label, end_x, end_y, width_px=width_px, height_px=height_px
+        )
         elements.append(
-            f'<text x="{end_x + 8:.2f}" y="{end_y - 8:.2f}" '
+            f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{anchor}" '
             f'font-family="system-ui" font-size="12" fill="#334155">{label}</text>'
         )
     return (

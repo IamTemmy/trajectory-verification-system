@@ -33,9 +33,10 @@ This repository is built around those questions. Its output is evidence, not a s
 
 ![Synthetic intersection scenario](docs/examples/intersection-scenario.svg)
 
-A synthetic four-agent intersection: a turning vehicle crosses a through
-vehicle's path while a cyclist and a pedestrian move nearby. Nothing here is
-dataset-derived, so it runs with no download and no credentials:
+A synthetic four-way junction: a turning vehicle cuts across a through
+vehicle's path while a southbound vehicle, a cyclist and a pedestrian move
+nearby. Nothing here is dataset-derived, so it runs with no download and no
+credentials:
 
 ```bash
 verify-trajectories \
@@ -50,8 +51,8 @@ It does not report that the scenario failed. It reports which requirement
 failed, when, and by how much:
 
 > `INTERSECTION_SEPARATION_001` — FAIL
-> separation was below the 5 m threshold from 4.5 s to 4.7 s; the worst value
-> was 3.83 m (1.17 m beyond the limit).
+> separation was below the 5 m threshold from 5.4 s to 5.8 s; the worst value
+> was 3.97 m (1.03 m beyond the limit).
 
 Two other requirements pass, and each verdict carries a threshold-sensitivity
 sweep showing how close the call was.
