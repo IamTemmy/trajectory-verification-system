@@ -2,35 +2,47 @@
 
 [![CI](https://github.com/IamTemmy/trajectory-verification-system/actions/workflows/ci.yml/badge.svg)](https://github.com/IamTemmy/trajectory-verification-system/actions/workflows/ci.yml)
 
-A requirements-driven engineering toolkit for verifying recorded or generated autonomous-driving trajectories, localizing failures, and producing traceable evidence.
+**Evaluate motion-prediction models the way safety-critical software is evaluated,
+not the way leaderboard entries are.**
+
+A requirements-driven engineering toolkit for verifying recorded or generated
+autonomous-driving trajectories, localizing failures in time, and producing
+traceable evidence.
 
 The first dataset adapter targets the Waymo Open Motion Dataset (WOMD). This project evaluates trajectories contained in or supplied alongside public datasets; it does **not** evaluate or make claims about the production Waymo Driver.
 
 ## Why this project exists
 
-Motion-prediction benchmarks usually summarize performance with aggregate metrics. Engineering validation also needs to answer:
+Motion-prediction benchmarks compress performance into an aggregate displacement
+error. A single mean tells you a model is some number of metres off on average. It
+does not tell you which situations it failed, or whether those situations mattered.
+
+Engineering validation has to answer questions an aggregate cannot:
 
 - Which behavioral requirement failed?
-- When did it fail?
-- Which agents and signals support that conclusion?
-- How sensitive is the result to the chosen threshold?
-- Did a new trajectory version introduce a regression?
+- When did it fail, to the sample?
+- Which agents and derived signals support that conclusion?
+- How sensitive is the verdict to the chosen threshold?
+- Did a new model version regress something the previous one handled?
+- Did the failure happen somewhere consequential — near a crosswalk, a traffic
+  control, or another actor?
 
-This repository is being built around those questions.
+This repository is built around those questions. Its output is evidence, not a score.
 
-## Initial vertical slice
+## What it does
 
-The first milestone provides:
-
-- normalized two-dimensional agent trajectories;
+- normalized two-dimensional agent trajectories from WOMD or hand-written scenarios;
 - derived speed, acceleration, jerk, separation, closing speed, and time-to-collision signals;
-- declarative threshold requirements;
-- contiguous failure-interval localization;
-- structured evidence suitable for reports and regression gates;
-- deterministic unit tests and continuous integration;
+- declarative threshold requirements with `PASS`, `FAIL`, and reasoned `NOT APPLICABLE` outcomes;
+- contiguous failure-interval localization with deterministic threshold-sensitivity sweeps;
+- map-aware requirements over lanes, stop signs, crosswalks, and traffic-signal states;
+- deterministic baseline/candidate regression gates suitable for CI;
+- official-format motion-prediction ingestion, batch metrics, and paired bootstrap comparison;
+- risk-context review connecting forecast error to interaction and map context;
+- reproducible experiment manifests recording source revision and artifact checksums;
+- a versioned JSON contract for importing third-party learned-model predictions;
 - lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency;
 - standalone SVG trajectory visualization without plotting dependencies.
-- deterministic baseline/candidate regression gates for CI.
 
 ## Quick start
 
@@ -161,27 +173,42 @@ scenario source -> dataset adapter -> normalized trajectories
                   failure intervals + evidence + report data
 ```
 
-## Repository status
+## Status
 
-This is an active engineering project. Milestone 0 (verification kernel) and
-Milestone 1 (WOMD ingestion), and Milestone 2 (engineering evidence) are
-complete. Milestone 3 adds map-aware requirements with explicit `PASS`, `FAIL`,
-and `NOT APPLICABLE` outcomes; the WOMD milestones are validated on a real
-WOMD v1.3.1 scenario. Milestone 4 adds deterministic regression gates, and
-Milestone 5 adds official-format motion-prediction ingestion and batch metrics,
-validated with generated baseline predictions on three real WOMD scenarios.
-Milestone 6 adds a transparent kinematic ensemble that reduced mean minADE by
-48.6% and mean minFDE by 46.5% against that baseline under a strict regression
-policy. Full-shard reports add deterministic confidence intervals, object-type
-breakdowns, mode contributions, and worst-case rankings. Across a verified
-276-scenario validation shard, the ensemble improved mean minADE by 19.8% and
-mean minFDE by 18.2% over constant velocity while preserving the evaluated
-population and label coverage.
-Milestone 8 adds paired improvement uncertainty and standalone case-study
-reports. On the verified 1,203-agent full-shard comparison, paired 95%
-intervals excluded zero for minADE, minFDE, and miss-rate improvements; no
-agent regressed because the candidate preserves constant velocity as an
-available mode.
+Milestones 0–10 are complete and validated against a real WOMD v1.3.1 validation
+shard: the verification kernel, WOMD ingestion, engineering evidence, map-aware
+requirements, regression gates, motion-prediction evaluation, kinematic
+candidates, the full-shard benchmark, paired evidence, reproducible experiment
+manifests, and prediction-risk context.
+
+Milestone 11 (external learned-model integration) is in progress. The import
+contract, provenance enforcement, and official-format conversion are complete;
+validating a real learned model's output is the current work. See
+[docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Benchmark results and their limits
+
+The repository ships two transparent, no-future-leakage candidates — constant
+velocity and a three-mode kinematic ensemble — so the verification machinery can
+be exercised end to end against models whose behavior is fully known. Across a
+verified 276-scenario, 1,203-agent WOMD validation shard:
+
+| Candidate | mean minADE | mean minFDE | diagnostic miss rate |
+|---|---:|---:|---:|
+| Constant velocity | 9.63 m | 24.38 m | 0.934 |
+| Kinematic ensemble | 7.73 m | 19.94 m | 0.915 |
+
+Paired 95% bootstrap intervals exclude zero for all three improvements. No agent
+regressed, because the ensemble retains constant velocity as an available mode.
+Ground-truth coverage is identical across candidates, so the evaluated population
+does not drift between them.
+
+**These are deliberately not competitive prediction results.** Published learned
+models reach roughly an order of magnitude lower minADE on WOMD. The kinematic
+candidates exist to exercise the evidence layer — which is this repository's
+actual contribution — not to compete on accuracy. The minADE, minFDE, and
+miss-rate values here are project diagnostics computed under documented
+assumptions, and are **not comparable to official Waymo challenge scores**.
 
 ## Responsible interpretation
 
@@ -203,4 +230,8 @@ The learned-model boundary is documented in
 
 ## License
 
-No project license has been selected yet. All rights are reserved until a license is added. Waymo datasets and SDK components retain their own licenses and terms.
+Licensed under the Apache License, Version 2.0 — see [LICENSE](LICENSE).
+
+Waymo datasets and SDK components retain their own licenses and terms; dataset use
+must comply with the Waymo Open Dataset license. No dataset content is distributed
+with this repository.
