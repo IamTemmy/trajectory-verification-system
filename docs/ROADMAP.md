@@ -18,7 +18,7 @@
 - [x] Validate against an authenticated real WOMD scenario shard
 - [x] Visualize a normalized decoded scenario as standalone SVG
 - [x] Prove the decoder equivalent to the official reader on a real shard
-- [ ] Extend the equivalence proof to a complete shard
+- [x] Extend the equivalence proof to a complete shard
 
 ## Milestone 2 — Engineering evidence
 

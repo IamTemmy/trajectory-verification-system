@@ -215,10 +215,10 @@ contract, provenance enforcement, and official-format conversion are complete;
 validating a real learned model's output is the current work. See
 [docs/ROADMAP.md](docs/ROADMAP.md).
 
-The TensorFlow-free reader has been checked against Waymo's own decoder. Over
-20 scenarios — 1,206 tracks and 56,654 agent states — both produced identical
-normalized output, matching on every per-scenario digest. The procedure and its
-limits are recorded in
+The TensorFlow-free reader has been checked against Waymo's own decoder across
+a complete shard. Over 276 scenarios — 17,525 tracks and 864,001 agent states —
+both produced identical normalized output, matching on every per-scenario
+digest. The procedure and its limits are recorded in
 [docs/READER_VERIFICATION.md](docs/READER_VERIFICATION.md).
 
 ## Benchmark results and their limits

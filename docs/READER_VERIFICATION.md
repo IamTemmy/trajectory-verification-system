@@ -140,23 +140,25 @@ mismatch is reported per scenario so the disagreeing field can be located.
 
 ## Verified result
 
-Executed August 24, 2026 over the first 20 records of shard
-`uncompressed_scenario_validation_validation.tfrecord-00007-of-00150`.
+Executed August 24, 2026 against shard
+`uncompressed_scenario_validation_validation.tfrecord-00007-of-00150`, first
+over a 20-record slice and then over the complete shard.
 
 ```
-MATCH - 20 scenarios decoded identically.
-combined digest: 87e28f49785d108a1d2c683b2113f5555b806a306cb9631fff2c9113147bcea2
+MATCH - 276 scenarios decoded identically.
+combined digest: 014b7e50eff675d0f5796f7cdd2a01cbd9c557f0af24fd5a76ba794aa18d5ec8
 ```
 
-| Quantity | Count |
-|---|---:|
-| Scenarios | 20 |
-| Agent tracks | 1,206 |
-| Agent states | 56,654 |
-| Compared per-state values | 566,540 |
+| Quantity | Slice | Complete shard |
+|---|---:|---:|
+| Scenarios | 20 | 276 |
+| Agent tracks | 1,206 | 17,525 |
+| Agent states | 56,654 | 864,001 |
+| Compared per-state values | 566,540 | 8,640,010 |
 
-Every per-scenario digest matched, not only the combined digest. Both digest
-files are retained under `docs/evidence/`.
+Both runs matched on every per-scenario digest, not only on the combined
+digest, and the two readers resolved identical sets of scenario identifiers.
+All four digest files are retained under `docs/evidence/`.
 
 The slice was produced with `tools/slice_shard.py` and digests identically to
 the first 20 scenarios of the complete shard, confirming it is a byte-faithful
