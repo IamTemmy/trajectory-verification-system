@@ -128,7 +128,7 @@ files contain scenario identifiers and digests, not trajectories.
 
 | Result | Covers |
 |---|---|
-| Reader equivalence | One validation shard, 276 scenarios |
+| Reader equivalence | Five validation shards, 1,445 scenarios |
 | Learned model evaluation | The same shard, 1,203 designated targets |
 | Regression experiment | The same shard, three candidates |
 

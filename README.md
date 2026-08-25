@@ -121,9 +121,9 @@ It decodes what the normalizer consumes, which is less than the whole schema:
 | Lane centers, stop signs, crosswalks | Road lines, road edges, speed bumps, driveways |
 | SDC, prediction targets, objects of interest | — |
 
-Within that scope it is verified: across a complete 276-scenario shard it
-produced output identical to Waymo's official decoder, agreeing on all
-8,640,010 compared values. See
+Within that scope it is verified: across five complete validation shards -
+1,445 scenarios, 99,330 tracks - it produced output identical to Waymo's
+official decoder, agreeing on all 48,563,140 compared values. See
 [docs/READER_VERIFICATION.md](docs/READER_VERIFICATION.md).
 
 CRC fields are read past but not validated, since the standard library has no
@@ -276,9 +276,9 @@ excluding zero on every metric. Full results, including where it regresses, are
 in [docs/LEARNED_MODEL.md](docs/LEARNED_MODEL.md).
 
 The TensorFlow-free reader has been checked against Waymo's own decoder across
-a complete shard. Over 276 scenarios — 17,525 tracks and 864,001 agent states —
-both produced identical normalized output, matching on every per-scenario
-digest. The procedure and its limits are recorded in
+five complete validation shards. Over 1,445 scenarios — 99,330 tracks and
+4,856,314 agent states — both produced identical normalized output, matching on
+every per-scenario digest. The procedure and its limits are recorded in
 [docs/READER_VERIFICATION.md](docs/READER_VERIFICATION.md).
 
 ## Benchmark results and their limits

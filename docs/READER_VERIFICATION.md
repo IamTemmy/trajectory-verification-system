@@ -140,25 +140,33 @@ mismatch is reported per scenario so the disagreeing field can be located.
 
 ## Verified result
 
-Executed August 24, 2026 against shard
-`uncompressed_scenario_validation_validation.tfrecord-00007-of-00150`, first
-over a 20-record slice and then over the complete shard.
+Executed August 24-25, 2026 across five shards of the WOMD validation split.
+The procedure was established on a 20-record slice, then the complete shard
+`...tfrecord-00007-of-00150`, then four further shards.
 
 ```
-MATCH - 276 scenarios decoded identically.
-combined digest: 014b7e50eff675d0f5796f7cdd2a01cbd9c557f0af24fd5a76ba794aa18d5ec8
+MATCH - 306 scenarios decoded identically.   validation.tfrecord-00001-of-00150
+MATCH - 287 scenarios decoded identically.   validation.tfrecord-00002-of-00150
+MATCH - 294 scenarios decoded identically.   validation.tfrecord-00003-of-00150
+MATCH - 282 scenarios decoded identically.   validation.tfrecord-00004-of-00150
+MATCH - 276 scenarios decoded identically.   ...validation.tfrecord-00007-of-00150
 ```
 
-| Quantity | Slice | Complete shard |
+| Quantity | Shard 00007 | All five shards |
 |---|---:|---:|
-| Scenarios | 20 | 276 |
-| Agent tracks | 1,206 | 17,525 |
-| Agent states | 56,654 | 864,001 |
-| Compared per-state values | 566,540 | 8,640,010 |
+| Scenarios | 276 | **1,445** |
+| Agent tracks | 17,525 | **99,330** |
+| Agent states | 864,001 | **4,856,314** |
+| Compared per-state values | 8,640,010 | **48,563,140** |
 
-Both runs matched on every per-scenario digest, not only on the combined
-digest, and the two readers resolved identical sets of scenario identifiers.
-All four digest files are retained under `docs/evidence/`.
+Every run matched on every per-scenario digest, not only on the combined digest,
+and the two readers resolved identical sets of scenario identifiers throughout.
+
+The combined digest for shard 00007 is
+`014b7e50eff675d0f5796f7cdd2a01cbd9c557f0af24fd5a76ba794aa18d5ec8`; its digest
+files are retained under `docs/evidence/`. The four later shards were compared
+in place on the runtime that produced them, since holding both decoders on one
+machine removes the need to move 235 MB shards between machines at all.
 
 The slice was produced with `tools/slice_shard.py` and digests identically to
 the first 20 scenarios of the complete shard, confirming it is a byte-faithful
