@@ -9,8 +9,8 @@
 
 | Requirement | Result | Confidence | Evaluated | Failed | Observed range |
 |---|---:|---:|---:|---:|---:|
-| `INTERSECTION_SEPARATION_001` | FAIL | HIGH | 91 | 5 | 3.97287–46.9707 m |
-| `INTERSECTION_VRU_SEPARATION_002` | PASS | HIGH | 91 | 0 | 6.17015–31.6057 m |
+| `INTERSECTION_SEPARATION_001` | FAIL | HIGH | 91 | 5 | 3.97–46.97 m |
+| `INTERSECTION_VRU_SEPARATION_002` | PASS | HIGH | 91 | 0 | 6.17–31.61 m |
 | `INTERSECTION_SPEED_003` | PASS | HIGH | 90 | 0 | 6.4–6.4 m/s |
 
 ## Data-quality and applicability annotations
@@ -30,7 +30,7 @@ Evidence confidence: **HIGH** — At least five samples were evaluated with no b
 
 ### Failure evidence
 
-- separation was below the 5 m threshold from 5.4 s to 5.8 s; the worst value was 3.97287 m (1.02713 m beyond the limit).
+- separation was below the 5 m threshold from 5.4 s to 5.8 s; the worst value was 3.97 m (1.03 m beyond the limit).
 
 ### Threshold sensitivity
 

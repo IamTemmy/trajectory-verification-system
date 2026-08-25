@@ -156,6 +156,18 @@ def default_sensitivity_thresholds(requirement: Requirement) -> tuple[float, ...
     return (value - delta, value, value + delta)
 
 
+def format_quantity(value: float) -> str:
+    """Render a measured quantity for human-facing text.
+
+    Derived signals carry the full precision of a float, so ``:g`` alone prints
+    values such as ``3.94976 m`` where the trailing digits assert an accuracy
+    the measurement does not have. Round to centimetre-scale before trimming, so
+    exact thresholds still render as ``5`` rather than ``5.00``.
+    """
+
+    return f"{round(value, 2):g}"
+
+
 def _explain_interval(
     interval: FailureInterval,
     requirement: Requirement,
@@ -163,11 +175,13 @@ def _explain_interval(
 ) -> FailureExplanation:
     deviation = abs(interval.worst_value - requirement.threshold)
     narrative = (
-        f"{requirement.metric} was {relation} the {requirement.threshold:g} "
-        f"{requirement.units} threshold from {interval.start_time_s:g} s to "
-        f"{interval.end_time_s:g} s; the worst value was "
-        f"{interval.worst_value:g} {requirement.units} "
-        f"({deviation:g} {requirement.units} beyond the limit)."
+        f"{requirement.metric} was {relation} the "
+        f"{format_quantity(requirement.threshold)} "
+        f"{requirement.units} threshold from "
+        f"{format_quantity(interval.start_time_s)} s to "
+        f"{format_quantity(interval.end_time_s)} s; the worst value was "
+        f"{format_quantity(interval.worst_value)} {requirement.units} "
+        f"({format_quantity(deviation)} {requirement.units} beyond the limit)."
     )
     return FailureExplanation(
         interval=interval,

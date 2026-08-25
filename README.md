@@ -73,19 +73,60 @@ sweep showing how close the call was.
   verified byte-identical to Waymo's official decoder;
 - standalone SVG trajectory visualization without plotting dependencies.
 
+## Using the WOMD reader on its own
+
+Waymo's official toolkit ships as a Linux x86-64 wheel pinned to a TensorFlow
+version, which makes it awkward on Apple Silicon and on recent Python releases.
+If all you need is agent trajectories and basic map context out of a
+scenario-proto shard, the reader here works anywhere Python runs and depends
+only on Google's protobuf runtime:
+
+```python
+from trajectory_verification.adapters.womd import iter_womd_scenarios
+
+for scenario in iter_womd_scenarios("path/to/shard.tfrecord"):
+    print(scenario.scenario_id, len(scenario.tracks))
+    for track in scenario.tracks:
+        for state in track.states:
+            ...  # state.time_s, state.x_m, state.y_m, state.heading_rad
+```
+
+Scenarios arrive as plain frozen dataclasses in SI units, with no protobuf or
+TensorFlow types leaking through. Gzip-compressed shards are detected
+automatically.
+
+It decodes what the normalizer consumes, which is less than the whole schema:
+
+| Reads | Does not read |
+|---|---|
+| Scenario protos, compressed or not | The `tf.Example` representation |
+| All agent state fields | Lidar and camera data |
+| Lane centers, stop signs, crosswalks | Road lines, road edges, speed bumps, driveways |
+| SDC, prediction targets, objects of interest | — |
+
+Within that scope it is verified: across a complete 276-scenario shard it
+produced output identical to Waymo's official decoder, agreeing on all
+8,640,010 compared values. See
+[docs/READER_VERIFICATION.md](docs/READER_VERIFICATION.md).
+
+CRC fields are read past but not validated, since the standard library has no
+CRC32C. Checksum shards at download time.
+
 ## Quick start
 
 ```bash
 python3 -m unittest discover -s tests -v
-PYTHONPATH=src python3 -m trajectory_verification.cli examples/following_scenario.json examples/requirements.json
+PYTHONPATH=src python3 -m trajectory_verification.cli \
+  examples/intersection_scenario.json examples/intersection_requirements.json
 ```
 
 Generate machine-readable evidence plus Markdown and standalone HTML reports:
 
 ```bash
-verify-trajectories examples/following_scenario.json examples/requirements.json \
+verify-trajectories examples/intersection_scenario.json examples/intersection_requirements.json \
   --markdown-report reports/generated/example.md \
-  --html-report reports/generated/example.html
+  --html-report reports/generated/example.html \
+  --svg-output reports/generated/example.svg
 ```
 
 Run reusable role-based requirements directly on a WOMD scenario shard:

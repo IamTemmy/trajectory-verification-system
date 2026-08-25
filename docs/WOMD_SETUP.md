@@ -2,7 +2,9 @@
 
 ## Supported input
 
-The current adapter reads **uncompressed scenario-proto TFRecord shards**. It does not read the fixed-shape `tf.Example` representation used by the official motion tutorial.
+The adapter reads **scenario-proto TFRecord shards**, compressed or not; gzip
+shards are detected by magic number rather than file name. It does not read the
+fixed-shape `tf.Example` representation used by the official motion tutorial.
 
 The official scenario schema aligns every track state by index with `timestamps_seconds`. The adapter:
 
@@ -19,7 +21,10 @@ Python's standard library and passes each payload to a wire-compatible subset of
 the official `Scenario` schema. Protobuf safely skips fields not consumed by the
 normalizer. This keeps ingestion lightweight on Apple Silicon without TensorFlow.
 
-CRC fields are consumed but not yet validated. Dataset shards should be validated by checksum at download time; optional CRC32C validation is planned.
+CRC fields are consumed but not validated, because the standard library does not
+provide CRC32C. Shards should be checksummed at download time. The decoder has
+since been proven equivalent to the official reader across a complete shard; see
+[READER_VERIFICATION.md](READER_VERIFICATION.md).
 
 ## Runtime dependency
 

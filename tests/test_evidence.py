@@ -1,6 +1,7 @@
 import unittest
 
 from trajectory_verification.evidence import (
+    format_quantity,
     assess_scenario_quality,
     default_sensitivity_thresholds,
     explain_requirement,
@@ -48,6 +49,17 @@ class EvidenceTests(unittest.TestCase):
         codes = {item.code for item in annotations}
         self.assertIn("PARTIAL_REPORTED_VELOCITY", codes)
         self.assertIn("NO_MAP_FEATURES", codes)
+
+
+class QuantityFormattingTests(unittest.TestCase):
+    def test_trims_precision_the_measurement_does_not_have(self):
+        self.assertEqual("3.97", format_quantity(3.9728712))
+        self.assertEqual("1.03", format_quantity(1.0271288))
+
+    def test_keeps_exact_values_clean(self):
+        self.assertEqual("5", format_quantity(5.0))
+        self.assertEqual("4.5", format_quantity(4.5))
+        self.assertEqual("0", format_quantity(0.0))
 
 
 if __name__ == "__main__":

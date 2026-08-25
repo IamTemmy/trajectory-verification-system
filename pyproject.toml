@@ -7,7 +7,7 @@ name = "trajectory-verification-system"
 version = "0.1.0"
 description = "Requirements-driven trajectory verification and failure attribution"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 authors = [{ name = "Temiloluwa Adesola" }]
 license = "Apache-2.0"
 license-files = ["LICENSE"]

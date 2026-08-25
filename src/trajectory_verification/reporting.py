@@ -13,6 +13,7 @@ from .evidence import (
     assess_scenario_quality,
     default_sensitivity_thresholds,
     explain_requirement,
+    format_quantity,
 )
 from .models import Scenario
 from .requirements import Requirement
@@ -220,7 +221,7 @@ def write_validation_reports(
 def _range_text(minimum: float | None, maximum: float | None, units: str) -> str:
     if minimum is None or maximum is None:
         return "not evaluated"
-    return f"{minimum:g}–{maximum:g} {units}"
+    return f"{format_quantity(minimum)}–{format_quantity(maximum)} {units}"
 
 
 def _evidence_html(item: RequirementEvidence) -> str:

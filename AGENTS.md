@@ -17,7 +17,8 @@ PYTHONPATH=src python3 -m trajectory_verification.cli examples/following_scenari
 
 ## Code style
 
-- Python 3.11+.
+- Python 3.10+. The floor is 3.10 so the package can be installed alongside
+  Waymo tooling, whose wheels stop at 3.11.
 - Type hints on public APIs.
 - Standard library core; justify new runtime dependencies.
 - Small, reviewable commits with tests passing.
