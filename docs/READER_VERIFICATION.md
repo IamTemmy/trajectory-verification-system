@@ -55,21 +55,30 @@ print(sys.version)
 print(platform.machine(), platform.system())
 ```
 
-### 2. Install the official decoder
+### 2. Install the official decoder beside the notebook interpreter
+
+The wheel pins TensorFlow 2.12, which supports Python 3.8 to 3.11. Colab's
+default interpreter is newer than that, so installing directly fails: pip finds
+no matching wheel, falls back to the source distribution, and the build dies
+needing Google's build system.
+
+Create a separate interpreter for the wheel rather than changing the notebook's:
 
 ```python
-!pip install -q waymo-open-dataset-tf-2-12-0
+!pip install -q uv
+!uv python install 3.10
+!uv venv --python 3.10 /content/wod-env
+!uv pip install --python /content/wod-env/bin/python waymo-open-dataset-tf-2-12-0
 ```
 
-If pip reports no compatible distribution, the runtime's Python is too new.
-Colab exposes older runtimes, or `condacolab` can pin an older interpreter.
-Resolve this here rather than working around it later.
+Confirm before continuing:
 
 ```python
-import tensorflow as tf
-from waymo_open_dataset.protos import scenario_pb2
-print("tensorflow", tf.__version__)
+!/content/wod-env/bin/python -c "import tensorflow as tf; from waymo_open_dataset.protos import scenario_pb2; print('tensorflow', tf.__version__); print('scenario proto OK')"
 ```
+
+CUDA and TensorRT warnings are expected and harmless; the comparison is
+CPU-only.
 
 ### 3. Provide the shard
 
@@ -94,17 +103,22 @@ auth.authenticate_user()
 The shard must be the same one used for the local reference. A different shard
 produces a different digest and proves nothing.
 
-### 4. Install this project
+### 4. Provide this project
+
+Installing the package into the 3.10 environment fails: its declared
+`requires-python` floor is 3.11, and the wheel's ceiling is 3.11. Clone the
+source and put it on `PYTHONPATH` instead. Nothing outside the standard library
+is needed on this path, so there is nothing to install.
 
 ```python
-!pip install -q git+https://github.com/IamTemmy/trajectory-verification-system.git
 !git clone -q https://github.com/IamTemmy/trajectory-verification-system.git /content/tvs
 ```
 
 ### 5. Produce the official digest
 
 ```python
-!python /content/tvs/tools/normalization_digest.py "$SHARD" \
+!PYTHONPATH=/content/tvs/src /content/wod-env/bin/python \
+  /content/tvs/tools/normalization_digest.py "$SHARD" \
   --official --output /content/official-digest.json
 ```
 
@@ -123,6 +137,46 @@ python tools/compare_digests.py project-digest.json official-digest.json
 
 Equal combined digests establish equivalence over the evaluated shard. Any
 mismatch is reported per scenario so the disagreeing field can be located.
+
+## Verified result
+
+Executed August 24, 2026 over the first 20 records of shard
+`uncompressed_scenario_validation_validation.tfrecord-00007-of-00150`.
+
+```
+MATCH - 20 scenarios decoded identically.
+combined digest: 87e28f49785d108a1d2c683b2113f5555b806a306cb9631fff2c9113147bcea2
+```
+
+| Quantity | Count |
+|---|---:|
+| Scenarios | 20 |
+| Agent tracks | 1,206 |
+| Agent states | 56,654 |
+| Compared per-state values | 566,540 |
+
+Every per-scenario digest matched, not only the combined digest. Both digest
+files are retained under `docs/evidence/`.
+
+The slice was produced with `tools/slice_shard.py` and digests identically to
+the first 20 scenarios of the complete shard, confirming it is a byte-faithful
+prefix rather than a re-encoding.
+
+### Environment
+
+| | Project reader | Official reader |
+|---|---|---|
+| Platform | macOS arm64 | Google Colab, x86-64 Linux |
+| Python | 3.14.5 | 3.10.21 |
+| Decoder | `womd_proto` schema subset | `waymo-open-dataset-tf-2-12-0` 1.6.5 |
+| Framing | `iter_tfrecord_records` | TensorFlow 2.12.0 `TFRecordDataset` |
+
+Colab's default interpreter was Python 3.13, which the official wheel does not
+support; a separate 3.10 environment was created alongside it. The project was
+placed on `PYTHONPATH` rather than installed, because its declared
+`requires-python` floor of 3.11 conflicts with the wheel's ceiling. The package
+imports nothing beyond the standard library on this path, so no installation is
+required.
 
 ## What this does and does not establish
 

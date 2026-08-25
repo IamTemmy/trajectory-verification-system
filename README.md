@@ -69,7 +69,8 @@ sweep showing how close the call was.
 - risk-context review connecting forecast error to interaction and map context;
 - reproducible experiment manifests recording source revision and artifact checksums;
 - a versioned JSON contract for importing third-party learned-model predictions;
-- lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency;
+- lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency,
+  verified byte-identical to Waymo's official decoder;
 - standalone SVG trajectory visualization without plotting dependencies.
 
 ## Quick start
@@ -213,6 +214,12 @@ Milestone 11 (external learned-model integration) is in progress. The import
 contract, provenance enforcement, and official-format conversion are complete;
 validating a real learned model's output is the current work. See
 [docs/ROADMAP.md](docs/ROADMAP.md).
+
+The TensorFlow-free reader has been checked against Waymo's own decoder. Over
+20 scenarios — 1,206 tracks and 56,654 agent states — both produced identical
+normalized output, matching on every per-scenario digest. The procedure and its
+limits are recorded in
+[docs/READER_VERIFICATION.md](docs/READER_VERIFICATION.md).
 
 ## Benchmark results and their limits
 

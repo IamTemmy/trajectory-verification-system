@@ -1,0 +1,148 @@
+{
+  "reader": "project",
+  "shard_name": "subset-20.tfrecord",
+  "scenario_count": 20,
+  "combined_digest": "87e28f49785d108a1d2c683b2113f5555b806a306cb9631fff2c9113147bcea2",
+  "scenarios": [
+    {
+      "index": 0,
+      "scenario_id": "4992809c590076fe",
+      "track_count": 14,
+      "state_count": 530,
+      "digest": "8395b7ba4fb0644519c67cb709c2c454ac15b8a1af547184b70dc52559314716"
+    },
+    {
+      "index": 1,
+      "scenario_id": "d963287c8360ac9d",
+      "track_count": 56,
+      "state_count": 3395,
+      "digest": "b9427323b013f8e60cb658b56be1b926791966324b719577fd166e0deb2a91cc"
+    },
+    {
+      "index": 2,
+      "scenario_id": "7e969997e3e0b772",
+      "track_count": 57,
+      "state_count": 3529,
+      "digest": "1784ac5224e85cd3b51d4f7b48b18239af673edce1e6e715dddc666c081d7418"
+    },
+    {
+      "index": 3,
+      "scenario_id": "a651202aa8e79d45",
+      "track_count": 172,
+      "state_count": 6306,
+      "digest": "a80c94db7441fba94e2887981839c38b22c6e43b72f9bc57d0e2417225bd4af0"
+    },
+    {
+      "index": 4,
+      "scenario_id": "8cad75133febe930",
+      "track_count": 15,
+      "state_count": 953,
+      "digest": "5450e8f380f36b4e055283ecb7a9969526494d7e95fb31d727ae7620d7b47c79"
+    },
+    {
+      "index": 5,
+      "scenario_id": "706fecd25045c8d",
+      "track_count": 125,
+      "state_count": 5753,
+      "digest": "c211e0002008e955de1bab0f1307d37b90c4fe2e22adff2612465b54cc01958e"
+    },
+    {
+      "index": 6,
+      "scenario_id": "46c1c1fbe5ef29d1",
+      "track_count": 45,
+      "state_count": 2311,
+      "digest": "bea9acfb31f7b7179cc13e2d0e9c670826b440b1c2c09edc3e03bfdfbcbe39e8"
+    },
+    {
+      "index": 7,
+      "scenario_id": "2d4816583251700d",
+      "track_count": 72,
+      "state_count": 2073,
+      "digest": "6fb1086c7f6593f0b3e431ca6dee150e17a5eb088ba6e42f642cda48a4feeb14"
+    },
+    {
+      "index": 8,
+      "scenario_id": "76bb4b8a12314fb2",
+      "track_count": 27,
+      "state_count": 1939,
+      "digest": "1996051199cbb64b7b972895f353370590a3d051306c8913871a8fa4a630d7e8"
+    },
+    {
+      "index": 9,
+      "scenario_id": "c38351406efe25f7",
+      "track_count": 35,
+      "state_count": 2300,
+      "digest": "ae213cbfef834047687689e6947f37c03fa3a12e5f962f20102b70e553c2c1e2"
+    },
+    {
+      "index": 10,
+      "scenario_id": "770fec53ec3e0395",
+      "track_count": 54,
+      "state_count": 1518,
+      "digest": "e2e1e5c3dc14b813e1e3a4bbc4f20fad893a5e12bf667ccfcb04f1f6732d0ddf"
+    },
+    {
+      "index": 11,
+      "scenario_id": "77c44d1768793143",
+      "track_count": 52,
+      "state_count": 3088,
+      "digest": "4ca922498f5d73312c5528eaa7a5134bc9418904669f561a2e5d3829d1e2f595"
+    },
+    {
+      "index": 12,
+      "scenario_id": "2f366a31ab03f8b",
+      "track_count": 11,
+      "state_count": 462,
+      "digest": "b5ed89480f4d5e9cf1aa3b79ff3d2c0ef5448cc097e0798927445c8c5ba7825f"
+    },
+    {
+      "index": 13,
+      "scenario_id": "e9db41e904b349a2",
+      "track_count": 77,
+      "state_count": 3426,
+      "digest": "8cfc43666c755afd8a33fbedc6221554aa20241d18f600513b3c885efaa8d7af"
+    },
+    {
+      "index": 14,
+      "scenario_id": "36587047f1289413",
+      "track_count": 63,
+      "state_count": 2577,
+      "digest": "277b9db3cf9d7b03e10e7be30ef981d61015143c71def7bc5977f0bd682b0659"
+    },
+    {
+      "index": 15,
+      "scenario_id": "740fd8f0ccf1419a",
+      "track_count": 48,
+      "state_count": 2625,
+      "digest": "4cdf1e69e92f208e550ae4426b3b6c975bb99576130122cc0c2ad873ec71c2a5"
+    },
+    {
+      "index": 16,
+      "scenario_id": "67fff4d5bb3acf8d",
+      "track_count": 89,
+      "state_count": 4944,
+      "digest": "78ece96756f17bd8c0730c79bd7f9033806af9df0c83e1630452167968b0d5de"
+    },
+    {
+      "index": 17,
+      "scenario_id": "5f5660d70a6f14f6",
+      "track_count": 178,
+      "state_count": 7942,
+      "digest": "b0315cd3384bc2b52105eb05dd84a0350f8460a08d5fb76a9494cbf3109cf638"
+    },
+    {
+      "index": 18,
+      "scenario_id": "2a3333bf80e243c6",
+      "track_count": 2,
+      "state_count": 182,
+      "digest": "bf8ef702153c464cbc8d50aca35c1990fbb91724c9b2fdee3c8e06beea05d3bf"
+    },
+    {
+      "index": 19,
+      "scenario_id": "5c8f9e7af4b0248a",
+      "track_count": 14,
+      "state_count": 801,
+      "digest": "b154392278065926edd5634bd1b0a04555d800789407d233b7851e4d77e605aa"
+    }
+  ]
+}
