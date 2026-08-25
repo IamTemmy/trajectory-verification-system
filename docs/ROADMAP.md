@@ -101,4 +101,4 @@
 - [x] Select and document a credible learned-model execution target
 - [x] Validate at least one learned-model output
 - [x] Compare learned, kinematic, and ensemble candidates fairly
-- [ ] Add release-quality reproducibility and interpretation guidance
+- [x] Add release-quality reproducibility and interpretation guidance

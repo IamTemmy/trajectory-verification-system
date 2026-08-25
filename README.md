@@ -57,6 +57,22 @@ failed, when, and by how much:
 Two other requirements pass, and each verdict carries a threshold-sensitivity
 sweep showing how close the call was.
 
+## Seeing a model fail
+
+![Predicted futures against the recorded one](docs/examples/prediction-turning-failure.svg)
+
+A vehicle approaches an intersection from the north and turns west. The model
+predicts the turn but takes a wider line and drifts steadily south of what
+happened, ending 5.17 m out. Every mode it considered is drawn; the one the
+evaluator scored as closest is highlighted.
+
+```bash
+visualize-predictions candidate.binproto data/raw/SHARD --out-dir cases --worst 10
+```
+
+Aggregate error says a model was some number of metres wrong. This says where it
+went instead.
+
 ## What it does
 
 - normalized two-dimensional agent trajectories from WOMD or hand-written scenarios;
@@ -71,7 +87,8 @@ sweep showing how close the call was.
 - a versioned JSON contract for importing third-party learned-model predictions;
 - lightweight WOMD scenario-proto TFRecord ingestion without a TensorFlow dependency,
   verified byte-identical to Waymo's official decoder;
-- standalone SVG trajectory visualization without plotting dependencies.
+- standalone SVG trajectory and prediction-versus-truth visualization, without
+  plotting dependencies.
 
 ## Using the WOMD reader on its own
 
@@ -316,7 +333,9 @@ See [docs/ROADMAP.md](docs/ROADMAP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE
 [docs/MOTION_PREDICTIONS.md](docs/MOTION_PREDICTIONS.md). Reproducible runs are
 documented in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md).
 Prediction-error context and its interpretation boundary are documented in
-[docs/RISK_CONTEXT.md](docs/RISK_CONTEXT.md).
+[docs/RISK_CONTEXT.md](docs/RISK_CONTEXT.md). What every reported number means,
+what it does not mean, and how to regenerate it are in
+[docs/INTERPRETATION.md](docs/INTERPRETATION.md).
 The learned-model boundary is documented in
 [docs/EXTERNAL_MODELS.md](docs/EXTERNAL_MODELS.md). The procedure for proving
 the reader equivalent to Waymo's official decoder is documented in

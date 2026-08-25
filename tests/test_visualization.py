@@ -7,7 +7,12 @@ from trajectory_verification.models import (
     AgentTrack, CrosswalkFeature, LaneFeature, MapContext, MapPoint,
     Scenario, State, StopSignFeature,
 )
-from trajectory_verification.visualization import scenario_to_svg, write_scenario_svg
+from trajectory_verification.predictions import (
+    AgentPrediction, PredictedTrajectory, PredictionPoint,
+)
+from trajectory_verification.visualization import (
+    prediction_to_svg, scenario_to_svg, write_scenario_svg,
+)
 
 
 class VisualizationTests(unittest.TestCase):
@@ -99,6 +104,61 @@ class VisualizationTests(unittest.TestCase):
         self.assertIn("stroke-dasharray", svg)
         self.assertIn("<polygon", svg)
         self.assertIn("rotate(45", svg)
+
+
+class PredictionVisualizationTests(unittest.TestCase):
+    def setUp(self):
+        history = tuple(State(float(t), float(t) * 2.0, 0.0) for t in range(5))
+        future = tuple(State(float(t), float(t) * 2.0, 0.0) for t in range(5, 9))
+        self.scenario = Scenario(
+            "pred-fixture",
+            (AgentTrack("target", history + future, "vehicle"),
+             AgentTrack("other", history + future, "pedestrian")),
+        )
+        self.prediction = AgentPrediction(
+            "target",
+            (
+                PredictedTrajectory(0.7, tuple(
+                    PredictionPoint(float(t), float(t) * 2.0, 0.0) for t in range(5, 9))),
+                PredictedTrajectory(0.3, tuple(
+                    PredictionPoint(float(t), float(t) * 2.0, 9.0) for t in range(5, 9))),
+            ),
+        )
+
+    def test_draws_history_truth_and_every_mode(self):
+        svg = prediction_to_svg(self.scenario, self.prediction)
+        self.assertIn("<svg", svg)
+        self.assertIn("pred-fixture", svg)
+        self.assertIn("agent target", svg)
+        for label in ("observed history", "recorded future",
+                      "closest predicted mode", "other modes"):
+            self.assertIn(label, svg)
+
+    def test_selects_the_mode_closest_to_the_recorded_future(self):
+        """The highlighted mode must be the accurate one, not the confident one.
+
+        The second mode is 9 m off but the first is exact, so the drawing must
+        highlight the first even though both are present.
+        """
+        svg = prediction_to_svg(self.scenario, self.prediction)
+        highlighted = re.findall(
+            r'<polyline points="([^"]+)"[^>]*stroke="#dc2626"', svg
+        )
+        self.assertEqual(1, len(highlighted), "exactly one mode may be highlighted")
+        # The accurate mode lies on y = 0 in world space; the 9 m offset mode
+        # would render at a different height.
+        ys = {round(float(pair.split(",")[1]), 2)
+              for pair in highlighted[0].split()}
+        self.assertEqual(1, len(ys), "highlighted mode should be the flat, exact one")
+
+    def test_rejects_an_agent_with_no_observed_history(self):
+        prediction = AgentPrediction(
+            "other",
+            (PredictedTrajectory(1.0, tuple(
+                PredictionPoint(float(t), 0.0, 0.0) for t in range(0, 4))),),
+        )
+        with self.assertRaisesRegex(ValueError, "no observed history"):
+            prediction_to_svg(self.scenario, prediction)
 
 
 if __name__ == "__main__":
