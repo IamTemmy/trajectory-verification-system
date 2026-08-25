@@ -127,6 +127,38 @@ The six modes were selected as best 217, 204, 137, 161, 265 and 219 times. No
 mode collapse: the winner-takes-all objective kept the modes distinct rather
 than letting them converge on a single averaged trajectory.
 
+## What the regressions have in common
+
+Ninety-eight agents scored worse than the kinematic ensemble. Characterising
+them turns out to explain itself.
+
+| Type | Agents | Ensemble | Learned | Improvement | Regressed |
+|---|---:|---:|---:|---:|---:|
+| Vehicle | 1,055 | 8.548 m | 2.136 m | 75.0% | 6.2% |
+| Pedestrian | 126 | 1.403 m | 0.870 m | 37.9% | **23.0%** |
+| Cyclist | 22 | 4.673 m | 2.398 m | 48.7% | **18.2%** |
+
+The regression rate tracks training representation. A sample of the training
+population is about 93% vehicles and 7% pedestrians, with cyclists barely
+present. Vehicles regress at 6%, pedestrians at 23%, cyclists at 18% - the
+classes the model saw least are the classes it degrades most.
+
+Two further properties separate the two groups. Pedestrians make up 30% of the
+regressions against 9% of the improvements, and regressed agents travel a median
+26.7 m over the horizon against 41.7 m for improved ones. The model is worse
+than physics specifically on slow, under-represented agents, which is exactly
+where constant velocity is hardest to beat: a pedestrian walking steadily is
+almost perfectly described by it.
+
+The trade is heavily favourable in magnitude. The median regression costs 0.39 m
+while the median improvement gains 4.88 m, and the worst single regression is
+6.20 m.
+
+None of this is visible in the aggregate. A mean of 2.008 m reports a large win
+and says nothing about a class-dependent failure that a rebalanced training set
+would plausibly fix - which is a concrete, testable next experiment rather than
+an observation.
+
 ## Limits
 
 These are project diagnostics under documented assumptions, **not** official
