@@ -19,6 +19,9 @@ from torch.utils.data import Dataset
 ARRAYS = ("target_history", "neighbors", "map_points", "future", "future_mask")
 LABELS = ("scenario_id", "agent_id", "object_type")
 
+# Index 0 is reserved for an unknown or absent type.
+OBJECT_TYPE_INDEX = {"vehicle": 1, "pedestrian": 2, "cyclist": 3}
+
 
 def consolidate(archive_dir: Path, out_dir: Path) -> int:
     """Merge per-shard archives into flat memory-mappable arrays."""
@@ -65,6 +68,16 @@ def consolidate(archive_dir: Path, out_dir: Path) -> int:
     return total
 
 
+def object_type_codes(directory: Path) -> np.ndarray:
+    """Per-example object type as an integer code, in consolidation order."""
+
+    labels = json.loads((Path(directory) / "labels.json").read_text(encoding="utf-8"))
+    return np.array(
+        [OBJECT_TYPE_INDEX.get(name, 0) for name in labels["object_type"]],
+        dtype=np.int64,
+    )
+
+
 class FeatureDataset(Dataset):
     def __init__(self, directory: Path, indices: np.ndarray | None = None) -> None:
         self.directory = Path(directory)
@@ -72,6 +85,7 @@ class FeatureDataset(Dataset):
             name: np.load(self.directory / f"{name}.npy", mmap_mode="r")
             for name in ARRAYS
         }
+        self.object_type = object_type_codes(self.directory)
         count = self.arrays["target_history"].shape[0]
         self.indices = np.arange(count) if indices is None else indices
 
@@ -80,13 +94,31 @@ class FeatureDataset(Dataset):
 
     def __getitem__(self, position: int) -> dict[str, torch.Tensor]:
         row = int(self.indices[position])
-        return {
+        item = {
             # Copy out of the memory map: torch cannot own a read-only buffer.
             name: torch.from_numpy(
                 np.array(self.arrays[name][row], dtype=np.float32, copy=True)
             )
             for name in ARRAYS
         }
+        item["object_type"] = torch.tensor(self.object_type[row], dtype=torch.long)
+        return item
+
+
+def sampling_weights(codes: np.ndarray, damping: float = 0.5) -> np.ndarray:
+    """Per-example weights that lift under-represented object types.
+
+    The training population is roughly 93% vehicles, and the classes the model
+    saw least are the ones it degrades most. Full inverse frequency would
+    over-correct and starve the majority class, so the weight is raised to a
+    damping power: 0 leaves the distribution alone, 1 equalises it outright.
+    """
+
+    values, counts = np.unique(codes, return_counts=True)
+    frequency = {int(v): c / counts.sum() for v, c in zip(values, counts)}
+    return np.array(
+        [(1.0 / frequency[int(code)]) ** damping for code in codes], dtype=np.float64
+    )
 
 
 def split_indices(count: int, holdout: float, seed: int = 0) -> tuple[np.ndarray, np.ndarray]:

@@ -19,9 +19,12 @@ from pathlib import Path
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, WeightedRandomSampler
 
-from dataset import FeatureDataset, consolidate, split_indices
+from dataset import (
+    OBJECT_TYPE_INDEX, FeatureDataset, consolidate, object_type_codes,
+    sampling_weights, split_indices,
+)
 from model import TrajectoryPredictor, multimodal_loss
 
 
@@ -47,13 +50,22 @@ def displacement_metrics(
 
 @torch.no_grad()
 def evaluate(model, loader, device) -> dict[str, float]:
+    """Overall and per-class displacement error on the monitor split.
+
+    Per-class figures are reported because the aggregate hid a class-dependent
+    failure: the classes least represented in training were the ones the model
+    degraded most against the kinematic baseline.
+    """
+
     model.eval()
     ade_sum = fde_sum = 0.0
     seen = 0
+    per_class: dict[int, list[float]] = {}
     for batch in loader:
         batch = {k: v.to(device, non_blocking=True) for k, v in batch.items()}
         trajectories, _ = model(
-            batch["target_history"], batch["neighbors"], batch["map_points"]
+            batch["target_history"], batch["neighbors"], batch["map_points"],
+            batch["object_type"],
         )
         ade, fde, n = displacement_metrics(
             trajectories, batch["future"], batch["future_mask"]
@@ -61,8 +73,20 @@ def evaluate(model, loader, device) -> dict[str, float]:
         ade_sum += ade
         fde_sum += fde
         seen += n
+        error = torch.linalg.vector_norm(
+            trajectories - batch["future"].unsqueeze(1), dim=-1
+        )
+        mask = batch["future_mask"].unsqueeze(1)
+        rowwise = ((error * mask).sum(-1) / mask.sum(-1).clamp(min=1.0)).amin(dim=1)
+        for code, value in zip(batch["object_type"].tolist(), rowwise.tolist()):
+            per_class.setdefault(int(code), []).append(value)
+
     seen = max(seen, 1)
-    return {"min_ade_m": ade_sum / seen, "min_fde_m": fde_sum / seen, "agents": seen}
+    metrics = {"min_ade_m": ade_sum / seen, "min_fde_m": fde_sum / seen, "agents": seen}
+    names = {index: name for name, index in OBJECT_TYPE_INDEX.items()}
+    for code, values in per_class.items():
+        metrics[f"min_ade_{names.get(code, 'unknown')}"] = sum(values) / len(values)
+    return metrics
 
 
 def main() -> int:
@@ -81,6 +105,10 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--dim", type=int, default=128)
     parser.add_argument("--blocks", type=int, default=3)
+    parser.add_argument("--balance-classes", action="store_true",
+                        help="oversample under-represented object types")
+    parser.add_argument("--balance-damping", type=float, default=0.5,
+                        help="0 leaves the distribution alone, 1 equalises it")
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
 
@@ -94,9 +122,21 @@ def main() -> int:
 
     train_idx, monitor_idx = split_indices(count, args.holdout, seed=args.seed)
     common = dict(batch_size=args.batch_size, num_workers=args.workers, pin_memory=True)
-    train_loader = DataLoader(
-        FeatureDataset(args.flat, train_idx), shuffle=True, drop_last=True, **common
-    )
+    train_set = FeatureDataset(args.flat, train_idx)
+    if args.balance_classes:
+        codes = object_type_codes(args.flat)[train_idx]
+        weights = sampling_weights(codes, damping=args.balance_damping)
+        sampler = WeightedRandomSampler(
+            weights.tolist(), num_samples=len(train_idx), replacement=True
+        )
+        train_loader = DataLoader(train_set, sampler=sampler, drop_last=True, **common)
+        names = {index: name for name, index in OBJECT_TYPE_INDEX.items()}
+        share = {names.get(int(c), "unknown"): f"{(codes == c).mean():.1%}"
+                 for c in np.unique(codes)}
+        print(f"balancing classes (damping {args.balance_damping}); raw share {share}",
+              flush=True)
+    else:
+        train_loader = DataLoader(train_set, shuffle=True, drop_last=True, **common)
     monitor_loader = DataLoader(FeatureDataset(args.flat, monitor_idx), **common)
     print(f"train {len(train_idx)}  monitor {len(monitor_idx)}  device {device}", flush=True)
 
@@ -138,7 +178,8 @@ def main() -> int:
             optimizer.zero_grad(set_to_none=True)
             with torch.amp.autocast("cuda", enabled=device.type == "cuda"):
                 trajectories, logits = model(
-                    batch["target_history"], batch["neighbors"], batch["map_points"]
+                    batch["target_history"], batch["neighbors"], batch["map_points"],
+                    batch["object_type"],
                 )
                 loss, _, _ = multimodal_loss(
                     trajectories.float(), logits.float(),
@@ -160,10 +201,15 @@ def main() -> int:
             lr=schedule.get_last_lr()[0],
         )
         history.append(metrics)
+        classes = "  ".join(
+            f"{name[:3]} {metrics[key]:5.3f}"
+            for name in ("vehicle", "pedestrian", "cyclist")
+            if (key := f"min_ade_{name}") in metrics
+        )
         print(
             f"epoch {epoch:3d}  loss {metrics['loss']:7.3f}  "
             f"minADE {metrics['min_ade_m']:6.3f} m  minFDE {metrics['min_fde_m']:6.3f} m  "
-            f"{metrics['seconds']:.0f}s",
+            f"[{classes}]  {metrics['seconds']:.0f}s",
             flush=True,
         )
 

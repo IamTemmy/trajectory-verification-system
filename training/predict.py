@@ -23,6 +23,7 @@ import torch
 
 from trajectory_verification.adapters.womd import iter_womd_scenarios
 
+from dataset import OBJECT_TYPE_INDEX
 from features import scenario_examples
 from model import NUM_MODES, TrajectoryPredictor
 
@@ -95,6 +96,10 @@ def main() -> int:
                     ).to(device),
                     "map_points": torch.from_numpy(
                         np.stack([e.map_points for e in chunk])
+                    ).to(device),
+                    "object_type": torch.tensor(
+                        [OBJECT_TYPE_INDEX.get(e.object_type, 0) for e in chunk],
+                        dtype=torch.long,
                     ).to(device),
                 }
                 with torch.no_grad():

@@ -69,6 +69,9 @@ class TrajectoryPredictor(nn.Module):
         self.neighbor_encoder = nn.GRU(10, dim, batch_first=True)
         self.map_encoder = _mlp([5, dim, dim])
 
+        # The target's own class. Neighbours carry a type indicator, but without
+        # this the network must infer whether it is predicting a car or a
+        # pedestrian from motion alone, and defaults to the majority class.
         self.agent_type = nn.Embedding(4, dim)
         self.context_kind = nn.Embedding(2, dim)  # neighbour vs map token
 
@@ -82,6 +85,7 @@ class TrajectoryPredictor(nn.Module):
         target_history: Tensor,   # (B, 11, 7)
         neighbors: Tensor,        # (B, N, 11, 10)
         map_points: Tensor,       # (B, P, 5)
+        object_type: Tensor | None = None,  # (B,) integer class code
     ) -> tuple[Tensor, Tensor]:
         batch, num_neighbors = neighbors.shape[0], neighbors.shape[1]
 
@@ -89,6 +93,8 @@ class TrajectoryPredictor(nn.Module):
         target[..., :2] /= POSITION_SCALE
         _, target_state = self.target_encoder(target)
         query = target_state[-1].unsqueeze(1)  # (B, 1, dim)
+        if object_type is not None:
+            query = query + self.agent_type(object_type).unsqueeze(1)
 
         flat = neighbors.reshape(batch * num_neighbors, neighbors.shape[2], -1).clone()
         flat[..., :2] /= POSITION_SCALE
