@@ -305,7 +305,11 @@ assumptions, and are **not comparable to official Waymo challenge scores**.
 
 Training and evaluating the learned candidate is documented in
 [training/README.md](training/README.md) and
-[docs/LEARNED_MODEL.md](docs/LEARNED_MODEL.md).
+[docs/LEARNED_MODEL.md](docs/LEARNED_MODEL.md). A worked cycle in which the
+evidence layer located a class-dependent defect, the defect was fixed, and the
+same tooling both confirmed the targeted improvement and refused to certify the
+aggregate one is recorded in
+[docs/REGRESSION_EXPERIMENT.md](docs/REGRESSION_EXPERIMENT.md).
 
 See [docs/ROADMAP.md](docs/ROADMAP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [docs/WOMD_SETUP.md](docs/WOMD_SETUP.md), and

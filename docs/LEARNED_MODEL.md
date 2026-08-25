@@ -155,9 +155,14 @@ while the median improvement gains 4.88 m, and the worst single regression is
 6.20 m.
 
 None of this is visible in the aggregate. A mean of 2.008 m reports a large win
-and says nothing about a class-dependent failure that a rebalanced training set
-would plausibly fix - which is a concrete, testable next experiment rather than
-an observation.
+and says nothing about a class-dependent failure.
+
+That failure was then diagnosed and reduced. The target's own object type turned
+out never to reach the network, so it inferred class from motion alone and
+defaulted to the majority. Supplying it, with and without class-balanced
+sampling, cut the pedestrian regression rate from 23.0% to 14.3% while the
+aggregate moved 1.4%. The experiment, including the claims that could not be
+supported, is recorded in [REGRESSION_EXPERIMENT.md](REGRESSION_EXPERIMENT.md).
 
 ## Limits
 

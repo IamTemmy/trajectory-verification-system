@@ -1,0 +1,60 @@
+{
+  "assumptions": {
+    "miss_threshold_m": 2.0,
+    "metric_scope": "project-defined diagnostic; not official Waymo challenge scoring",
+    "mode_selection": "minADE and minFDE minimized independently across modes"
+  },
+  "summary": {
+    "scenarios": 276,
+    "agents": 1203,
+    "mean_min_ade_m": 2.010513895837634,
+    "mean_min_fde_m": 4.698357813580786,
+    "miss_rate": 0.6608478802992519,
+    "mean_ground_truth_coverage": 0.9313175394846218
+  },
+  "confidence_intervals": {
+    "mean_min_ade_m": {
+      "lower": 1.9085630893039378,
+      "upper": 2.112335983475556,
+      "confidence": 0.95
+    },
+    "mean_min_fde_m": {
+      "lower": 4.396988190087666,
+      "upper": 5.002337642820477,
+      "confidence": 0.95
+    },
+    "miss_rate": {
+      "lower": 0.6350789692435578,
+      "upper": 0.6891105569409809,
+      "confidence": 0.95
+    }
+  },
+  "by_object_type": {
+    "cyclist": {
+      "agents": 22,
+      "mean_min_ade_m": 2.0811853078304394,
+      "mean_min_fde_m": 4.574483700185673,
+      "miss_rate": 0.7727272727272727
+    },
+    "pedestrian": {
+      "agents": 126,
+      "mean_min_ade_m": 0.7699643130432692,
+      "mean_min_fde_m": 1.6081099400136194,
+      "miss_rate": 0.21428571428571427
+    },
+    "vehicle": {
+      "agents": 1055,
+      "mean_min_ade_m": 2.157200603295689,
+      "mean_min_fde_m": 5.07001322833354,
+      "miss_rate": 0.7118483412322275
+    }
+  },
+  "best_mode_counts": {
+    "0": 202,
+    "1": 264,
+    "2": 267,
+    "3": 152,
+    "4": 187,
+    "5": 131
+  }
+}
