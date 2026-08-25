@@ -1,0 +1,192 @@
+{
+  "assumptions": {
+    "miss_threshold_m": 2.0,
+    "metric_scope": "project-defined diagnostic; not official Waymo challenge scoring",
+    "mode_selection": "minADE and minFDE minimized independently across modes"
+  },
+  "summary": {
+    "scenarios": 276,
+    "agents": 1203,
+    "mean_min_ade_m": 2.0079729586426516,
+    "mean_min_fde_m": 4.637845390774879,
+    "miss_rate": 0.656691604322527,
+    "mean_ground_truth_coverage": 0.9313175394846218
+  },
+  "confidence_intervals": {
+    "mean_min_ade_m": {
+      "lower": 1.8986804724898159,
+      "upper": 2.1097432991136635,
+      "confidence": 0.95
+    },
+    "mean_min_fde_m": {
+      "lower": 4.346687366667469,
+      "upper": 4.929316781617456,
+      "confidence": 0.95
+    },
+    "miss_rate": {
+      "lower": 0.6292601828761429,
+      "upper": 0.684123025768911,
+      "confidence": 0.95
+    }
+  },
+  "by_object_type": {
+    "cyclist": {
+      "agents": 22,
+      "mean_min_ade_m": 2.398017626457269,
+      "mean_min_fde_m": 5.649106612615914,
+      "miss_rate": 0.8636363636363636
+    },
+    "pedestrian": {
+      "agents": 126,
+      "mean_min_ade_m": 0.87044946789509,
+      "mean_min_fde_m": 1.7993600736802293,
+      "miss_rate": 0.2619047619047619
+    },
+    "vehicle": {
+      "agents": 1055,
+      "mean_min_ade_m": 2.1356952118580743,
+      "mean_min_fde_m": 4.955761412645422,
+      "miss_rate": 0.6995260663507109
+    }
+  },
+  "best_mode_counts": {
+    "0": 217,
+    "1": 204,
+    "2": 137,
+    "3": 161,
+    "4": 265,
+    "5": 219
+  },
+  "worst_agents_by_min_ade": [
+    {
+      "scenario_id": "376624f577454c5b",
+      "agent_id": "52",
+      "modes": 6,
+      "evaluated_points": 14,
+      "expected_points": 16,
+      "min_ade_m": 18.094344629192374,
+      "min_fde_m": 49.697883432708075,
+      "miss": true,
+      "best_mode_index": 3,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 0.875
+    },
+    {
+      "scenario_id": "5c8f9e7af4b0248a",
+      "agent_id": "1532",
+      "modes": 6,
+      "evaluated_points": 16,
+      "expected_points": 16,
+      "min_ade_m": 16.994193419399448,
+      "min_fde_m": 54.41477985333692,
+      "miss": true,
+      "best_mode_index": 2,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 1.0
+    },
+    {
+      "scenario_id": "be15fd2b0b7a0cb",
+      "agent_id": "163",
+      "modes": 6,
+      "evaluated_points": 16,
+      "expected_points": 16,
+      "min_ade_m": 13.47182662958253,
+      "min_fde_m": 33.59931187208888,
+      "miss": true,
+      "best_mode_index": 1,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 1.0
+    },
+    {
+      "scenario_id": "3cf08ce161d49453",
+      "agent_id": "2537",
+      "modes": 6,
+      "evaluated_points": 16,
+      "expected_points": 16,
+      "min_ade_m": 13.168433985786733,
+      "min_fde_m": 25.32672159538772,
+      "miss": true,
+      "best_mode_index": 3,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 1.0
+    },
+    {
+      "scenario_id": "ac66dfdfd35ad7aa",
+      "agent_id": "1532",
+      "modes": 6,
+      "evaluated_points": 11,
+      "expected_points": 16,
+      "min_ade_m": 12.888348183178893,
+      "min_fde_m": 34.65158064131729,
+      "miss": true,
+      "best_mode_index": 1,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 0.6875
+    },
+    {
+      "scenario_id": "9c4d2aaeade111e5",
+      "agent_id": "1458",
+      "modes": 6,
+      "evaluated_points": 16,
+      "expected_points": 16,
+      "min_ade_m": 12.086044738691502,
+      "min_fde_m": 32.83902208560174,
+      "miss": true,
+      "best_mode_index": 0,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 1.0
+    },
+    {
+      "scenario_id": "55a12afa44e19024",
+      "agent_id": "18",
+      "modes": 6,
+      "evaluated_points": 16,
+      "expected_points": 16,
+      "min_ade_m": 10.60747797511826,
+      "min_fde_m": 21.52278744484827,
+      "miss": true,
+      "best_mode_index": 3,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 1.0
+    },
+    {
+      "scenario_id": "3ce06a8ab3ddc59c",
+      "agent_id": "4",
+      "modes": 6,
+      "evaluated_points": 16,
+      "expected_points": 16,
+      "min_ade_m": 9.809985091803501,
+      "min_fde_m": 25.186552574191445,
+      "miss": true,
+      "best_mode_index": 3,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 1.0
+    },
+    {
+      "scenario_id": "4992809c590076fe",
+      "agent_id": "842",
+      "modes": 6,
+      "evaluated_points": 16,
+      "expected_points": 16,
+      "min_ade_m": 9.632714472534172,
+      "min_fde_m": 24.490815924629572,
+      "miss": true,
+      "best_mode_index": 3,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 1.0
+    },
+    {
+      "scenario_id": "739be8dd009ac54a",
+      "agent_id": "34",
+      "modes": 6,
+      "evaluated_points": 16,
+      "expected_points": 16,
+      "min_ade_m": 8.976764702478764,
+      "min_fde_m": 23.195765743022378,
+      "miss": true,
+      "best_mode_index": 3,
+      "object_type": "vehicle",
+      "ground_truth_coverage": 1.0
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "interpretation": "contextual engineering-review priority; not collision probability or a production safety assessment",
+  "thresholds": {
+    "close_interaction_m": 5.0,
+    "dense_scene_agents": 10,
+    "large_separation_error_m": 5.0,
+    "crosswalk_context_m": 5.0,
+    "control_context_m": 10.0,
+    "stationary_displacement_m": 2.0,
+    "turning_angle_rad": 0.35
+  },
+  "summary": {
+    "agents": 1203,
+    "review_priority": {
+      "high": 712,
+      "low": 76,
+      "medium": 415
+    },
+    "motion_class": {
+      "stationary": 6,
+      "straight": 739,
+      "turning": 458
+    },
+    "risk_tags": {
+      "close_interaction": 697,
+      "crosswalk_context": 625,
+      "dense_scene": 491,
+      "large_sdc_separation_error": 288,
+      "traffic_control_context": 542,
+      "vulnerable_road_user": 148
+    }
+  },
+  "by_motion_class": {
+    "stationary": {
+      "agents": 6,
+      "mean_min_ade_m": 0.45027143005168363,
+      "mean_min_fde_m": 1.2999842717189487,
+      "miss_rate": 0.16666666666666666
+    },
+    "straight": {
+      "agents": 739,
+      "mean_min_ade_m": 1.616112942440649,
+      "mean_min_fde_m": 3.388479135300086,
+      "miss_rate": 0.5453315290933695
+    },
+    "turning": {
+      "agents": 458,
+      "mean_min_ade_m": 2.6606602100505676,
+      "mean_min_fde_m": 6.697471656081008,
+      "miss_rate": 0.8427947598253275
+    }
+  },
+  "by_review_priority": {
+    "high": {
+      "agents": 712,
+      "mean_min_ade_m": 2.7154270608237194,
+      "mean_min_fde_m": 6.722635112993509,
+      "miss_rate": 1.0
+    },
+    "low": {
+      "agents": 76,
+      "mean_min_ade_m": 0.739488211731866,
+      "mean_min_fde_m": 1.0395674782430335,
+      "miss_rate": 0.0
+    },
+    "medium": {
+      "agents": 415,
+      "mean_min_ade_m": 1.0265211996361439,
+      "mean_min_fde_m": 1.7200112682032034,
+      "miss_rate": 0.18795180722891566
+    }
+  }
+}

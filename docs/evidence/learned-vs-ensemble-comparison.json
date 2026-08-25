@@ -1,0 +1,466 @@
+{
+  "gate_passed": true,
+  "scenario_count": 276,
+  "agent_count": 1203,
+  "baseline": {
+    "mean_min_ade_m": 7.728334434356853,
+    "mean_min_fde_m": 19.9379603238235,
+    "miss_rate": 0.9152119700748129,
+    "mean_ground_truth_coverage": 0.9313175394846218
+  },
+  "candidate": {
+    "mean_min_ade_m": 2.0079729586426516,
+    "mean_min_fde_m": 4.637845390774879,
+    "miss_rate": 0.656691604322527,
+    "mean_ground_truth_coverage": 0.9313175394846218
+  },
+  "deltas": {
+    "mean_min_ade_m": -5.720361475714201,
+    "mean_min_fde_m": -15.300114933048622,
+    "miss_rate": -0.2585203657522859,
+    "mean_ground_truth_coverage": 0.0
+  },
+  "violations": [],
+  "paired_confidence_intervals": {
+    "min_ade_m": {
+      "lower": -6.0416674416270135,
+      "upper": -5.404219183398719,
+      "confidence": 0.95
+    },
+    "min_fde_m": {
+      "lower": -16.187400630389412,
+      "upper": -14.47566856482089,
+      "confidence": 0.95
+    },
+    "miss": {
+      "lower": -0.28595178719867,
+      "upper": -0.23275145469659186,
+      "confidence": 0.95
+    }
+  },
+  "agent_change_counts": {
+    "min_ade_m": {
+      "improved": 1105,
+      "unchanged": 0,
+      "regressed": 98
+    },
+    "min_fde_m": {
+      "improved": 1081,
+      "unchanged": 0,
+      "regressed": 122
+    },
+    "miss": {
+      "improved": 328,
+      "unchanged": 858,
+      "regressed": 17
+    }
+  },
+  "most_improved_scenarios": [
+    {
+      "scenario_id": "f8194e7b4026784b",
+      "agents": 2,
+      "mean_min_ade_delta_m": -21.718505462235974,
+      "mean_min_fde_delta_m": -60.19777105884005,
+      "miss_rate_delta": -0.5
+    },
+    {
+      "scenario_id": "cca7c204bf3ce668",
+      "agents": 2,
+      "mean_min_ade_delta_m": -16.863965350344532,
+      "mean_min_fde_delta_m": -51.1903030921097,
+      "miss_rate_delta": -0.5
+    },
+    {
+      "scenario_id": "d2af10d326e44eb0",
+      "agents": 4,
+      "mean_min_ade_delta_m": -16.233997992177226,
+      "mean_min_fde_delta_m": -42.94589096589152,
+      "miss_rate_delta": -1.0
+    },
+    {
+      "scenario_id": "42e1f8772178733e",
+      "agents": 8,
+      "mean_min_ade_delta_m": -16.02200459867715,
+      "mean_min_fde_delta_m": -42.42650442567798,
+      "miss_rate_delta": -0.125
+    },
+    {
+      "scenario_id": "da77d2eb4365bc68",
+      "agents": 2,
+      "mean_min_ade_delta_m": -15.795125501315647,
+      "mean_min_fde_delta_m": -30.966731725525406,
+      "miss_rate_delta": -1.0
+    },
+    {
+      "scenario_id": "66bba4646960dab5",
+      "agents": 4,
+      "mean_min_ade_delta_m": -14.67595567372887,
+      "mean_min_fde_delta_m": -36.380901782947696,
+      "miss_rate_delta": -0.75
+    },
+    {
+      "scenario_id": "349c454c67187c0b",
+      "agents": 2,
+      "mean_min_ade_delta_m": -14.564576978804194,
+      "mean_min_fde_delta_m": -42.0678539816841,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "99a6d52e100d9e97",
+      "agents": 2,
+      "mean_min_ade_delta_m": -13.444730453520675,
+      "mean_min_fde_delta_m": -37.75755379995873,
+      "miss_rate_delta": -0.5
+    },
+    {
+      "scenario_id": "9077dd48b72a65f8",
+      "agents": 1,
+      "mean_min_ade_delta_m": -13.102736265589249,
+      "mean_min_fde_delta_m": -38.47192585714668,
+      "miss_rate_delta": -1.0
+    },
+    {
+      "scenario_id": "b6ffcc391a3b82b5",
+      "agents": 3,
+      "mean_min_ade_delta_m": -12.73466666755349,
+      "mean_min_fde_delta_m": -35.44987133126498,
+      "miss_rate_delta": 0.0
+    }
+  ],
+  "most_regressed_scenarios": [
+    {
+      "scenario_id": "b1d1c0b36391aed2",
+      "agents": 2,
+      "mean_min_ade_delta_m": 1.7937547525740178,
+      "mean_min_fde_delta_m": 3.516443858094476,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "5a524a1dc7410e9c",
+      "agents": 8,
+      "mean_min_ade_delta_m": 1.4328085632295746,
+      "mean_min_fde_delta_m": 4.926146688372585,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "250a79673f012927",
+      "agents": 1,
+      "mean_min_ade_delta_m": 0.9674402036344367,
+      "mean_min_fde_delta_m": -2.1456382524762425,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "8dd1657206231d2e",
+      "agents": 2,
+      "mean_min_ade_delta_m": 0.6991839239786944,
+      "mean_min_fde_delta_m": 1.2375022713238648,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "e72555573947dbd3",
+      "agents": 1,
+      "mean_min_ade_delta_m": 0.06043652728673543,
+      "mean_min_fde_delta_m": 0.026635460429269786,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "a049bb36cfa4fa33",
+      "agents": 1,
+      "mean_min_ade_delta_m": -0.037750753089397626,
+      "mean_min_fde_delta_m": -0.33631452489403424,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "c941617c981520db",
+      "agents": 3,
+      "mean_min_ade_delta_m": -0.16253264269260784,
+      "mean_min_fde_delta_m": 0.7695995638949972,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "125635eaf838cbf4",
+      "agents": 3,
+      "mean_min_ade_delta_m": -0.20821601399321196,
+      "mean_min_fde_delta_m": 1.5849184269679226,
+      "miss_rate_delta": 0.3333333333333333
+    },
+    {
+      "scenario_id": "9016aa05933f7cb5",
+      "agents": 2,
+      "mean_min_ade_delta_m": -0.244833342271738,
+      "mean_min_fde_delta_m": -0.2103668952528399,
+      "miss_rate_delta": 0.0
+    },
+    {
+      "scenario_id": "a651202aa8e79d45",
+      "agents": 4,
+      "mean_min_ade_delta_m": -0.26989470062350795,
+      "mean_min_fde_delta_m": -1.1267982123184175,
+      "miss_rate_delta": -0.25
+    }
+  ],
+  "most_improved_agents": [
+    {
+      "scenario_id": "42e1f8772178733e",
+      "agent_id": "1281",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 41.34460688348482,
+      "candidate_min_ade_m": 2.968722611890953,
+      "min_ade_m": -38.37588427159387,
+      "baseline_min_fde_m": 101.28756745011476,
+      "candidate_min_fde_m": 6.976879902931657,
+      "min_fde_m": -94.31068754718311,
+      "miss": 0.0,
+      "candidate_best_mode_index": 3
+    },
+    {
+      "scenario_id": "72dd0b4f96849bf",
+      "agent_id": "655",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 29.1871860000545,
+      "candidate_min_ade_m": 0.659451835431738,
+      "min_ade_m": -28.52773416462276,
+      "baseline_min_fde_m": 71.86134936778575,
+      "candidate_min_fde_m": 2.0396777958918166,
+      "min_fde_m": -69.82167157189393,
+      "miss": 0.0,
+      "candidate_best_mode_index": 5
+    },
+    {
+      "scenario_id": "66bba4646960dab5",
+      "agent_id": "533",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 28.83508844102178,
+      "candidate_min_ade_m": 1.1798750638655933,
+      "min_ade_m": -27.655213377156187,
+      "baseline_min_fde_m": 74.5376617665665,
+      "candidate_min_fde_m": 0.1421888602893862,
+      "min_fde_m": -74.39547290627712,
+      "miss": -1.0,
+      "candidate_best_mode_index": 3
+    },
+    {
+      "scenario_id": "d30709cd60e60395",
+      "agent_id": "164",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 27.60375580188938,
+      "candidate_min_ade_m": 0.9283505976952342,
+      "min_ade_m": -26.675405204194146,
+      "baseline_min_fde_m": 61.00800807146406,
+      "candidate_min_fde_m": 0.4386901505180013,
+      "min_fde_m": -60.56931792094606,
+      "miss": -1.0,
+      "candidate_best_mode_index": 3
+    },
+    {
+      "scenario_id": "f13124876e8f9c3c",
+      "agent_id": "1702",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 24.732276076007036,
+      "candidate_min_ade_m": 0.5203585342137138,
+      "min_ade_m": -24.211917541793323,
+      "baseline_min_fde_m": 63.579642764987895,
+      "candidate_min_fde_m": 0.2494562912383717,
+      "min_fde_m": -63.33018647374952,
+      "miss": -1.0,
+      "candidate_best_mode_index": 5
+    },
+    {
+      "scenario_id": "f8194e7b4026784b",
+      "agent_id": "1163",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 25.02447632452168,
+      "candidate_min_ade_m": 1.0178181698493944,
+      "min_ade_m": -24.006658154672284,
+      "baseline_min_fde_m": 64.56597199407523,
+      "candidate_min_fde_m": 0.5334643407048604,
+      "min_fde_m": -64.03250765337036,
+      "miss": -1.0,
+      "candidate_best_mode_index": 3
+    },
+    {
+      "scenario_id": "97e15de5a9938965",
+      "agent_id": "16",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 24.893380896017366,
+      "candidate_min_ade_m": 1.608526629692002,
+      "min_ade_m": -23.284854266325365,
+      "baseline_min_fde_m": 62.854108353282335,
+      "candidate_min_fde_m": 2.158714952666182,
+      "min_fde_m": -60.695393400616155,
+      "miss": 0.0,
+      "candidate_best_mode_index": 1
+    },
+    {
+      "scenario_id": "770fec53ec3e0395",
+      "agent_id": "1120",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 25.12620460156695,
+      "candidate_min_ade_m": 2.126795251413309,
+      "min_ade_m": -22.99940935015364,
+      "baseline_min_fde_m": 73.58169836278955,
+      "candidate_min_fde_m": 7.651178077449457,
+      "min_fde_m": -65.9305202853401,
+      "miss": 0.0,
+      "candidate_best_mode_index": 5
+    },
+    {
+      "scenario_id": "8c9eaa71b6a696c5",
+      "agent_id": "797",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 24.03748030265451,
+      "candidate_min_ade_m": 1.0893813736311158,
+      "min_ade_m": -22.948098929023395,
+      "baseline_min_fde_m": 64.44112621588063,
+      "candidate_min_fde_m": 2.730361677152402,
+      "min_fde_m": -61.71076453872823,
+      "miss": 0.0,
+      "candidate_best_mode_index": 0
+    },
+    {
+      "scenario_id": "fb2483c9eb3294f8",
+      "agent_id": "71",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 23.249126625518187,
+      "candidate_min_ade_m": 0.5410058514112204,
+      "min_ade_m": -22.708120774106966,
+      "baseline_min_fde_m": 53.37939877776604,
+      "candidate_min_fde_m": 1.1615989269243754,
+      "min_fde_m": -52.217799850841665,
+      "miss": -1.0,
+      "candidate_best_mode_index": 3
+    }
+  ],
+  "most_regressed_agents": [
+    {
+      "scenario_id": "5a524a1dc7410e9c",
+      "agent_id": "4150",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 2.3357729313550224,
+      "candidate_min_ade_m": 8.531101218146539,
+      "min_ade_m": 6.195328286791517,
+      "baseline_min_fde_m": 5.335071521376152,
+      "candidate_min_fde_m": 24.67609854961126,
+      "min_fde_m": 19.34102702823511,
+      "miss": 0.0,
+      "candidate_best_mode_index": 1
+    },
+    {
+      "scenario_id": "3ce06a8ab3ddc59c",
+      "agent_id": "4",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 5.595912234014798,
+      "candidate_min_ade_m": 9.809985091803501,
+      "min_ade_m": 4.214072857788703,
+      "baseline_min_fde_m": 9.544459710153973,
+      "candidate_min_fde_m": 25.186552574191445,
+      "min_fde_m": 15.642092864037473,
+      "miss": 0.0,
+      "candidate_best_mode_index": 3
+    },
+    {
+      "scenario_id": "b1d1c0b36391aed2",
+      "agent_id": "934",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 3.327475162758614,
+      "candidate_min_ade_m": 7.218697478189517,
+      "min_ade_m": 3.891222315430903,
+      "baseline_min_fde_m": 6.206278847188454,
+      "candidate_min_fde_m": 15.549509325596095,
+      "min_fde_m": 9.34323047840764,
+      "miss": 0.0,
+      "candidate_best_mode_index": 4
+    },
+    {
+      "scenario_id": "5a524a1dc7410e9c",
+      "agent_id": "4325",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 2.592561935557028,
+      "candidate_min_ade_m": 6.124427691021191,
+      "min_ade_m": 3.531865755464163,
+      "baseline_min_fde_m": 6.592461240301308,
+      "candidate_min_fde_m": 15.861617429755176,
+      "min_fde_m": 9.269156189453868,
+      "miss": 0.0,
+      "candidate_best_mode_index": 4
+    },
+    {
+      "scenario_id": "5a524a1dc7410e9c",
+      "agent_id": "4151",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 4.709866261839816,
+      "candidate_min_ade_m": 7.6150694867169175,
+      "min_ade_m": 2.905203224877101,
+      "baseline_min_fde_m": 11.113028578743547,
+      "candidate_min_fde_m": 20.215367053348885,
+      "min_fde_m": 9.102338474605338,
+      "miss": 0.0,
+      "candidate_best_mode_index": 4
+    },
+    {
+      "scenario_id": "9c4d2aaeade111e5",
+      "agent_id": "1458",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 9.311943428897399,
+      "candidate_min_ade_m": 12.086044738691502,
+      "min_ade_m": 2.774101309794103,
+      "baseline_min_fde_m": 24.89070885614804,
+      "candidate_min_fde_m": 32.83902208560174,
+      "min_fde_m": 7.948313229453699,
+      "miss": 0.0,
+      "candidate_best_mode_index": 0
+    },
+    {
+      "scenario_id": "851db0b0267f352f",
+      "agent_id": "178",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 0.7804849416165779,
+      "candidate_min_ade_m": 3.401054594006656,
+      "min_ade_m": 2.620569652390078,
+      "baseline_min_fde_m": 3.3885966456140086,
+      "candidate_min_fde_m": 8.680932791725205,
+      "min_fde_m": 5.292336146111197,
+      "miss": 0.0,
+      "candidate_best_mode_index": 0
+    },
+    {
+      "scenario_id": "5c8f9e7af4b0248a",
+      "agent_id": "1532",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 14.381448750109946,
+      "candidate_min_ade_m": 16.994193419399448,
+      "min_ade_m": 2.6127446692895013,
+      "baseline_min_fde_m": 32.61633318393278,
+      "candidate_min_fde_m": 54.41477985333692,
+      "min_fde_m": 21.798446669404136,
+      "miss": 0.0,
+      "candidate_best_mode_index": 2
+    },
+    {
+      "scenario_id": "1ef603c21233b4b5",
+      "agent_id": "733",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 2.7109608859346825,
+      "candidate_min_ade_m": 5.2967047687902555,
+      "min_ade_m": 2.585743882855573,
+      "baseline_min_fde_m": 7.482992437012978,
+      "candidate_min_fde_m": 16.269587119169856,
+      "min_fde_m": 8.786594682156878,
+      "miss": 0.0,
+      "candidate_best_mode_index": 4
+    },
+    {
+      "scenario_id": "72dd0b4f96849bf",
+      "agent_id": "651",
+      "object_type": "vehicle",
+      "baseline_min_ade_m": 3.6553273448730916,
+      "candidate_min_ade_m": 6.212607289753532,
+      "min_ade_m": 2.55727994488044,
+      "baseline_min_fde_m": 13.255683822482492,
+      "candidate_min_fde_m": 14.691281774435272,
+      "min_fde_m": 1.4355979519527793,
+      "miss": 0.0,
+      "candidate_best_mode_index": 5
+    }
+  ]
+}

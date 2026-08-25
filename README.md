@@ -251,10 +251,12 @@ requirements, regression gates, motion-prediction evaluation, kinematic
 candidates, the full-shard benchmark, paired evidence, reproducible experiment
 manifests, and prediction-risk context.
 
-Milestone 11 (external learned-model integration) is in progress. The import
-contract, provenance enforcement, and official-format conversion are complete;
-validating a real learned model's output is the current work. See
-[docs/ROADMAP.md](docs/ROADMAP.md).
+Milestone 11 (external learned-model integration) is complete. A learned
+candidate trained on the WOMD training split was scored through the contract,
+the evaluator, and the regression gate on the validation shard: mean minADE
+2.008 m against the kinematic ensemble's 7.728 m, with paired 95% intervals
+excluding zero on every metric. Full results, including where it regresses, are
+in [docs/LEARNED_MODEL.md](docs/LEARNED_MODEL.md).
 
 The TensorFlow-free reader has been checked against Waymo's own decoder across
 a complete shard. Over 276 scenarios — 17,525 tracks and 864,001 agent states —
@@ -273,16 +275,22 @@ verified 276-scenario, 1,203-agent WOMD validation shard:
 |---|---:|---:|---:|
 | Constant velocity | 9.63 m | 24.38 m | 0.934 |
 | Kinematic ensemble | 7.73 m | 19.94 m | 0.915 |
+| Learned model | 2.01 m | 4.64 m | 0.657 |
 
 Paired 95% bootstrap intervals exclude zero for all three improvements. No agent
 regressed, because the ensemble retains constant velocity as an available mode.
 Ground-truth coverage is identical across candidates, so the evaluated population
 does not drift between them.
 
-**These are deliberately not competitive prediction results.** Published learned
-models reach roughly an order of magnitude lower minADE on WOMD. The kinematic
-candidates exist to exercise the evidence layer — which is this repository's
-actual contribution — not to compete on accuracy. The minADE, minFDE, and
+The kinematic candidates exist to exercise the evidence layer; the learned model
+tests whether that layer says anything useful about a candidate nobody designed
+to be easy to evaluate. It does: the aggregate 2.01 m conceals turning agents at
+2.66 m against 1.62 m for straight motion, and 98 agents that the ensemble
+handled better.
+
+**None of these are competitive prediction results.** Published models reach
+roughly 0.6 m minADE on WOMD. This repository's contribution is the evidence
+layer, not the predictors. The minADE, minFDE, and
 miss-rate values here are project diagnostics computed under documented
 assumptions, and are **not comparable to official Waymo challenge scores**.
 
@@ -294,6 +302,10 @@ assumptions, and are **not comparable to official Waymo challenge scores**.
 - Dataset and SDK use must comply with Waymo's applicable license terms.
 
 ## Roadmap
+
+Training and evaluating the learned candidate is documented in
+[training/README.md](training/README.md) and
+[docs/LEARNED_MODEL.md](docs/LEARNED_MODEL.md).
 
 See [docs/ROADMAP.md](docs/ROADMAP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [docs/WOMD_SETUP.md](docs/WOMD_SETUP.md), and
