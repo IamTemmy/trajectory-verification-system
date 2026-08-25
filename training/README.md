@@ -69,3 +69,51 @@ python training/preprocess.py /content/train/training.tfrecord-* \
 ```
 
 About 0.15 s per scenario, roughly 6.5 KB per example.
+
+## Model
+
+Six modes of sixteen points each, matching the submission format the evaluator
+reads. The target agent forms a single query that cross-attends to context
+tokens built from neighbouring agents and pooled lane geometry; attending from
+one query is far cheaper than self-attention over every token, which matters on
+a free-tier GPU.
+
+About 0.8 M parameters at the default width.
+
+### Loss
+
+Winner-takes-all regression on the closest mode, plus cross-entropy teaching the
+classifier which mode that was. Regressing every mode toward the single observed
+future would collapse them onto each other and destroy the multi-modality the
+format exists to express.
+
+The future mask decides which steps count. Around half of all agents leave the
+scene before the horizon ends, so ignoring it would train the model to steer
+vanished agents toward the origin.
+
+## Training
+
+```bash
+python training/train.py \
+  --features /content/features --flat /content/flat \
+  --checkpoint-dir /content/drive/MyDrive/tvs-checkpoints \
+  --epochs 30 --batch-size 64
+```
+
+State is written every epoch and the run resumes from `latest.pt`, because
+free-tier runtimes are reclaimed without warning. Point `--checkpoint-dir` at
+Drive so checkpoints outlive the machine.
+
+Progress prints minADE and minFDE over the six modes, the same quantities the
+project evaluator computes, so a run can be read against the kinematic
+baselines directly. On the verified validation shard those were:
+
+| Candidate | mean minADE | mean minFDE |
+|---|---:|---:|
+| Constant velocity | 9.63 m | 24.38 m |
+| Kinematic ensemble | 7.73 m | 19.94 m |
+
+Those figures come from the designated targets of a complete shard; the
+in-training monitor set is a random slice of training data and is only a
+progress signal. Comparable numbers come from scoring a submission through
+`evaluate-motion-predictions`.
