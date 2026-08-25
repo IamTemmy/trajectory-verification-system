@@ -254,7 +254,9 @@ documented in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md).
 Prediction-error context and its interpretation boundary are documented in
 [docs/RISK_CONTEXT.md](docs/RISK_CONTEXT.md).
 The learned-model boundary is documented in
-[docs/EXTERNAL_MODELS.md](docs/EXTERNAL_MODELS.md).
+[docs/EXTERNAL_MODELS.md](docs/EXTERNAL_MODELS.md). The procedure for proving
+the reader equivalent to Waymo's official decoder is documented in
+[docs/READER_VERIFICATION.md](docs/READER_VERIFICATION.md).
 
 ## License
 
