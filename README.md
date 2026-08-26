@@ -94,7 +94,10 @@ And it still catches 2.5x more real violations than the physics baselines, which
 never cry wolf but cannot anticipate a vehicle braking hard at all.
 
 No single number expresses that. [docs/PREDICTED_BEHAVIOUR.md](docs/PREDICTED_BEHAVIOUR.md)
-covers the method and its limits.
+covers the method, its limits, and the prior work that makes this argument more
+thoroughly — the critique of displacement metrics and the kinematic-plausibility
+measure are both established; the contribution here is a working implementation,
+not the idea.
 
 ## What it does
 

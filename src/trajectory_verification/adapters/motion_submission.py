@@ -30,10 +30,11 @@ def scenario_predictions_from_proto(
         )
     agents: list[AgentPrediction] = []
     predictions = message.single_predictions.predictions
+    # The timeline is a property of the scenario, not of any one agent.
+    timestamp_by_index = _source_timestamps(ground_truth)
     for item in predictions:
         agent_id = str(item.object_id)
-        truth = ground_truth.track(agent_id)
-        timestamp_by_index = _source_timestamps(ground_truth)
+        ground_truth.track(agent_id)  # raises if the submission names an unknown agent
         modes = tuple(
             _trajectory_from_proto(mode, timestamp_by_index)
             for mode in tuple(item.trajectories)[:MAX_MODES]

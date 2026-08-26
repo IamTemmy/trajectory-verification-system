@@ -98,6 +98,31 @@ hard. The learned model cries wolf constantly and misses 97 — **2.5x fewer**.
 Which failure is worse depends on the consumer, and this tool does not decide
 that. It reports both, which no aggregate does.
 
+## Prior work
+
+None of the ideas here are new, and the literature says so more thoroughly than
+this document does.
+
+The argument that displacement metrics are not safety-relevant is established.
+[Beyond ADE and FDE](https://arxiv.org/abs/2510.10086) sets out an evaluation
+framework for safety-critical prediction on exactly this basis, and
+[What Truly Matters in Trajectory Prediction for Autonomous Driving?](https://arxiv.org/abs/2306.15136)
+makes the related case that dataset metrics do not track driving performance.
+
+The kinematic implausibility measured above is also known.
+[Physically Feasible Vehicle Trajectory Prediction](https://arxiv.org/abs/2104.14679)
+studies predictions that violate vehicle dynamics, and **jerk violation rate**
+is an established metric with published comfort thresholds in the range of
+roughly 0.3 to 0.9 m/s³ — considerably stricter than the 5 m/s³ used here, which
+was chosen to exercise the machinery rather than to reflect ride comfort.
+
+What this repository contributes is not the idea but an implementation: one
+declarative requirement file that runs against both recorded and predicted
+trajectories, reporting paired agreement with the record rather than a violation
+rate in isolation. No prior art was found for that specific integration, on a
+handful of searches rather than a literature review — a weak claim, and stated
+weakly on purpose.
+
 ## Interpretation boundary
 
 Requirement thresholds here are chosen to exercise the machinery. A behavioural

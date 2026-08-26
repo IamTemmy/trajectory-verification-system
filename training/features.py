@@ -20,7 +20,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from math import cos, hypot, sin
-from typing import Iterator, Sequence
+from typing import Iterator
 
 import numpy as np
 
