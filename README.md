@@ -73,6 +73,29 @@ visualize-predictions candidate.binproto data/raw/SHARD --out-dir cases --worst 
 Aggregate error says a model was some number of metres wrong. This says where it
 went instead.
 
+## The result the aggregate hides
+
+Displacement error cannot say whether being wrong *mattered*. So the same
+requirements used on recorded trajectories are run against what the model
+predicts will happen, and the verdicts compared:
+
+| Candidate | minADE | Behavioural accuracy | False alarms | Missed violations |
+|---|---:|---:|---:|---:|
+| Constant velocity | 9.633 m | **92.9%** | **12** | 246 |
+| Kinematic ensemble | 7.728 m | **92.9%** | **12** | 246 |
+| Learned model | **2.008 m** | 65.0% | 1,167 | **97** |
+
+**The ranking inverts.** The candidate 4.8x more accurate spatially is the worst
+behaviourally: its forecasts imply harsh acceleration in 32.7% of agents where
+real driving does so in 5.7%. It wobbles around the true path closely enough to
+score well on distance while predicting driving that never happens.
+
+And it still catches 2.5x more real violations than the physics baselines, which
+never cry wolf but cannot anticipate a vehicle braking hard at all.
+
+No single number expresses that. [docs/PREDICTED_BEHAVIOUR.md](docs/PREDICTED_BEHAVIOUR.md)
+covers the method and its limits.
+
 ## What it does
 
 - normalized two-dimensional agent trajectories from WOMD or hand-written scenarios;
@@ -82,6 +105,8 @@ went instead.
 - map-aware requirements over lanes, stop signs, crosswalks, and traffic-signal states;
 - deterministic baseline/candidate regression gates suitable for CI;
 - official-format motion-prediction ingestion, batch metrics, and paired bootstrap comparison;
+- behavioral verification of predicted futures against the same requirements,
+  reporting false alarms and missed violations rather than displacement;
 - risk-context review connecting forecast error to interaction and map context;
 - reproducible experiment manifests recording source revision and artifact checksums;
 - a versioned JSON contract for importing third-party learned-model predictions;

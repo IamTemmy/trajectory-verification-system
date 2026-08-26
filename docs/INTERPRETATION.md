@@ -131,6 +131,7 @@ files contain scenario identifiers and digests, not trajectories.
 | Reader equivalence | Five validation shards, 1,445 scenarios |
 | Learned model evaluation | The same shard, 1,203 designated targets |
 | Regression experiment | The same shard, three candidates |
+| Behavioral verification | The same shard, three candidates, three requirements |
 
 One shard is not the dataset. Extending any of these claims means repeating the
 procedure on more shards, and the procedures are written to make that a matter

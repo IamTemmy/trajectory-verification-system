@@ -1,0 +1,31 @@
+{
+  "requirements": [
+    {
+      "id": "PREDICTED_URBAN_SPEED",
+      "description": "Predicted motion should stay at or below the 15 m/s urban limit",
+      "metric": "speed",
+      "operator": "less_than_or_equal",
+      "threshold": 15.0,
+      "units": "m/s",
+      "subject_agent_id": "@target"
+    },
+    {
+      "id": "PREDICTED_COMFORT_ACCEL",
+      "description": "Predicted motion should stay within 3 m/s^2 of longitudinal acceleration",
+      "metric": "acceleration",
+      "operator": "less_than_or_equal",
+      "threshold": 3.0,
+      "units": "m/s^2",
+      "subject_agent_id": "@target"
+    },
+    {
+      "id": "PREDICTED_JERK",
+      "description": "Predicted motion should stay within 5 m/s^3 of jerk",
+      "metric": "jerk",
+      "operator": "less_than_or_equal",
+      "threshold": 5.0,
+      "units": "m/s^3",
+      "subject_agent_id": "@target"
+    }
+  ]
+}

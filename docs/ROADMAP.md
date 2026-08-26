@@ -103,3 +103,11 @@
 - [x] Validate at least one learned-model output
 - [x] Compare learned, kinematic, and ensemble candidates fairly
 - [x] Add release-quality reproducibility and interpretation guidance
+
+## Milestone 12 — Behavioral prediction verification
+
+- [x] Rebuild scenarios as a model predicts them
+- [x] Evaluate declarative requirements against predicted futures
+- [x] Classify false alarms and missed violations against the record
+- [x] Compare candidates by behavioral verdict rather than displacement
+- [x] Document the method, the inversion it exposes, and its gameability
