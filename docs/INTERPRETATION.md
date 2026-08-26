@@ -112,6 +112,12 @@ omits a timestamp so that identical inputs yield an identical index.
 Checksums establish byte identity, not authenticity. Obtaining WOMD under its
 terms and confirming the source remains the operator's responsibility.
 
+History was rewritten once, on August 26, 2026, to purge three submission JSONs
+committed in error. Commit identifiers recorded before that date therefore no
+longer resolve; the two cited in `EXPERIMENTS.md` and `RISK_CONTEXT.md` carry
+both their original and current values. Tree contents are unaffected. A project
+that records revisions as evidence should say when those revisions moved.
+
 ## Dataset and model terms
 
 The Waymo Open Dataset licence governs the data and anything trained on it.

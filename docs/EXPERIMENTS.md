@@ -55,8 +55,11 @@ the evidence focused on reproducible inputs rather than wall-clock metadata.
 
 ## Verified full-shard run
 
-Milestone 9 was validated on July 24, 2026 from clean Git revision
-`61d2549f7222a1cf97cad4b98a1ff647eb37755f`.
+Milestone 9 was validated on July 24, 2026 from a clean revision, recorded at
+the time as `61d2549f7222a1cf97cad4b98a1ff647eb37755f`. History was later
+rewritten to purge committed model outputs, and that commit is now
+`a133222cdbdcf522c3fbebe5838aba5cbc06d261`. The tree it names is unchanged; only
+the identifier moved.
 
 The one-command run:
 

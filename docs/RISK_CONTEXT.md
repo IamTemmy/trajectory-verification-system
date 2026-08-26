@@ -64,8 +64,11 @@ analyze-prediction-risk predictions.binproto data/raw/SHARD \
 
 ## Verified full-shard context analysis
 
-Milestone 10 was validated on July 24, 2026 from clean Git revision
-`7602dc657e4dd9f5b2317696cfff15d396250287`, using the same checksummed WOMD
+Milestone 10 was validated on July 24, 2026 from a clean revision, recorded at
+the time as `7602dc657e4dd9f5b2317696cfff15d396250287` and now
+`0ad3b34670ce4a52f568447041f23969fe36fe64` after history was rewritten to purge
+committed model outputs. The tree is unchanged; only the identifier moved. The
+run used the same checksummed WOMD
 v1.3.1 shard, 276 scenarios, and 1,203 target agents.
 
 The candidate improved every motion stratum:
