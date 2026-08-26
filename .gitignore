@@ -12,3 +12,10 @@ build/
 data/raw/
 data/processed/
 reports/generated/
+.ruff_cache/
+# Model outputs and submissions are build products, regenerable from a
+# checkpoint. They also carry trajectories in the dataset's coordinate frame,
+# which this repository does not distribute.
+*-predictions.json
+predictions-*.json
+*.binproto
