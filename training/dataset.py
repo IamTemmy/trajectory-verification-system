@@ -108,10 +108,11 @@ class FeatureDataset(Dataset):
 def sampling_weights(codes: np.ndarray, damping: float = 0.5) -> np.ndarray:
     """Per-example weights that lift under-represented object types.
 
-    The training population is roughly 93% vehicles, and the classes the model
-    saw least are the ones it degrades most. Full inverse frequency would
-    over-correct and starve the majority class, so the weight is raised to a
-    damping power: 0 leaves the distribution alone, 1 equalises it outright.
+    The consolidated run was 83.6% vehicles, 14.8% pedestrians and 1.6%
+    cyclists, and the classes the model saw least were the ones it degraded
+    most. Full inverse frequency would over-correct and starve the majority
+    class, so the weight is raised to a damping power: 0 leaves the distribution
+    alone, 1 equalises it outright.
     """
 
     values, counts = np.unique(codes, return_counts=True)

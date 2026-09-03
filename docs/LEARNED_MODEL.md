@@ -138,10 +138,10 @@ them turns out to explain itself.
 | Pedestrian | 126 | 1.403 m | 0.870 m | 37.9% | **23.0%** |
 | Cyclist | 22 | 4.673 m | 2.398 m | 48.7% | **18.2%** |
 
-The regression rate tracks training representation. A sample of the training
-population is about 93% vehicles and 7% pedestrians, with cyclists barely
-present. Vehicles regress at 6%, pedestrians at 23%, cyclists at 18% - the
-classes the model saw least are the classes it degrades most.
+The regression rate tracks training representation. The consolidated training
+population was 83.6% vehicles, 14.8% pedestrians and 1.6% cyclists. Vehicles
+regress at 6%, pedestrians at 23%, cyclists at 18% - the classes the model saw
+least are the classes it degrades most.
 
 Two further properties separate the two groups. Pedestrians make up 30% of the
 regressions against 9% of the improvements, and regressed agents travel a median

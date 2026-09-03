@@ -9,6 +9,27 @@ Only the reader is imported from the package, which means training consumes
 exactly the decoder proven equivalent to Waymo's in
 [docs/READER_VERIFICATION.md](../docs/READER_VERIFICATION.md).
 
+## Environment
+
+The verifier keeps PyTorch and NumPy out of its runtime dependencies. Create a
+separate environment for model work:
+
+```bash
+python3.11 -m venv .training-venv
+source .training-venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e .
+python -m pip install -r training/requirements.txt
+python -m unittest discover -s training/tests -v
+```
+
+On Windows, activate with `.training-venv\Scripts\activate`. The pinned versions
+are the release-tested CPU smoke environment; CUDA builds of the same PyTorch
+version may be used for training. The recorded Colab run predates this lock and
+training is stochastic, so the committed metrics are reproducible within normal
+run-to-run variation rather than bit for bit. The reader, evaluator, bootstrap
+comparisons and reports remain deterministic.
+
 ## Task
 
 Fixed by the official submission format the evaluator already reads:
@@ -117,3 +138,23 @@ Those figures come from the designated targets of a complete shard; the
 in-training monitor set is a random slice of training data and is only a
 progress signal. Comparable numbers come from scoring a submission through
 `evaluate-motion-predictions`.
+
+## Export and evaluation
+
+```bash
+python training/predict.py \
+  /content/drive/MyDrive/tvs-checkpoints/best.pt \
+  /content/validation/validation.tfrecord-* \
+  --output /content/predictions.json
+
+import-external-predictions \
+  /content/predictions.json /content/predictions.binproto \
+  /content/validation/validation.tfrecord-*
+
+evaluate-motion-predictions \
+  /content/predictions.binproto /content/validation/validation.tfrecord-* \
+  --json-report /content/evaluation.json
+```
+
+Prediction JSON, checkpoints, feature archives and dataset shards are build or
+licensed-data products and remain outside version control.

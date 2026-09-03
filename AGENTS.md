@@ -11,6 +11,7 @@
 ## Verification commands
 
 ```bash
+python3 -m pip install -e .
 python3 -m unittest discover -s tests -v
 PYTHONPATH=src python3 -m trajectory_verification.cli examples/following_scenario.json examples/requirements.json
 ```

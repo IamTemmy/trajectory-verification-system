@@ -63,6 +63,7 @@ rather than worked around.
 ### Verification, without any dataset
 
 ```bash
+python3 -m pip install -e .
 python3 -m unittest discover -s tests -v
 verify-trajectories examples/intersection_scenario.json \
   examples/intersection_requirements.json --markdown-report report.md

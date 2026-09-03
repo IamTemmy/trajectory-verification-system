@@ -37,20 +37,25 @@ risk-context analysis, and regression gates.
 
 ## Learned-model target assessment
 
-MTR is the preferred first learned-model target because its official repository
-reports strong WOMD validation performance and publishes model checkpoints.
-However, its documented installation compiles custom CUDA code, uses Python
-3.8, and preprocesses data through an older Waymo TensorFlow package. It is not
-a native Apple-silicon workload.
+MTR was the first integration target considered because its official repository
+reports strong WOMD validation performance. Its public training and evaluation
+commands expect a user-produced checkpoint; the repository does not currently
+provide downloadable pretrained weights. Reproducing it would therefore require
+both training and inference in an older Linux/CUDA/Waymo-TensorFlow stack, not
+just adapting an existing artifact, and it is not a native Apple-silicon
+workload.
 
-The integration is therefore deliberately split:
+The first validated learned source is instead the compact cross-attention model
+under `training/`. It was trained on a free Colab T4 and exports only provenance
+plus scenario-global predictions through the same contract. MTR remains a
+compatible future source:
 
-1. run MTR preprocessing and inference in a pinned Linux/CUDA environment;
-2. export only model provenance and scenario-global predictions;
+1. train and run it in a pinned Linux/CUDA environment;
+2. export model provenance and scenario-global predictions;
 3. validate and evaluate the artifact on any platform through this repository.
 
-This boundary avoids pretending that a CUDA model is supported on the user's
-Mac while keeping model execution replaceable and verification reproducible.
+This boundary keeps model execution replaceable and avoids pretending that a
+CUDA model is supported on the user's Mac.
 
 Primary references:
 

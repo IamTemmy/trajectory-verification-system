@@ -1,0 +1,3 @@
+# Release-tested training and CPU smoke-test environment.
+numpy==2.5.2
+torch==2.14.0

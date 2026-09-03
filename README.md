@@ -160,10 +160,17 @@ CRC32C. Checksum shards at download time.
 ## Quick start
 
 ```bash
-python3 -m unittest discover -s tests -v
-PYTHONPATH=src python3 -m trajectory_verification.cli \
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+python -m unittest discover -s tests -v
+verify-trajectories \
   examples/intersection_scenario.json examples/intersection_requirements.json
 ```
+
+On Windows, activate the environment with `.venv\Scripts\activate` instead.
+The learned-model training code has an isolated environment and smoke suite;
+see [training/README.md](training/README.md).
 
 Generate machine-readable evidence plus Markdown and standalone HTML reports:
 
@@ -290,11 +297,12 @@ scenario source -> dataset adapter -> normalized trajectories
 
 ## Status
 
-Milestones 0–10 are complete and validated against a real WOMD v1.3.1 validation
-shard: the verification kernel, WOMD ingestion, engineering evidence, map-aware
-requirements, regression gates, motion-prediction evaluation, kinematic
-candidates, the full-shard benchmark, paired evidence, reproducible experiment
-manifests, and prediction-risk context.
+Milestones 0–12 are complete. The verification kernel, WOMD ingestion,
+engineering evidence, map-aware requirements, regression gates,
+motion-prediction evaluation, kinematic candidates, full-shard benchmark,
+paired evidence, reproducible experiment manifests, prediction-risk context,
+external learned-model integration, and behavioral prediction verification have
+all been exercised end to end.
 
 Milestone 11 (external learned-model integration) is complete. A learned
 candidate trained on the WOMD training split was scored through the contract,
@@ -302,6 +310,13 @@ the evaluator, and the regression gate on the validation shard: mean minADE
 2.008 m against the kinematic ensemble's 7.728 m, with paired 95% intervals
 excluding zero on every metric. Full results, including where it regresses, are
 in [docs/LEARNED_MODEL.md](docs/LEARNED_MODEL.md).
+
+Milestone 12 runs the same declarative requirements against predicted futures
+and compares those verdicts with the recorded future. It exposed an inversion:
+the learned model was much stronger on displacement error and much weaker on
+kinematic plausibility, while also missing fewer recorded violations. The
+method, result, and gameability boundary are in
+[docs/PREDICTED_BEHAVIOUR.md](docs/PREDICTED_BEHAVIOUR.md).
 
 The TensorFlow-free reader has been checked against Waymo's own decoder across
 five complete validation shards. Over 1,445 scenarios — 99,330 tracks and
@@ -322,10 +337,12 @@ verified 276-scenario, 1,203-agent WOMD validation shard:
 | Kinematic ensemble | 7.73 m | 19.94 m | 0.915 |
 | Learned model | 2.01 m | 4.64 m | 0.657 |
 
-Paired 95% bootstrap intervals exclude zero for all three improvements. No agent
-regressed, because the ensemble retains constant velocity as an available mode.
-Ground-truth coverage is identical across candidates, so the evaluated population
-does not drift between them.
+Paired 95% bootstrap intervals exclude zero for the aggregate improvements. In
+the **kinematic-ensemble versus constant-velocity comparison**, no agent
+regressed because the ensemble retains constant velocity as an available mode.
+The learned model does not have that fallback and regressed on 98 agents by
+minADE despite its much stronger aggregate. Ground-truth coverage is identical
+across candidates, so the evaluated population does not drift between them.
 
 The kinematic candidates exist to exercise the evidence layer; the learned model
 tests whether that layer says anything useful about a candidate nobody designed
@@ -368,6 +385,7 @@ The learned-model boundary is documented in
 [docs/EXTERNAL_MODELS.md](docs/EXTERNAL_MODELS.md). The procedure for proving
 the reader equivalent to Waymo's official decoder is documented in
 [docs/READER_VERIFICATION.md](docs/READER_VERIFICATION.md).
+Release history is recorded in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

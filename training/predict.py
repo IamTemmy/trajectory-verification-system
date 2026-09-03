@@ -60,7 +60,7 @@ def main() -> int:
     parser.add_argument("shards", nargs="+", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model-name", default="tvs-crossattn")
-    parser.add_argument("--model-version", default="0.1.0")
+    parser.add_argument("--model-version", default="1.0.0")
     parser.add_argument(
         "--source-repository",
         default="https://github.com/IamTemmy/trajectory-verification-system",
